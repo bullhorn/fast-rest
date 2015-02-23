@@ -1,0 +1,130 @@
+<?php
+namespace Phalcon\ApiGenerator\Api\Models;
+use Phalcon\ApiGenerator\Api\Services\Acl\EntityInterface;
+use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\ManagerInterface;
+use Phalcon\Mvc\Model\MetaDataInterface;
+use Phalcon\Mvc\Model\Relation;
+use Phalcon\ApiGenerator\Api\Services\Database\CriteriaHelper;
+
+interface ApiInterface extends EntityInterface, GeneratedInterface {
+	/**
+	 * Getter
+	 * @return string[]
+	 */
+	public function getAutomaticallyUpdatedFields();
+	/**
+	 * Gets the unreadable fields, these will always display as null
+	 * @return \string[]
+	 */
+	public function getUnReadableFields();
+	/**
+	 * This adds a join based off of the aliases to an existing criteria, you can do nested joins, using a ., such as User.BranchSharing
+	 * @param CriteriaHelper $criteriaHelper The criteria we are adding the join on to
+	 * @param string         $alias          The alias of the relationship
+	 * @return string - The name of the model we just joined on
+	 */
+	public function addJoin(CriteriaHelper $criteriaHelper, $alias);
+
+	/**
+	 * Returns a list of all parent relationships, these will all return a Base Model instance
+	 * @return string[]
+	 */
+	public function getParentRelationships();
+
+	/**
+	 * Returns a list of all children relationships, these will all return a ResultSet
+	 * @return string[]
+	 */
+	public function getChildrenRelationships();
+
+	/**
+	 * Returns the models manager related to the entity instance
+	 *
+	 * @return ManagerInterface
+	 */
+	public function getModelsManager();
+
+	/**
+	 * Returns the models meta-data service related to the entity instance
+	 *
+	 * @return MetaDataInterface
+	 */
+	public function getModelsMetaData();
+
+	/**
+	 * Finds a relationship from a given alias
+	 *
+	 * @param string $alias
+	 *
+	 * @return Relation
+	 */
+	public function getRelationship($alias);
+
+	/**
+	 * Gets the Relationship Aliases required to load the defaults
+	 * @return string[]
+	 */
+	public function getDefaultRelationships();
+
+	/**
+	 * Sets a related entity
+	 *
+	 * @param string $alias
+	 * @param Model  $entity
+	 *
+	 * @return void
+	 */
+	public function setRelated($alias, Model $entity);
+
+	/**
+	 * This should set any defaults to the current object
+	 * @return void
+	 */
+	public function loadDefaults();
+
+	/**
+	 * Returns a list of changed values
+	 *
+	 * @return array
+	 */
+	public function getChangedFields();
+
+	/**
+	 * Gets the entity name
+	 * @return string
+	 */
+	public function getEntityName();
+
+
+	/**
+	 * Getter
+	 * @return int
+	 */
+	public function getCreatedAt();
+
+	/**
+	 * Setter
+	 * @param int $createdAt
+	 */
+	public function setCreatedAt($createdAt);
+
+	/**
+	 * Getter
+	 * @return int
+	 */
+	public function getUpdatedAt();
+
+	/**
+	 * Setter
+	 * @param int $updatedAt
+	 */
+	public function setUpdatedAt($updatedAt);
+
+	/**
+	 * Gets a list of all the required modules
+	 * @return string[]
+	 */
+	public function getRequiredModules();
+
+}

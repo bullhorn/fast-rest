@@ -1,0 +1,28 @@
+{
+  "name": "phalcon/api-generator",
+  "type": "library",
+  "description": "This is meant to be a generator to read a mysql database's structure, including foreign keys, table/column comments, and indexes to generate the models and controllers",
+  "keywords": [
+    "framework",
+    "phalcon"
+  ],
+  "license": "BSD-3",
+  "authors": [
+    {
+      "name": "Nicholas Lewis",
+      "email": "nickle799@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "ext-phalcon": ">=1.3.4"
+  },
+  "require-dev": {
+    "phalcon/devtools": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {
+      "Phalcon\\ApiGenerator": "Library/"
+    }
+  }
+}
