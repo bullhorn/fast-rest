@@ -20,7 +20,7 @@
   "require": {
     "php": ">=5.5.0",
     "ext-phalcon": ">=1.3.4",
-    "zircote/swagger-php": "*",
+    "zircote/swagger-php": "*"
   },
   "require-dev": {
     "phalcon/devtools": "dev-master"
