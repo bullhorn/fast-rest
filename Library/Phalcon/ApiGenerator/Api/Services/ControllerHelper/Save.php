@@ -317,7 +317,6 @@ class Save extends Base {
 		$this->writeFields($fields, $entity);
 
 		if($isCreating) {
-			$this->getAcl()->canWrite($entity);
 			$entity->fireEventCancel(UploadBase::EVENT_UPLOAD_FILE_CREATE);
 		} else {
 			$entity->fireEventCancel(UploadBase::EVENT_UPLOAD_FILE_UPDATE);
@@ -325,6 +324,10 @@ class Save extends Base {
 		if($isCreating || sizeOf($entity->getChangedFields())>0) {
 			$isChanged = true;
 			$entity->save();
+		}
+		if($isCreating) {
+			//Add the acl in after the save so that the validation can be performed, in case you are looking at a parent, and the parent value is set incorrectly.  This will rollback the transaction anyways
+			$this->getAcl()->canWrite($entity);
 		}
 		return $isChanged;
 	}
