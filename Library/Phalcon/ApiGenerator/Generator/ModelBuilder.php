@@ -898,22 +898,26 @@ class ModelBuilder {
 					break;
 			}
 
+			$content = 'if(is_null($this->'.$field->getShortName().')) {
+			return null;
+		}
+';
 			switch($field->getType()) {
 				case 'Date':
 				case 'DateTime':
-					$content = 'return new '.$field->getType().'($this->'.$field->getShortName().');';
+					$content .= '		return new '.$field->getType().'($this->'.$field->getShortName().');';
 					break;
 				case 'bool':
-					$content = 'return (bool)$this->'.$field->getShortName().';';
+					$content .= '		return (bool)$this->'.$field->getShortName().';';
 					break;
 				case 'int':
-					$content = 'return (int)$this->'.$field->getShortName().';';
+					$content .= '		return (int)$this->'.$field->getShortName().';';
 					break;
 				case 'double':
-					$content = 'return (double)$this->'.$field->getShortName().';';
+					$content .= '		return (double)$this->'.$field->getShortName().';';
 					break;
 				default:
-					$content = 'return $this->'.$field->getShortName().';';
+					$content .= '		return $this->'.$field->getShortName().';';
 					break;
 
 			}
@@ -1425,7 +1429,7 @@ class ModelBuilder {
 		$method->setName('getDi');
 		$method->setDescription('Gets the current dependency injector');
 		$method->setContent(
-		'if(is_null($this->dependencyInjector)) {
+			'if(is_null($this->dependencyInjector)) {
 			$this->dependencyInjector = FactoryDefault::getDefault();
 			if(is_null($this->dependencyInjector)) {
 				$this->dependencyInjector = new FactoryDefault();
@@ -1441,7 +1445,7 @@ class ModelBuilder {
 		$method->setName('tearDown');
 		$method->setDescription('Resets the di when the test is done');
 		$method->setContent(
-		'FactoryDefault::reset();'
+			'FactoryDefault::reset();'
 		);
 		$this->getTestClass()->addMethod($method);
 
@@ -1454,7 +1458,7 @@ class ModelBuilder {
 		$parameter->setType('FactoryDefault');
 		$method->addParameter($parameter);
 		$method->setContent(
-		'$this->dependencyInjector = $dependencyInjector;'
+			'$this->dependencyInjector = $dependencyInjector;'
 		);
 		$this->getTestClass()->addMethod($method);
 
