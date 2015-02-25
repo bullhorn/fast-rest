@@ -898,11 +898,24 @@ class ModelBuilder {
 					break;
 			}
 
+			switch($field->getType()) {
+				case 'Date':
+				case 'DateTime':
+					$content = 'return new '.$field->getType().'($this->'.$field->getShortName().');';
+					break;
+				case 'bool':
+					$content = 'return (bool)$this->'.$field->getShortName().';';
+					break;
+				case 'int':
+					$content = 'return (int)$this->'.$field->getShortName().';';
+					break;
+				case 'double':
+					$content = 'return (double)$this->'.$field->getShortName().';';
+					break;
+				default:
+					$content = 'return $this->'.$field->getShortName().';';
+					break;
 
-			if(in_array($field->getType(), array('Date', 'DateTime'))) {
-				$content = 'return new '.$field->getType().'($this->'.$field->getShortName().');';
-			} else {
-				$content = 'return $this->'.$field->getShortName().';';
 			}
 			$method = new Object\Method();
 			$method->setAccess('public');
