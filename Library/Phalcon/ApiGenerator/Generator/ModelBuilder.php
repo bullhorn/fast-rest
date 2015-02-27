@@ -679,30 +679,22 @@ class ModelBuilder {
 	private function buildRelationships() {
 		/** @var Relationship[] $relationships */
 		$relationships = array();
-		$regExp = '@\s+CONSTRAINT `(?P<constraintName>[^`]+)` FOREIGN KEY \(`(?P<localColumn>[^`]+)`\) REFERENCES `(?P<remoteTable>[^`]+)` \(`(?P<remoteColumn>[^`]+)`\) (?P<changes>.*)@';
-		//Local Tables
-		$sql = 'SHOW CREATE TABLE `'.$this->getTableName().'`';
-		/** @var ResultSet $results */
-		$results = $this->getConfiguration()->getConnection()->query($sql);
-		$result = (object)$results->fetch();
-		$script = $result->{'Create Table'};
-		if(preg_match_all($regExp, $script, $matches)) {
-			$length = count($matches[0]);
-			for($i = 0; $i < $length; $i++) {
-				$relationship = new Relationship(
-					$this->getConfiguration(),
-					$this->getTableName(),
-					$matches['localColumn'][$i],
-					$matches['remoteTable'][$i],
-					$matches['remoteColumn'][$i],
-					'belongsTo',
-					trim($matches['changes'][$i], ',')
-				);
-				$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Relation');
-				$this->getAbstractClass()->addUse($relationship->getRemoteModel().' as Child'.$relationship->getRemoteShortModel());
-				$relationships[] = $relationship;
-			}
+		$dbCompareTable = new \Phalcon\ApiGenerator\DbCompare\Table($this->getConfiguration()->getConnection(), $this->getTableName());
+		foreach($dbCompareTable->getConstraints() as $constraint) {
+			$relationship = new Relationship(
+				$this->getConfiguration(),
+				$this->getTableName(),
+				implode(', ', $constraint->getLocalColumns()),
+				$constraint->getRemoteTable(),
+				implode(', ', $constraint->getRemoteColumns()),
+				'belongsTo',
+				'ON DELETE '.$constraint->getDeleteAction().' ON UPDATE '.$constraint->getUpdateAction()
+			);
+			$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Relation');
+			$this->getAbstractClass()->addUse($relationship->getRemoteModel().' as Child'.$relationship->getRemoteShortModel());
+			$relationships[] = $relationship;
 		}
+
 		//Get One to Many relationships
 
 		$database = $this->getCurrentDatabaseName();
@@ -712,31 +704,25 @@ class ModelBuilder {
 		while($foreignKey = $foreignKeys->fetch()) {
 			$foreignKey = (object)$foreignKey;
 			$tableName = $foreignKey->tableName;
-			$sql = 'SHOW CREATE TABLE `'.$tableName.'`';
-			/** @var ResultSet $results */
-			$results = $this->getConfiguration()->getConnection()->query($sql);
-			$result = (object)$results->fetch();
-			$script = $result->{'Create Table'};
-			if(preg_match_all($regExp, $script, $matches)) {
-				$length = count($matches[0]);
-				for($i = 0; $i < $length; $i++) {
-					if($matches['remoteTable'][$i]==$this->getTableName()) {
-						$relationship = new Relationship(
-							$this->getConfiguration(),
-							$this->getTableName(),
-							$matches['remoteColumn'][$i],
-							$tableName,
-							$matches['localColumn'][$i],
-							'hasMany',
-							trim($matches['changes'][$i], ',')
-						);
-						$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Relation');
-						$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Resultset\Simple as ResultSet');
-						$this->getAbstractClass()->addUse($relationship->getRemoteModel().' as Child'.$relationship->getRemoteShortModel());
-						$relationships[] = $relationship;
-					}
+
+			$dbCompareTable = new \Phalcon\ApiGenerator\DbCompare\Table($this->getConfiguration()->getConnection(), $tableName);
+			foreach($dbCompareTable->getConstraints() as $constraint) {
+				if($constraint->getRemoteTable()==$this->getTableName()) {
+					$relationship = new Relationship(
+						$this->getConfiguration(),
+						$this->getTableName(),
+						implode(', ', $constraint->getRemoteColumns()),
+						$constraint->getRemoteTable(),
+						implode(', ', $constraint->getLocalColumns()),
+						'hasMany',
+						'ON DELETE '.$constraint->getDeleteAction().' ON UPDATE '.$constraint->getUpdateAction()
+					);
+					$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Relation');
+					$this->getAbstractClass()->addUse($relationship->getRemoteModel().' as Child'.$relationship->getRemoteShortModel());
+					$relationships[] = $relationship;
 				}
 			}
+
 		}
 		foreach($relationships as $relationship) {
 			$relationship->setRelationships($relationships);
