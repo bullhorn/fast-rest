@@ -712,7 +712,7 @@ class ModelBuilder {
 						$this->getConfiguration(),
 						$this->getTableName(),
 						implode(', ', $constraint->getRemoteColumns()),
-						$constraint->getRemoteTable(),
+						$tableName,
 						implode(', ', $constraint->getLocalColumns()),
 						'hasMany',
 						'ON DELETE '.$constraint->getDeleteAction().' ON UPDATE '.$constraint->getUpdateAction()
