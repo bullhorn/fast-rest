@@ -130,6 +130,7 @@ class Index {
 			throw new \Exception('Constant Already Exists: '.$name);
 		}
 		$constants[$name] = $value;
+		ksort($constants);
 		$this->setConstants($constants);
 	}
 
@@ -200,6 +201,7 @@ class Index {
 			throw new \Exception('A Method with the name of: '.$method->getName().' already exists');
 		}
 		$methods[$key] = $method;
+		ksort($methods);
 		$this->setMethods($methods);
 	}
 
@@ -226,6 +228,7 @@ class Index {
 			throw new \Exception('A Variable with the name of: '.$variable->getName().' already exists');
 		}
 		$variables[$key] = $variable;
+		ksort($variables);
 		$this->setVariables($variables);
 	}
 
@@ -282,6 +285,7 @@ class Index {
 		if(!in_array($use, $uses)) {
 			$uses[] = $use;
 		}
+		sort($uses);
 		$this->setUses($uses);
 	}
 

@@ -719,6 +719,9 @@ class ModelBuilder {
 					);
 					$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Relation');
 					$this->getAbstractClass()->addUse($relationship->getRemoteModel().' as Child'.$relationship->getRemoteShortModel());
+					$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Relation');
+					$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Resultset\Simple as ResultSet');
+					$this->getAbstractClass()->addUse($relationship->getRemoteModel().' as Child'.$relationship->getRemoteShortModel());
 					$relationships[] = $relationship;
 				}
 			}
