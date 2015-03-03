@@ -249,7 +249,7 @@ class ControllerBuilder {
 		}
 		$resource = new Swagger\Resource();
 		$resource->setApiVersion('1.0')->setBasePath('/v1.0')->setResourcePath($this->getClassName());
-		$resource->setDescription("All operations regarding ".$this->singularModelA_Or_An());
+		$resource->setDescription('');
 		$documentation = $model."\n".$resource;
 		$this->getObject()->setDocumentation($documentation);
 	}
