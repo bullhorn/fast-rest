@@ -22,11 +22,12 @@ class Show extends Base {
 
 	/**
 	 * Generates the std object to show
+	 * @param Field $field
 	 * @return \stdClass
 	 */
-	public function generate() {
+	public function generate(Field $field) {
 		$output = new \stdClass();
-		$this->showRecursive($output, $this->getFields(), $this->getEntity());
+		$this->showRecursive($output, $field, $this->getEntity());
 		return $output;
 	}
 
@@ -34,34 +35,33 @@ class Show extends Base {
 	 * showParentsAndChildren
 	 *
 	 * @param \stdClass    $output
-	 * @param string       $alias
 	 * @param ApiInterface $entity
-	 * @param \stdClass    $value
+	 * @param Field        $field
 	 *
 	 * @return void
 	 * @throws Exception
 	 */
-	private function showParentsAndChildren(\stdClass $output, $alias, ApiInterface $entity, \stdClass $value) {
-		if(in_array($alias, $entity->getParentRelationships())) {
+	private function showParentsAndChildren(\stdClass $output, ApiInterface $entity, Field $field) {
+		if(in_array($field->getAlias(), $entity->getParentRelationships())) {
 
 			/** @var ApiInterface $parentEntity */
-			$parentEntity = $entity->getRelated($alias);
+			$parentEntity = $entity->getRelated($field->getAlias());
 			if($parentEntity===false) {//AKA, a nullable vendor
-				$output->{$alias} = null;
+				$output->{$field->getAlias()} = null;
 			} else {
-				$output->{$alias} = new \stdClass();
-				$this->showRecursive($output->{$alias}, $value, $parentEntity);
+				$output->{$field->getAlias()} = new \stdClass();
+				$this->showRecursive($output->{$field->getAlias()}, $field, $parentEntity);
 			}
-		} elseif(in_array($alias, $entity->getChildrenRelationships())) {
-			$output->{$alias} = array();
-			$resultSet = $entity->getRelated($alias);
+		} elseif(in_array($field->getAlias(), $entity->getChildrenRelationships())) {
+			$output->{$field->getAlias()} = array();
+			$resultSet = $entity->getRelated($field->getAlias());
 			foreach($resultSet as $key=>$currentEntity) {
 				$subOutput = new \stdClass();
-				$output->{$alias}[] = $subOutput;
-				$this->showRecursive($subOutput, $value, $currentEntity);
+				$output->{$field->getAlias()}[] = $subOutput;
+				$this->showRecursive($subOutput, $field, $currentEntity);
 			}
 		} else {
-			throw new Exception('Invalid Field, not on the current object, no child or parent found: '.$entity->getEntityName().' with '.$alias, 400);
+			throw new Exception('Invalid Field, not on the current object, no child or parent found: '.$entity->getEntityName().' with '.$field->getAlias(), 400);
 		}
 	}
 
@@ -69,35 +69,34 @@ class Show extends Base {
 	 * Adds to the output object the specified field
 	 *
 	 * @param \stdClass    $output
-	 * @param \stdClass    $fields
+	 * @param Field        $field
 	 * @param ApiInterface $entity
 	 *
 	 * @return void
 	 * @throws Exception
 	 */
-	private function showRecursive(\stdClass $output, \stdClass $fields, ApiInterface $entity) {
+	private function showRecursive(\stdClass $output, Field $field, ApiInterface $entity) {
 		$this->getAcl()->canRead($entity);
 		$columns = $entity->getModelsMetaData()->getColumnMap($entity);
-		foreach($fields as $key=>$value) {
-			if(is_object($value) && get_class($value)=='stdClass') {
-				$this->showParentsAndChildren(
-					$output,
-					ucfirst($key),
-					$entity,
-					$value
-				);
-			} else { //For current object
-				if($key=='*') { //All parts
-					foreach($columns as $column) {
-						$this->showField($output, $entity, $column);
-					}
-				} elseif(in_array($key, $columns)) {
-					$this->showField($output, $entity, $key);
-				} elseif(in_array($key, $entity->getChildrenRelationships()) || in_array($key, $entity->getParentRelationships())) {
-					throw new Exception('Invalid Field, child or parent: '.$entity->getEntityName().' with "'.$key.'". Please add .* to the end to get all related fields', 400);
-				} else {
-					throw new Exception('Invalid Field, not on the current object: '.$entity->getEntityName().' with '.$key, 400);
+		$columns = array_merge($columns, $entity->getExtraProperties());
+		foreach($field->getChildren() as $child) {
+			$this->showParentsAndChildren(
+				$output,
+				$entity,
+				$child
+			);
+		}
+		foreach($field->getFields() as $subField) {
+			if($subField=='*') { //All parts
+				foreach($columns as $column) {
+					$this->showField($output, $entity, $column);
 				}
+			} elseif(in_array($subField, $columns)) {
+				$this->showField($output, $entity, $subField);
+			} elseif(in_array($subField, $entity->getChildrenRelationships()) || in_array($subField, $entity->getParentRelationships())) {
+				throw new Exception('Invalid Field, child or parent: '.$entity->getEntityName().' with "'.$subField.'". Please add .* to the end to get all related fields', 400);
+			} else {
+				throw new Exception('Invalid Field, not on the current object: '.$entity->getEntityName().' with '.$subField, 400);
 			}
 		}
 	}
@@ -124,18 +123,6 @@ class Show extends Base {
 			}
 			$output->{$column} = $value;
 		}
-	}
-
-	/**
-	 * Returns the fields
-	 * @return \stdClass
-	 */
-	private function getFields() {
-		$rawFields = $this->getRequest()->get('fields', null, '*');
-		$fields = explode(',', $rawFields);
-		$helper = new SplitHelper('.');
-		$keyedFields = array_fill_keys($fields, null);
-		return $helper->convert($keyedFields);
 	}
 
 	/**

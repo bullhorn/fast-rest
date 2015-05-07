@@ -1,6 +1,6 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Models;
-use Phalcon\ApiGenerator\Api\Services\Acl\EntityInterface;
+use Api\v1_0\Services\Authentication\Acl\EntityInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
@@ -8,6 +8,12 @@ use Phalcon\Mvc\Model\Relation;
 use Phalcon\ApiGenerator\Api\Services\Database\CriteriaHelper;
 
 interface ApiInterface extends EntityInterface, GeneratedInterface {
+
+	/**
+	 * Returns the primary id.
+	 * @return int
+	 */
+	public function getId();
 	/**
 	 * Getter
 	 * @return string[]
@@ -126,5 +132,11 @@ interface ApiInterface extends EntityInterface, GeneratedInterface {
 	 * @return string[]
 	 */
 	public function getRequiredModules();
+
+	/**
+	 * Allows us to arbitrarily add read only properties to api entities.
+	 * @return String[]
+	 */
+	public function getExtraProperties();
 
 }

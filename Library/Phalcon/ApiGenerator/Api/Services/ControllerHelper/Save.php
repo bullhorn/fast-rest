@@ -18,6 +18,9 @@ class Save extends Base {
 	private $entity;
 	/** @var  bool */
 	private $creating;
+	const EVENT_DATA_PROPAGATION_CREATE = 'event_data_propagation_create';
+	const EVENT_DATA_PROPAGATION_UPDATE = 'event_data_propagation_update';
+	const EVENT_DATA_FINAL_CLEANUP = 'event_data_final_cleanup';
 
 	/**
 	 * Constructor
@@ -80,74 +83,19 @@ class Save extends Base {
 		$this->request = $request;
 	}
 
-	private function dispatchJsonError() {
-		$error = 'JSON Decode Error';
-		switch(json_last_error()) {
-			case JSON_ERROR_DEPTH:
-				$error .= ' - Maximum stack depth exceeded';
-				break;
-			case JSON_ERROR_STATE_MISMATCH:
-				$error .= ' - Underflow or the modes mismatch';
-				break;
-			case JSON_ERROR_CTRL_CHAR:
-				$error .= ' - Unexpected control character found';
-				break;
-			case JSON_ERROR_SYNTAX:
-				$error .= ' - Syntax error, malformed JSON';
-				break;
-			case JSON_ERROR_UTF8:
-				$error .= ' - Malformed UTF-8 characters, possibly incorrectly encoded';
-				break;
-			default:
-				$error .= ' - Unknown error';
-				break;
-		}
-		throw new Exception($error, 400);
-	}
-
-	/**
-	 * Gets the parameters, sorted from parent to child
-	 * @return \stdClass
-	 * @throws Exception
-	 */
-	private function getParams() {
-		if($this->getRequest()->getRawBody()==''
-			&& !empty($this->getRequest()->getPost())
-			&& !empty($this->getRequest()->getPut())
-			&& !empty($this->getRequest()->getUploadedFiles())
-		) {
-			throw new Exception('No Data Passed', 400);
-		}
-		if(!is_null($this->getRequest()->getJsonRawBody())) {
-			$params = (array)$this->getRequest()->getJsonRawBody();
-			$delimiter = '.';
-		} else {
-			if($this->getRequest()->isPost()) {
-				$params = $this->getRequest()->getPost();
-			} else {
-				$params = $this->getRequest()->getPut();
-			}
-			$delimiter = '_';
-		}
-		if(sizeOf($params)==0 && json_last_error()!=JSON_ERROR_NONE) {
-			$this->dispatchJsonError();
-		}
-		$helper = new SplitHelper($delimiter);
-		return $helper->convert($params);
-	}
-
 	/**
 	 * Saves all possible post variables
+	 * @param Params $params
 	 * @return bool if anything was changed
 	 * @throws Exception
 	 * @throws \Exception
 	 */
-	public function process() {
+	public function process(Params $params) {
 		$transactionManager = new Transaction();
 		$transaction = $transactionManager->getTransaction();
 		$isChanged = false;
 		try {
-			$isChanged = $this->saveFieldsRecursive($this->getParams(), $this->getEntity(), $this->isCreating(), $transaction);
+			$isChanged = $this->saveFieldsRecursive($params->getParams(), $this->getEntity(), $this->isCreating(), $transaction);
 			$transaction->commit();
 		} catch (TransactionException $e) {
 			$transaction->rollback();
@@ -193,14 +141,10 @@ class Save extends Base {
 		foreach($params as $key=>$value) {
 			if(!(is_object($value) && get_class($value)=='stdClass')) {
 				if(in_array($key, $entity->getModelsMetaData()->getColumnMap($entity))) {
-					if(is_array($value)) {
-						throw new Exception('Post Value cannot be an array', 400);
-					} else {
-						if(array_key_exists($key, $automaticFields) && $entity->readAttribute($key)!=$value) {
-							throw new Exception('The field of: '.$key.' cannot be manually updated', 409);
-						}
-						$fields[$key] = $value;
+					if(array_key_exists($key, $automaticFields) && $entity->readAttribute($key)!=$value) {
+						throw new Exception('The field of: '.$key.' cannot be manually updated', 409);
 					}
+					$fields[$key] = $value;
 				} else {
 					throw new Exception('Could not find the field: '.$key, 400);
 				}
@@ -318,8 +262,10 @@ class Save extends Base {
 
 		if($isCreating) {
 			$entity->fireEventCancel(UploadBase::EVENT_UPLOAD_FILE_CREATE);
+			$entity->fireEvent(self::EVENT_DATA_PROPAGATION_CREATE);
 		} else {
 			$entity->fireEventCancel(UploadBase::EVENT_UPLOAD_FILE_UPDATE);
+			$entity->fireEvent(self::EVENT_DATA_PROPAGATION_UPDATE);
 		}
 		if($isCreating || sizeOf($entity->getChangedFields())>0) {
 			$isChanged = true;
@@ -329,6 +275,7 @@ class Save extends Base {
 			//Add the acl in after the save so that the validation can be performed, in case you are looking at a parent, and the parent value is set incorrectly.  This will rollback the transaction anyways
 			$this->getAcl()->canWrite($entity);
 		}
+		$entity->fireEvent(self::EVENT_DATA_FINAL_CLEANUP);
 		return $isChanged;
 	}
 }

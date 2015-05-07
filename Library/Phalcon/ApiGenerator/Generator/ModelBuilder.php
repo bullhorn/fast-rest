@@ -347,6 +347,8 @@ class ModelBuilder {
 		$validation->addUse('Phalcon\Mvc\Model\Message');
 		$validation->addUse('Phalcon\Mvc\Model\ValidatorInterface');
 		$validation->addUse('Phalcon\ApiGenerator\Api\Services\Acl\Events as AclEvents');
+		$validation->addUse('Phalcon\ApiGenerator\Api\Services\ControllerHelper\Save as SaveService');
+		$validation->addUse('Phalcon\ApiGenerator\Api\Services\ControllerHelper\Delete as DeleteService');
 
 		$variable = new Object\Variable();
 		$variable->setName('entity');
@@ -414,17 +416,55 @@ class ModelBuilder {
 			case \'beforeDelete\':
 				$this->beforeDelete($entity);
 				break;
+			case \'afterSave\':
+				$this->afterSave($entity);
+				break;
+			case \'afterUpdate\':
+				$this->afterUpdate($entity);
+				break;
+			case \'afterDelete\':
+				$this->afterDelete($entity);
+				break;
 			case \'validation\':
 				$this->validation($entity);
 				break;
 			case \'beforeValidationOnCreate\':
 				$this->beforeValidationOnCreate($entity);
 				break;
+			case \'beforeValidationOnUpdate\':
+				$this->beforeValidationOnUpdate($entity);
+				break;
 			case AclEvents::EVENT_READ:
-				$this->canRead($entity);
+				$canRead = $this->canRead($entity);
+				if($canRead===false) {
+					if(empty($entity->getMessages())) {
+						$entity->appendMessage(new Message("You do not have read permission to: ".$entity->getSource()));
+					}
+				}else if($canRead!==true) {
+					throw new \InvalidArgumentException("Can read must return a boolean.");
+				}
 				break;
 			case AclEvents::EVENT_WRITE:
-				$this->canWrite($entity);
+				$canWrite = $this->canWrite($entity);
+				if($canWrite===false) {
+					if(empty($entity->getMessages())) {
+						$entity->appendMessage(new Message("You do not have write permission to: ".$entity->getSource()));
+					}
+				}else if($canWrite!==true) {
+					throw new \InvalidArgumentException("Can write must return a boolean.");
+				}
+				break;
+			case SaveService::EVENT_DATA_FINAL_CLEANUP:
+				$this->finalCleanup($entity);
+				break;
+			case SaveService::EVENT_DATA_PROPAGATION_CREATE:
+				$this->dataPropagationCreate($entity);
+				break;
+			case SaveService::EVENT_DATA_PROPAGATION_UPDATE:
+				$this->dataPropagationUpdate($entity);
+				break;
+			case DeleteService::EVENT_DATA_PROPAGATION_DELETE:
+				$this->dataPropagationDelete($entity);
 				break;
 		}
 		if($entity->validationHasFailed()==true) {
@@ -465,6 +505,25 @@ class ModelBuilder {
 
 		$method = new Object\Method();
 		$method->setAccess('protected');
+		$method->setDescription('Ran before validation on update');
+		$method->setReturnType('void');
+		$method->setName('beforeValidationOnUpdate');
+		$parameter = new Object\Parameter();
+		$parameter->setName('entity');
+		$parameter->setType('Model');
+		$parameter->setStrictType(true);
+		$method->addParameter($parameter);
+		$method->setContent('return null;');
+		$validation->addMethod($method);
+
+		$validation->addMethod($this->buildFinalCleanupMethod());
+		$validation->addMethod($this->buildDataPropagationCreateMethod());
+		$validation->addMethod($this->buildDataPropagationUpdateMethod());
+		$validation->addMethod($this->buildDataPropagationDeleteMethod());
+
+
+		$method = new Object\Method();
+		$method->setAccess('protected');
 		$method->setDescription('Validates if the entity can be written to');
 		$method->setReturnType('bool');
 		$method->setName('canWrite');
@@ -499,6 +558,10 @@ class ModelBuilder {
 		$method->setContent($content);
 		$validation->addMethod($method);
 		//End Before Delete Method
+
+		$validation->addMethod($this->buildAfterDeleteMethod());
+		$validation->addMethod($this->buildAfterUpdateMethod());
+		$validation->addMethod($this->buildAfterSaveMethod());
 
 		//Validation Method
 		$content = '//Check to see if it is automatically updated
@@ -1377,6 +1440,7 @@ class ModelBuilder {
 
 		$this->initTestClass();
 		$this->getTestClass()->setNamespace($this->getAbstractClass()->getNamespace());
+		$this->getTestClass()->setName($this->getAbstractClass()->getName().'Test');
 		$this->buildTestSetup();
 
 		$this->buildEnumConstants();
@@ -1389,6 +1453,7 @@ class ModelBuilder {
 		$this->buildAddJoin();
 
 		$this->buildFindFirst();
+		$this->buildFind();
 
 		$this->buildGettersAndSetters();
 		$this->buildRelationshipGetters();
@@ -1465,13 +1530,40 @@ class ModelBuilder {
 		$method->setName('findFirst');
 		$method->setDescription('Override parent so we have completion');
 		$method->setStatic(true);
-		$method->setReturnType('ChildModel');
+		$method->setReturnType('ChildModel|false');
+		$parameter = new Object\Parameter();
+		$parameter->setName('parameters');
+		$parameter->setDefaultValue('null');
+		$parameter->setDescription("Array of conditions or primary key.");
+		$parameter->setType('array|int');
+		$method->addParameter($parameter);
+		$method->setContent('return parent::findFirst($parameters);');
+		$this->getAbstractClass()->addMethod($method);
+	}
+
+	/**
+	 * buildFind
+	 * @return void
+	 * @throws \Exception
+	 */
+	private function buildFind() {
+		$method = new Object\Method();
+		$method->setAccess('public');
+		$method->setName('find');
+		$method->setDescription('Override parent so we have completion');
+		$method->setStatic(true);
+		$method->setReturnType('ChildModel[]|ResultSet');
 		$parameter = new Object\Parameter();
 		$parameter->setName('parameters');
 		$parameter->setDefaultValue('null');
 		$parameter->setType('array');
 		$method->addParameter($parameter);
-		$method->setContent('return parent::findFirst($parameters);');
+		$method->setContent('if(is_array($parameters) && empty($parameters)) {
+			$model = new ChildModel();
+			return new ResultSet($model->columnMap(), $model, null);
+		}
+		return parent::find($parameters);');
+		$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Resultset\Simple as ResultSet');
 		$this->getAbstractClass()->addMethod($method);
 	}
 
@@ -1561,4 +1653,130 @@ class ModelBuilder {
 		}
 	}
 
+	/**
+	 * No.
+	 * @return Object\Method
+	 */
+	private function buildDataPropagationCreateMethod() {
+		$method = new Object\Method();
+		$method->setAccess('protected');
+		$method->setDescription('Does any data manipulation that is needed before saving but after validation');
+		$method->setReturnType('void');
+		$method->setName('dataPropagationCreate');
+		$parameter = new Object\Parameter();
+		$parameter->setName('entity');
+		$parameter->setType('Model');
+		$parameter->setStrictType(true);
+		$method->addParameter($parameter);
+		$method->setContent('return;');
+
+		return $method;
+	}
+	/**
+	 * No.
+	 * @return Object\Method
+	 */
+	private function buildFinalCleanupMethod() {
+		$method = new Object\Method();
+		$method->setAccess('protected');
+		$method->setDescription('One time cleanup after save/update/delete are done. Helps avoid some recursion nightmares.');
+		$method->setReturnType('void');
+		$method->setName('finalCleanup');
+		$parameter = new Object\Parameter();
+		$parameter->setName('entity');
+		$parameter->setType('Model');
+		$parameter->setStrictType(true);
+		$method->addParameter($parameter);
+		$method->setContent('return;');
+
+		return $method;
+	}
+
+	/**
+	 * No.
+	 * @return Object\Method
+	 */
+	private function buildDataPropagationUpdateMethod() {
+		$method = new Object\Method();
+		$method->setAccess('protected');
+		$method->setDescription('Does any data manipulation that is needed before updating the database row but after validation');
+		$method->setReturnType('void');
+		$method->setName('dataPropagationUpdate');
+		$parameter = new Object\Parameter();
+		$parameter->setName('entity');
+		$parameter->setType('Model');
+		$parameter->setStrictType(true);
+		$method->addParameter($parameter);
+		$method->setContent('return;');
+
+		return $method;
+	}
+
+	/**
+	 * No.
+	 * @return Object\Method
+	 */
+	private function buildDataPropagationDeleteMethod() {
+		$method = new Object\Method();
+		$method->setAccess('protected');
+		$method->setDescription('Does any data manipulation that is needed before deleting the row from the database but after validation');
+		$method->setReturnType('void');
+		$method->setName('dataPropagationDelete');
+		$parameter = new Object\Parameter();
+		$parameter->setName('entity');
+		$parameter->setType('Model');
+		$parameter->setStrictType(true);
+		$method->addParameter($parameter);
+		$method->setContent('return;');
+
+		return $method;
+	}
+
+	/**
+	 * No.
+	 * @return Object\Method
+	 */
+	private function buildAfterDeleteMethod() {
+		return $this->afterCrudMethod("afterDelete", 'Provides a way of doing additional manipulation after deletion.');
+	}
+
+	/**
+	 * No.
+	 * @return Object\Method
+	 */
+	private function buildAfterSaveMethod() {
+		return $this->afterCrudMethod("afterSave", 'Provides a way of doing additional manipulation after creating/updating.');
+	}
+
+	/**
+	 * No.
+	 * @return Object\Method
+	 */
+	private function buildAfterUpdateMethod() {
+		return $this->afterCrudMethod("afterUpdate", 'Provides a way of doing additional manipulation after updating.');
+	}
+
+	/**
+	 * Generates after events since they are so similar.
+	 *
+	 * @param String $methodName
+	 * @param String $methodDescription
+	 *
+	 * @return Object\Method
+	 */
+	private function afterCrudMethod($methodName, $methodDescription) {
+		$method = new Object\Method();
+		$method->setAccess('protected');
+		$method->setDescription($methodDescription);
+		$method->setReturnType('void');
+		$method->setName($methodName);
+		$parameter = new Object\Parameter();
+		$parameter->setName('entity');
+		$parameter->setType('Model');
+		$parameter->setStrictType(true);
+		$method->addParameter($parameter);
+		$method->setContent('return;');
+
+		return $method;
+	}
 }

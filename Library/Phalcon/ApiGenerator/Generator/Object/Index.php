@@ -361,7 +361,7 @@ namespace '.$this->getNamespace().';
 		} else {
 			$rootDirectory = $this->getConfiguration()->getRootDirectory();
 		}
-		if(substr('\\'.$this->getNamespace(), 0, strlen($this->getConfiguration()->getRootNamespace()))!=$this->getConfiguration()->getRootNamespace()) {
+		if(substr($this->getNamespace(), 0, strlen($this->getConfiguration()->getRootNamespace()))!=$this->getConfiguration()->getRootNamespace()) {
 			throw new \Exception('The Root namespace does not match this classes namespace, could not get the file name');
 		}
 		if($isTestClass) {
