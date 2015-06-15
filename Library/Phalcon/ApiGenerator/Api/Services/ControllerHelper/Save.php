@@ -92,13 +92,14 @@ class Save extends Base {
 	 */
 	public function process(Params $params) {
 		$transactionManager = new Transaction();
+		$transactionManager->begin();
 		$transaction = $transactionManager->getTransaction();
 		$isChanged = false;
 		try {
 			$isChanged = $this->saveFieldsRecursive($params->getParams(), $this->getEntity(), $this->isCreating(), $transaction);
-			$transaction->commit();
+			$transactionManager->commit();
 		} catch (TransactionException $e) {
-			$transaction->rollback();
+			$transactionManager->rollback();
 		}
 		return $isChanged;
 	}
@@ -137,10 +138,14 @@ class Save extends Base {
 	 */
 	private function filterFields(\stdClass $params, ApiInterface $entity, $isCreating) {
 		$automaticFields = $this->lookUpAutomaticFields($entity, $isCreating);
+		$customParentRelationshipFields = [];
+		foreach($entity->getCustomParentRelationships() as $customParentRelationshipField) {
+			$customParentRelationshipFields[] = $customParentRelationshipField->getFields();
+		}
 		$fields = array();
 		foreach($params as $key=>$value) {
 			if(!(is_object($value) && get_class($value)=='stdClass')) {
-				if(in_array($key, $entity->getModelsMetaData()->getColumnMap($entity))) {
+				if(in_array($key, $entity->getModelsMetaData()->getColumnMap($entity)) || in_array($key, $customParentRelationshipFields)) {
 					if(array_key_exists($key, $automaticFields) && $entity->readAttribute($key)!=$value) {
 						throw new Exception('The field of: '.$key.' cannot be manually updated', 409);
 					}
@@ -194,6 +199,23 @@ class Save extends Base {
 	}
 
 	/**
+	 * Writes the custom parent fields
+	 *
+	 * @param string[]     $fields
+	 * @param ApiInterface $entity
+	 *
+	 * @return void
+	 */
+	private function writeCustomParents($fields, ApiInterface $entity) {
+		foreach($entity->getCustomParentRelationships() as $customRelationship) {
+			$name = $customRelationship->getReferencedFields();
+			if(array_key_exists($name, $fields)) {
+				$entity->writeAttribute($name, $fields[$name]);
+			}
+		}
+	}
+
+	/**
 	 * Saves all fields
 	 *
 	 * @param \stdClass            $params
@@ -216,6 +238,7 @@ class Save extends Base {
 
 
 		$this->writeFields($fields, $entity);
+		$this->writeCustomParents($fields, $entity);
 		//Then Update the parents
 		/** @var ApiInterface[] $parentEntities */
 		$parentEntities = array();
@@ -235,7 +258,6 @@ class Save extends Base {
 			if($parentIsChanged) {
 				$isChanged = true;
 			}
-
 		}
 		//Then Check if we want to load from defaults (if creating the specific object)
 		if($isCreating) {

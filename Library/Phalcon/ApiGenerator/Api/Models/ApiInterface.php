@@ -8,6 +8,11 @@ use Phalcon\Mvc\Model\Relation;
 use Phalcon\ApiGenerator\Api\Services\Database\CriteriaHelper;
 
 interface ApiInterface extends EntityInterface, GeneratedInterface {
+	/**
+	 * Gets a list of all the custom relationships, the key should be the alias
+	 * @return CustomRelationship[]
+	 */
+	public function getCustomParentRelationships();
 
 	/**
 	 * Returns the primary id.

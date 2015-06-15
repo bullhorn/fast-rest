@@ -422,6 +422,9 @@ class ModelBuilder {
 			case \'afterUpdate\':
 				$this->afterUpdate($entity);
 				break;
+			case \'afterCreate\':
+				$this->afterCreate($entity);
+				break;
 			case \'afterDelete\':
 				$this->afterDelete($entity);
 				break;
@@ -562,6 +565,7 @@ class ModelBuilder {
 		$validation->addMethod($this->buildAfterDeleteMethod());
 		$validation->addMethod($this->buildAfterUpdateMethod());
 		$validation->addMethod($this->buildAfterSaveMethod());
+		$validation->addMethod($this->buildAfterCreateMethod());
 
 		//Validation Method
 		$content = '//Check to see if it is automatically updated
@@ -850,7 +854,7 @@ class ModelBuilder {
 				$method->setAccess('public');
 				$method->setDescription('Gets the related '.$relationship->getAlias());
 				$method->setName('get'.ucfirst($relationship->getAlias()));
-				$method->setReturnType('ResultSet');
+				$method->setReturnType('ResultSet|Child'.$relationship->getRemoteShortModel().'[]');
 				$parameter = new Object\Parameter();
 				$parameter->setDescription('');
 				$parameter->setName('parameters');
@@ -1754,6 +1758,14 @@ class ModelBuilder {
 	 */
 	private function buildAfterUpdateMethod() {
 		return $this->afterCrudMethod("afterUpdate", 'Provides a way of doing additional manipulation after updating.');
+	}
+
+	/**
+	 * No.
+	 * @return Object\Method
+	 */
+	private function buildAfterCreateMethod() {
+		return $this->afterCrudMethod("afterCreate", 'Provides a way of doing additional manipulation after creating.');
 	}
 
 	/**
