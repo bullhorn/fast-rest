@@ -19,11 +19,19 @@
   ],
   "require": {
     "php": ">=5.5.0",
+<<<<<<< HEAD
     "ext-phalcon": "1.3.4",
     "zircote/swagger-php": "*"
   },
   "require-dev": {
     "phalcon/devtools": "1.3.4"
+=======
+    "ext-phalcon": ">=1.3.4 <2.0",
+    "zircote/swagger-php": "*"
+  },
+  "require-dev": {
+    "phalcon/devtools": "1.3.x-dev"
+>>>>>>> 7e91cf1029bbbc8406445166c2ece62147dbe9fa
   },
   "autoload": {
     "psr-0": {
