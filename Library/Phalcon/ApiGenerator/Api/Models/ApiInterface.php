@@ -1,6 +1,6 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Models;
-use Phalcon\ApiGenerator\Api\Services\Acl\EntityInterface;
+use Api\v1_0\Services\Authentication\Acl\EntityInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
@@ -8,6 +8,24 @@ use Phalcon\Mvc\Model\Relation;
 use Phalcon\ApiGenerator\Api\Services\Database\CriteriaHelper;
 
 interface ApiInterface extends EntityInterface, GeneratedInterface {
+	const FIELD_TYPE_BOOL = 'bool';
+	const FIELD_TYPE_DATE = 'Date';
+	const FIELD_TYPE_DATE_TIME = 'DateTime';
+	const FIELD_TYPE_DOUBLE = 'double';
+	const FIELD_TYPE_INT = 'int';
+	const FIELD_TYPE_STRING = 'string';
+
+	/**
+	 * Gets a list of all the custom relationships, the key should be the alias
+	 * @return CustomRelationship[]
+	 */
+	public function getCustomParentRelationships();
+
+	/**
+	 * Returns the primary id.
+	 * @return int
+	 */
+	public function getId();
 	/**
 	 * Getter
 	 * @return string[]
@@ -96,35 +114,24 @@ interface ApiInterface extends EntityInterface, GeneratedInterface {
 	 */
 	public function getEntityName();
 
-
-	/**
-	 * Getter
-	 * @return int
-	 */
-	public function getCreatedAt();
-
-	/**
-	 * Setter
-	 * @param int $createdAt
-	 */
-	public function setCreatedAt($createdAt);
-
-	/**
-	 * Getter
-	 * @return int
-	 */
-	public function getUpdatedAt();
-
-	/**
-	 * Setter
-	 * @param int $updatedAt
-	 */
-	public function setUpdatedAt($updatedAt);
-
 	/**
 	 * Gets a list of all the required modules
 	 * @return string[]
 	 */
 	public function getRequiredModules();
 
+	/**
+	 * Allows us to arbitrarily add read only properties to api entities.
+	 * @return String[]
+	 */
+	public function getExtraProperties();
+
+	/**
+	 * Returns all behaviors associated with the class
+	 *
+	 * @param string $className
+	 *
+	 * @return Model\BehaviorInterface[]
+	 */
+	public function getAllBehaviorsByClassName($className);
 }

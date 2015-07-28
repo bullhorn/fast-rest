@@ -54,7 +54,7 @@ class Relationship {
 			if(isset($changes['DELETE']) && $changes['DELETE']=='SET NULL') {
 				$this->setNullable(true);
 				$action = 'NO_ACTION';
-			} elseif(isset($changes['UPDATE']) && $changes['UPDATE']=='CASCADE') {
+			} elseif(isset($changes['DELETE']) && $changes['DELETE']=='CASCADE') {
 				$action = 'ACTION_CASCADE';
 			}
 			$this->setAction($action);

@@ -11,9 +11,9 @@ class Constraint extends Base {
 	/** @var  string[] */
 	private $remoteColumns;
 	/** @var  string */
-	private $deleteAction;
+	private $deleteAction = 'RESTRICT';
 	/** @var  string */
-	private $updateAction;
+	private $updateAction = 'RESTRICT';
 
 	/**
 	 * Constructor

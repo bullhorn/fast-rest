@@ -64,7 +64,7 @@ class Field {
 			$fieldType = 'string';
 			$swaggerType = 'string';
 			$this->setEnumOptions(explode('\',\'', $matches['matches']));
-		} elseif (preg_match('@^datetime@', $result->Type)) {
+		} elseif (preg_match('@^(datetime|timestamp)@', $result->Type)) {
 			$fieldType = 'DateTime';
 			$swaggerType = 'string';
 			$swaggerFormat = 'datetime';

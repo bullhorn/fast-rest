@@ -115,12 +115,14 @@ class ControllerBuilder {
 		$automaticallyUpdatedFields = $this->getModel()->getAutomaticallyUpdatedFields();
 		foreach($this->getModel()->getDefaultRelationships() as $alias) {
 			$relation = $this->getModel()->getModelsManager()->getRelationByAlias(get_class($this->getModel()), $alias);
-			if(in_array($relation->getFields(), $automaticallyUpdatedFields)) {
-				$referencedModel = $relation->getReferencedModel();
-				/** @var Base $relatedModel */
-				$relatedModel = new $referencedModel();
-				$relatedModels[$alias] = $relatedModel;
-				$relatedBuilders[$alias] = new ModelBuilder($this->getConfiguration(), $relatedModel->getSource());
+			if($relation!==false) {
+				if(in_array($relation->getFields(), $automaticallyUpdatedFields)) {
+					$referencedModel = $relation->getReferencedModel();
+					/** @var Base $relatedModel */
+					$relatedModel = new $referencedModel();
+					$relatedModels[$alias] = $relatedModel;
+					$relatedBuilders[$alias] = new ModelBuilder($this->getConfiguration(), $relatedModel->getSource());
+				}
 			}
 		}
 		$this->setRelatedModels($relatedModels);

@@ -8,6 +8,7 @@ use Phalcon\ApiGenerator\Api\Models\ControllerModelInterface;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Http\Request\Exception;
 use Phalcon\Mvc\Url;
+use Phalcon\Mvc\Model\Behavior\SoftDelete;
 
 class Index extends Base {
 	/** @var  Request */
@@ -24,6 +25,8 @@ class Index extends Base {
 	private $criteriaHelper;
 	/** @var string[] Fields that are always allowed  */
 	private $whiteList = ['fields','start','count','sort'];
+	/** @var  IndexCriteria */
+	private $indexCriteria;
 
 	/**
 	 * Constructor
@@ -34,6 +37,7 @@ class Index extends Base {
 	public function __construct(Request $request, ControllerModelInterface $entityFactory, array $whiteList = []) {
 		$this->addToWhiteList($whiteList);
 		$this->setRequest($request);
+		$this->setIndexCriteria(new IndexCriteria($this->getRequest()));
 		$this->setEntityFactory($entityFactory);
 		$this->setCriteria($this->getEntityFactory()->query());
 		$this->setCriteriaHelper(new CriteriaHelper($this->getCriteria()));
@@ -47,6 +51,22 @@ class Index extends Base {
 		$this->buildLimit();
 		$this->setResultSet($this->getCriteriaHelper()->execute());
 	}
+
+	/**
+	 * @return IndexCriteria
+	 */
+	private function getIndexCriteria() {
+		return $this->indexCriteria;
+	}
+
+	/**
+	 * @param IndexCriteria $indexCriteria
+	 */
+	private function setIndexCriteria(IndexCriteria $indexCriteria) {
+		$this->indexCriteria = $indexCriteria;
+	}
+
+
 
 	/**
 	 * Gets the whitelisted list of fields always allowed
@@ -90,7 +110,7 @@ class Index extends Base {
 	 * Getter
 	 * @return CriteriaHelper
 	 */
-	private function getCriteriaHelper() {
+	protected function getCriteriaHelper() {
 		return $this->criteriaHelper;
 	}
 
@@ -106,7 +126,7 @@ class Index extends Base {
 	 * Getter
 	 * @return Criteria
 	 */
-	private function getCriteria() {
+	protected function getCriteria() {
 		return $this->criteria;
 	}
 
@@ -157,49 +177,70 @@ class Index extends Base {
 	 * @return void
 	 */
 	private function buildSearchCriteria() {
-		$helper = new SplitHelper('_');
-		$params = $helper->convert($this->getRequest()->getQuery());
-		$this->buildSearchFieldsRecursive($params, $this->getEntityFactory());
+		$this->buildSearchFieldsRecursive($this->getIndexCriteria()->getSearch(), $this->getEntityFactory());
 	}
 
 	/**
 	 * Builds the search fields
 	 *
-	 * @param \stdClass    $params
+	 * @param Search       $search
 	 * @param ApiInterface $entity
-	 * @param string       $alias
 	 *
 	 * @return void
 	 * @throws Exception
 	 */
-	private function buildSearchFieldsRecursive(\stdClass $params, ApiInterface $entity, $alias = null) {
+	private function buildSearchFieldsRecursive(Search $search, ApiInterface $entity) {
 		$isRoot = false;
+		$alias = $search->getAlias();
 		if(is_null($alias)) {
 			$isRoot = true;
 			$alias = get_class($entity);
 		}
-		foreach($params as $key=>$value) {
-			if(is_array($value)) {
-				throw new Exception('Search Value cannot be an array', 400);
-			} elseif(is_object($value) && get_class($value)=='stdClass') {
-				$subAlias = ucfirst($key);
-				if(in_array($subAlias, $entity->getParentRelationships())) {
-					$subEntity = $this->addJoin($entity, $subAlias, false);
-					$this->buildSearchFieldsRecursive($value, $subEntity, $subAlias);
-				} elseif(in_array($subAlias, $entity->getChildrenRelationships())) {
-					throw new Exception('Cannot search on children: '.($isRoot?'':$alias.'.').$subAlias, 400);
-				} else {
-					throw new Exception('Could not find the parent: '.($isRoot?'':$alias.'.').$subAlias, 400);
-				}
-			} else { //For current object
-				if(in_array($key, $entity->getModelsMetaData()->getColumnMap($entity))) {
-					$this->addSearchField($key, $value, $entity, $alias);
-				} else {
-					if(!$isRoot || !in_array($key, $this->getWhiteList())) {
-						throw new Exception('Could not find the field: '.($isRoot?'':$alias.'.').$key, 400);
-					}
+
+		foreach($search->getFields() as $field=>$value) {
+			if(in_array(preg_replace("/[<|>]$/", "", $field), $entity->getModelsMetaData()->getColumnMap($entity))) {
+				$this->addSearchField($field, $value, $entity, $alias);
+			} else {
+				if(!$isRoot || !in_array($field, $this->getWhiteList())) {
+					throw new Exception('Could not find the field: '.($isRoot?'':$alias.'.').$field, 400);
 				}
 			}
+		}
+		foreach($search->getChildren() as $child) {
+			if(in_array($child->getAlias(), $entity->getParentRelationships())) {
+				$subEntity = $this->addJoin($entity, $child->getAlias(), false);
+				$this->buildSearchFieldsRecursive($child, $subEntity, $child->getAlias());
+			} elseif(in_array($child->getAlias(), $entity->getChildrenRelationships())) {
+				throw new Exception('Cannot search on children: '.($isRoot?'':$alias.'.').$child->getAlias(), 400);
+			} else {
+				throw new Exception('Could not find the parent: '.($isRoot?'':$alias.'.').$child->getAlias(), 400);
+			}
+		}
+
+		$this->addSoftDelete($entity, $alias);
+	}
+
+	/**
+	 * Add soft delete to the where clause if the entity supports it
+	 *
+	 * @param ApiInterface $entity
+	 * @param string       $alias
+	 *
+	 * @return void
+	 */
+	public function addSoftDelete(ApiInterface $entity, $alias) {
+		$reflectionClass = new \ReflectionClass(SoftDelete::class);
+		$reflectionMethod = $reflectionClass->getMethod("getOptions");
+		$reflectionMethod->setAccessible(true);
+
+		/** @var SoftDelete[] $softDeleteBehaviors */
+		$softDeleteBehaviors = $entity->getAllBehaviorsByClassName(SoftDelete::class);
+
+		foreach ($softDeleteBehaviors as $softDeleteBehavior) {
+			$options = $reflectionMethod->invoke($softDeleteBehavior);
+			$sql = $alias.'.'.$options["field"].'!=?0';
+			$params = [$options["value"]];
+			$this->getCriteriaHelper()->andWhere($sql, $params);
 		}
 	}
 
@@ -214,11 +255,26 @@ class Index extends Base {
 	 * @return void
 	 */
 	private function addSearchField($name, $value, ApiInterface $entity, $alias) {
+		$operator = "=";
+		if (preg_match("/[<|>]$/", $name)) {
+			$operator = substr($name, -1)."=";
+			$name = substr($name, 0, -1);
+
+			$fieldTypes = $entity->getFieldTypes();
+			$fieldTypesWhiteList = [ApiInterface::FIELD_TYPE_DATE, ApiInterface::FIELD_TYPE_DATE_TIME, ApiInterface::FIELD_TYPE_DOUBLE, ApiInterface::FIELD_TYPE_INT];
+			if(!in_array($fieldTypes[$name], $fieldTypesWhiteList)) {
+				throw new Exception(
+					'Cannot perform '.$operator.' search on any fields that are not in '.implode(", ", $fieldTypesWhiteList).': '.$name.' has a type of '.$fieldTypes[$name],
+					400
+				);
+			}
+		}
+
 		$sql = $alias.'.'.$name;
 		$entity->writeAttribute($name, $value);
 		$params = array();
 		$paramCount = $this->getCriteriaHelper()->getParamId();
-		$sql .= '=?'.$paramCount;
+		$sql .= $operator.'?'.$paramCount;
 		$params[$paramCount] = $entity->readAttribute($name).''; //Make sure to convert to string, for Date and DateTime
 		$this->getCriteria()->andWhere($sql, $params);
 	}
@@ -252,20 +308,11 @@ class Index extends Base {
 	 * @return void
 	 */
 	protected function buildSortParameter() {
-		if($this->getRequest()->getQuery('sort')!='') {
-			$sortParameters = explode(",", $this->getRequest()->getQuery('sort'));
-
+		$sorts = $this->getIndexCriteria()->getSorts();
+		if(!empty($sorts)) {
 			$orderBy = '';
-			foreach($sortParameters as $index => $parameter) {
-				$parameter = trim($parameter);
-				if(substr($parameter, 0, 1) == "-") {
-					$parameter = substr($parameter, 1);
-					$isAsc = false;
-				} else {
-					$isAsc = true;
-				}
-				$parts = explode('.', $parameter);
-				$this->buildSortRecursive($this->getEntityFactory(), $parts, $isAsc, $orderBy);
+			foreach($sorts as $sort) {
+				$this->buildSortRecursive($this->getEntityFactory(), $sort->getFields(), $sort->isAsc(), $orderBy);
 			}
 			$this->getCriteria()->orderBy($orderBy);
 		}
@@ -309,19 +356,7 @@ class Index extends Base {
 	 * @return void
 	 */
 	private function buildLimit() {
-		$this->getCriteria()->limit($this->getLimit(), $this->getOffset());
-	}
-
-	/**
-	 * Gets the current offset
-	 * @return int
-	 */
-	private function getOffset() {
-		$start = $this->getRequest()->getQuery('start', 'int', 0); //If you don't pass in, 0, min 0
-		if($start<0) {
-			$start = 0;
-		}
-		return $start;
+		$this->getCriteria()->limit($this->getIndexCriteria()->getLimit(), $this->getIndexCriteria()->getOffset());
 	}
 
 	/**
@@ -346,21 +381,6 @@ class Index extends Base {
 	 */
 	private function getCount() {
 		return $this->count;
-	}
-
-	/**
-	 * Gets the current limit
-	 * @return int
-	 */
-	private function getLimit() {
-		$limit = $this->getRequest()->getQuery('count', 'int', 50);
-		if($limit<1) {
-			$limit = 1;
-		}
-		if($limit>500) {
-			$limit = 500;
-		}
-		return $limit;
 	}
 
 	/**
@@ -402,7 +422,7 @@ class Index extends Base {
 	private function getFirstPageQueryCriteria() {
 		return array(
 			'start' => 0,
-			'count' => $this->getLimit()
+			'count' => $this->getIndexCriteria()->getLimit()
 		);
 	}
 
@@ -411,13 +431,13 @@ class Index extends Base {
 	 * @return string[]
 	 */
 	private function getPreviousPageQueryCriteria() {
-		$start = $this->getOffset()-$this->getLimit();
+		$start = $this->getIndexCriteria()->getOffset()-$this->getIndexCriteria()->getLimit();
 		if($start<0) {
 			$start = 0;
 		}
 		return array(
 			'start' => $start,
-			'count' => $this->getLimit()
+			'count' => $this->getIndexCriteria()->getLimit()
 		);
 	}
 
@@ -426,10 +446,10 @@ class Index extends Base {
 	 * @return string[]
 	 */
 	private function getNextPageQueryCriteria() {
-		$start = $this->getOffset()+$this->getLimit();
+		$start = $this->getIndexCriteria()->getOffset()+$this->getIndexCriteria()->getLimit();
 		return array(
 			'start' => $start,
-			'count' => $this->getLimit()
+			'count' => $this->getIndexCriteria()->getLimit()
 		);
 	}
 
@@ -438,13 +458,13 @@ class Index extends Base {
 	 * @return string[]
 	 */
 	private function getLastPageQueryCriteria() {
-		$start = $this->getCount()-$this->getLimit();
+		$start = $this->getCount()-$this->getIndexCriteria()->getLimit();
 		if($start<0) {
 			$start = 0;
 		}
 		return array(
 			'start' => $start,
-			'count' => $this->getLimit()
+			'count' => $this->getIndexCriteria()->getLimit()
 		);
 	}
 

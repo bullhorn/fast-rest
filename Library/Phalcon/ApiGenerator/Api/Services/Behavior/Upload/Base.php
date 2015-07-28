@@ -70,7 +70,7 @@ abstract class Base extends Behavior implements BehaviorInterface, InjectionAwar
 	 * @return Request
 	 */
 	protected function getRequest() {
-		return $this->getDi()->get('request');
+		return $this->getDi()->get('Request');
 	}
 
 	/**

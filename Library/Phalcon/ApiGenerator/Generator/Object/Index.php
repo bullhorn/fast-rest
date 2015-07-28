@@ -134,6 +134,21 @@ class Index {
 		$this->setConstants($constants);
 	}
 
+	/**
+	 * Checks if the constant exists
+	 *
+	 * @param string $name The name of the constant you are looking for
+	 *
+	 * @return bool
+	 */
+	public function hasConstant($name) {
+		$hasConstant = false;
+		if(array_key_exists($name, $this->getConstants())) {
+			$hasConstant = true;
+		}
+
+		return $hasConstant;
+	}
 
 	/**
 	 * Getter
@@ -184,6 +199,17 @@ class Index {
 	 */
 	private function setMethods(array $methods) {
 		$this->methods = $methods;
+	}
+
+	/**
+	 * Checks whether the method name already exists on the class
+	 *
+	 * @param string $methodName The name to be checked
+	 *
+	 * @return bool
+	 */
+	public function hasMethod($methodName) {
+		return array_key_exists($methodName, $this->methods);
 	}
 
 	/**
@@ -361,7 +387,7 @@ namespace '.$this->getNamespace().';
 		} else {
 			$rootDirectory = $this->getConfiguration()->getRootDirectory();
 		}
-		if(substr('\\'.$this->getNamespace(), 0, strlen($this->getConfiguration()->getRootNamespace()))!=$this->getConfiguration()->getRootNamespace()) {
+		if(substr($this->getNamespace(), 0, strlen($this->getConfiguration()->getRootNamespace()))!=$this->getConfiguration()->getRootNamespace()) {
 			throw new \Exception('The Root namespace does not match this classes namespace, could not get the file name');
 		}
 		if($isTestClass) {
