@@ -1,10 +1,12 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Services\Database;
-use Api\v1_0\Services\Base;
+use Phalcon\ApiGenerator\DependencyInjection;
 use Phalcon\DI\InjectionAwareInterface;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use \Phalcon\Mvc\Model\TransactionInterface;
-class Transaction extends Base implements InjectionAwareInterface{
+use Phalcon\Events\Manager as EventsManager;
+class Transaction implements InjectionAwareInterface {
+	use DependencyInjection;
 	const DI_NAME = 'CurrentTransaction';
 	const EVENT_ROLLBACK = 'transaction:rollback';
 	const EVENT_COMMIT = 'transaction:commit';
@@ -67,6 +69,14 @@ class Transaction extends Base implements InjectionAwareInterface{
 		$this->getTransaction()->commit();
 		$this->getDi()->remove(self::DI_NAME);
 		$this->findEventsManager()->fire(self::EVENT_COMMIT, $this);
+	}
+	
+	/**
+	 * findEventsManager
+	 * @return EventsManager
+	 */
+	public function findEventsManager() {
+		return $this->getDi()->get('eventsManager');
 	}
 
 }

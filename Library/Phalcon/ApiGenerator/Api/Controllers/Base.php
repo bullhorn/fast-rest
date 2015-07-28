@@ -19,7 +19,6 @@ use Phalcon\ApiGenerator\Api\Services\Acl\AclInterface;
 
 /**
  * Class ControllerBase
- * @package Api\v1_0\Controllers
  */
 abstract class Base extends Controller {
 	/** @var  \stdClass */

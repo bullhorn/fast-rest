@@ -1,13 +1,12 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Models;
-use Api\v1_0\Services\Authentication\Acl\EntityInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\Relation;
 use Phalcon\ApiGenerator\Api\Services\Database\CriteriaHelper;
 
-interface ApiInterface extends EntityInterface, GeneratedInterface {
+interface ApiInterface extends GeneratedInterface {
 	const FIELD_TYPE_BOOL = 'bool';
 	const FIELD_TYPE_DATE = 'Date';
 	const FIELD_TYPE_DATE_TIME = 'DateTime';

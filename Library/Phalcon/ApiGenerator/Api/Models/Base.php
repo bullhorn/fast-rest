@@ -1,9 +1,7 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Models;
-use Api\v1_0\Services\Behavior\AuditTrail\AuditTrail;
 use Phalcon\ApiGenerator\Api\Services\Database\CriteriaHelper;
 use Phalcon\ApiGenerator\Api\Services\Database\Transaction;
-use Api\v1_0\Services\Module as ModuleService;
 use Phalcon\Mvc\Model;
 use Phalcon\ApiGenerator\Api\Services\Filter;
 use Phalcon\Mvc\Model\TransactionInterface;
@@ -11,7 +9,6 @@ use Phalcon\Mvc\Model\Resultset\Simple as ResultSet;
 
 /**
  * Interface EntityInterface
- * @package Api\v1_0\Services
  */
 abstract class Base extends Model {
 	/** @var Filter */
@@ -62,16 +59,6 @@ abstract class Base extends Model {
 		$this->setCustomParentRelationships($customRelationships);
 	}
 
-
-
-	/**
-	 * Gets the module service
-	 * @return ModuleService
-	 */
-	protected function getModuleService() {
-		return $this->getDi()->get('Module');
-	}
-
 	/**
 	 * getChangedFields
 	 * @return string[]
@@ -103,14 +90,6 @@ abstract class Base extends Model {
 		);
 		//Sets to only update the fields that are changed
 		$this->useDynamicUpdate(true);
-	}
-
-	/**
-	 * Sets the default audit trail for all of our models.
-	 * @return void
-	 */
-	protected function addAuditTrailBehavior() {
-		$this->addBehavior(new AuditTrail());
 	}
 
 	/**
