@@ -11,14 +11,14 @@ class Params extends Base {
 
 	/** @var  Request */
 	private $request;
-	/** @var  \stdClass */
+	/** @var  \stdClass[] */
 	private $params;
 	/** @var  Filter */
 	private $filter;
 
 	/**
 	 * Constructor
-	 * @param Request      $request
+	 * @param Request $request
 	 */
 	public function __construct(Request $request) {
 		$this->setRequest($request);
@@ -82,7 +82,7 @@ class Params extends Base {
 
 	/**
 	 * Getter
-	 * @return \stdClass
+	 * @return \stdClass|\stdClass[]
 	 */
 	public function getParams() {
 		return $this->params;
@@ -90,9 +90,9 @@ class Params extends Base {
 
 	/**
 	 * Setter
-	 * @param \stdClass $params
+	 * @param \stdClass|\stdClass[] $params
 	 */
-	private function setParams(\stdClass $params) {
+	private function setParams($params) {
 		$this->params = $params;
 	}
 
@@ -165,8 +165,17 @@ class Params extends Base {
 		if(sizeOf($params)==0 && json_last_error()!=JSON_ERROR_NONE) {
 			$this->dispatchJsonError();
 		}
-		$helper = new SplitHelper($delimiter);
-		$this->setParams($helper->convert($params));
+		if(is_array($params)) { //Bulk Creation
+			$outputParams = [];
+			foreach($params as $param) {
+				$helper = new SplitHelper($delimiter);
+				$outputParams[] = $helper->convert((array)$param);
+			}
+			$this->setParams($outputParams);
+		} else {
+			$helper = new SplitHelper($delimiter);
+			$this->setParams($helper->convert($params));
+		}
 	}
 
 }

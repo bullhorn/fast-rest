@@ -2,6 +2,7 @@
 namespace Phalcon\ApiGenerator\Api\Services\Database;
 use Phalcon\ApiGenerator\DependencyInjection;
 use Phalcon\DI\InjectionAwareInterface;
+use Phalcon\Mvc\Model\Transaction\Failed;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use \Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Events\Manager as EventsManager;
@@ -55,7 +56,13 @@ class Transaction implements InjectionAwareInterface {
 	 * @throws \Exception
 	 */
 	public function rollback() {
-		$this->getTransaction()->rollback();
+		try {
+			$this->getTransaction()->rollback();
+		} catch(Failed $e) {
+			if($e->getMessage()!='Transaction aborted') {
+				throw $e;
+			}
+		}
 		$this->getDi()->remove(self::DI_NAME);
 		$this->findEventsManager()->fire(self::EVENT_ROLLBACK, $this);
 	}

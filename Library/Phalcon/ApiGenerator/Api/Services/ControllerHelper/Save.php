@@ -85,21 +85,24 @@ class Save extends Base {
 
 	/**
 	 * Saves all possible post variables
-	 * @param Params $params
+	 * @param \stdClass $postParams
 	 * @return bool if anything was changed
 	 * @throws Exception
 	 * @throws \Exception
 	 */
-	public function process(Params $params) {
+	public function process(\stdClass $postParams) {
 		$transactionManager = new Transaction();
 		$transactionManager->begin();
 		$transaction = $transactionManager->getTransaction();
 		$isChanged = false;
 		try {
-			$isChanged = $this->saveFieldsRecursive($params->getParams(), $this->getEntity(), $this->isCreating(), $transaction);
+			$isChanged = $this->saveFieldsRecursive($postParams, $this->getEntity(), $this->isCreating(), $transaction);
 			$transactionManager->commit();
 		} catch (TransactionException $e) {
 			$transactionManager->rollback();
+		} catch(\Exception $e) {
+			$transactionManager->rollback();
+			throw $e;
 		}
 		return $isChanged;
 	}

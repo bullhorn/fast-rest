@@ -1,7 +1,9 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Controllers;
 
+use org\apache\maven\POM\_4_0_0\Model;
 use Phalcon\ApiGenerator\Api\Models\ControllerModelInterface as ModelInterface;
+use Phalcon\ApiGenerator\Api\Models\CreateObject;
 use Phalcon\ApiGenerator\Api\Services\ControllerHelper\Index;
 use Phalcon\ApiGenerator\Api\Services\ControllerHelper\Params;
 use Phalcon\ApiGenerator\Api\Services\ControllerHelper\Save;
@@ -16,6 +18,7 @@ use Phalcon\Mvc\Model\Resultset\Simple as ResultSet;
 use Phalcon\ApiGenerator\Api\Services\Behavior\ValidationException;
 use Phalcon\ApiGenerator\Api\Services\Output\OutputInterface;
 use Phalcon\ApiGenerator\Api\Services\Acl\AclInterface;
+use Phalcon\ApiGenerator\Api\Services\DataTransform\Base as DataTransformer;
 
 /**
  * Class ControllerBase
@@ -203,26 +206,80 @@ abstract class Base extends Controller {
 	 * @return void
 	 */
 	public function createAction() {
-		try {
-			$this->setStatusCode(201);
-			$entity = $this->createActionInternal();
-			$this->showActionInternal($entity);
-		} catch(Exception $e) {
-			$this->handleError($e);
-		} catch(ValidationException $e) {
-			$this->handleValidationError($e);
-		} catch(AclException $e) {
-			$this->handleAclError($e);
+		$this->setStatusCode(201);
+		$createObjects = $this->createActionProcess();
+		if(sizeOf($createObjects)==1) { //Default handling of passing in one
+			$createObject = $createObjects[0];
+			$this->setErrors($createObject->getErrors());
+			$this->setStatusCode($createObject->getStatusCode());
+			if(!is_null($createObject->getEntity())) {
+				$this->showActionInternal($createObject->getEntity());
+			}
+		} else {
+			$this->setStatusCode(400);
+			$hasOneSuccessful = false;
+			$objects = [];
+			foreach($createObjects as $createObject) {
+				$object = new \stdClass();
+				if(!is_null($createObject->getEntity())) {
+					$hasOneSuccessful = true;
+					$object->{$createObject->getEntity()->getEntityName()} = $this->generateEntityAction($createObject->getEntity());
+				}
+				$object = $this->addErrorsAndStatus($createObject->getErrors(), $createObject->getStatusCode(), $object);
+				$objects[] = $object;
+			}
+			$blankEntity = $this->generateEntity();
+			$outputObject = $this->getOutputObject();
+			$outputObject->{$blankEntity->getEntityName().'s'} = $objects;
+			$this->setOutputObject($outputObject);
+			if($hasOneSuccessful) {
+				$this->setStatusCode(201);
+			}
 		}
+
+	}
+
+	/**
+	 * Creates the entities, returns a list of createObjects, to process accordingly
+	 * @return \Phalcon\ApiGenerator\Api\Models\CreateObject[]
+	 */
+	private function createActionProcess() {
+		$params = new Params($this->request);
+		$postParams = $params->getParams();
+		if(!is_array($postParams)) {
+			$postParams = [$postParams];
+		}
+		/** @var CreateObject[] $createObjects */
+		$createObjects = [];
+		foreach($postParams as $postParam) {
+			$createObject = new CreateObject($postParam);
+			try {
+				$entity = $this->createActionInternal($postParam);
+				$createObject->setEntity($entity);
+
+			} catch (Exception $e) {
+				$this->handleError($e);
+			} catch (ValidationException $e) {
+				$this->handleValidationError($e);
+			} catch (AclException $e) {
+				$this->handleAclError($e);
+			}
+			$createObject->setStatusCode($this->getStatusCode());
+			$createObject->setErrors($this->getErrors());
+			$this->setErrors([]);
+			$createObjects[] = $createObject;
+		}
+		return $createObjects;
 	}
 
 	/**
 	 * Provides the actual creating of a new entity.
+	 * @param \stdClass $postParams
 	 * @return ModelInterface
 	 */
-	protected function createActionInternal() {
+	private function createActionInternal(\stdClass $postParams) {
 		$entity = $this->generateEntity();
-		$this->saveEntity($entity, true);
+		$this->saveEntity($postParams, $entity, true);
 		// since our entity can be manipulated after saving, we need to find it again, just in case.
 		return $entity->findFirst($entity->getId());
 	}
@@ -303,26 +360,42 @@ abstract class Base extends Controller {
 	}
 
 	/**
+	 * Gets the data transformer, if there is one
+	 * @param Params $params
+	 * @return null|DataTransformer
+	 */
+	protected function getDataTransformer(Params $params) {
+		return null;
+	}
+
+	/**
+	 * Saves an entity (either creating or updating)
+	 *
+	 * @param \stdClass      $postParams
+	 * @param ModelInterface $entity
+	 * @param bool           $isCreating
+	 *
+	 * @return bool if anything was changed
+	 */
+	private function saveEntity(\stdClass $postParams, ModelInterface $entity, $isCreating) {
+		$save = new Save($this->request, $entity, $isCreating);
+		return $save->process($postParams);
+	}
+
+	/**
 	 * Finds the post parameters
 	 * @param ModelInterface $entity
 	 * @return Params
 	 */
 	protected function findPostParams(ModelInterface $entity) {
 		//Entity is passed in so children can access it
-		return new Params($this->request);
-	}
-
-	/**
-	 * Saves an entity (either creating or updating)
-	 *
-	 * @param ModelInterface $entity
-	 * @param bool           $isCreating
-	 *
-	 * @return bool if anything was changed
-	 */
-	private function saveEntity(ModelInterface $entity, $isCreating) {
-		$save = new Save($this->request, $entity, $isCreating);
-		return $save->process($this->findPostParams($entity));
+		$params = new Params($this->request);
+		$dataTransformer = $this->getDataTransformer($params);
+		if(!is_null($dataTransformer)) {
+			$dataTransformer->transform($entity);
+			$params = $dataTransformer->getParams();
+		}
+		return $params;
 	}
 
 	/**
@@ -331,9 +404,15 @@ abstract class Base extends Controller {
 	 * @param ModelInterface $entity
 	 *
 	 * @return bool
+	 *
+	 * @throws Exception
 	 */
 	protected function updateActionInternal(ModelInterface $entity) {
-		$isChanged = $this->saveEntity($entity, false);
+		$params = new Params($this->request);
+		if(is_array($params->getParams())) {
+			throw new Exception('Bulk Updating is not supported: An array of objects was passed in', 400);
+		}
+		$isChanged = $this->saveEntity($params->getParams(), $entity, false);
 		if(!$isChanged) {
 			$this->setStatusCode(304); //Nothing is changed
 		}
@@ -437,6 +516,19 @@ abstract class Base extends Controller {
 		$errors = $this->getErrors();
 		$code   = $this->getStatusCode();
 
+		$object = $this->addErrorsAndStatus($errors, $code, $object);
+		$this->response->setStatusCode($code, 'Check Document Body For More Details');
+		$output->output($object, $this->response);
+	}
+
+	/**
+	 * addErrorsAndStatus
+	 * @param Exception[] $errors
+	 * @param int         $code
+	 * @param \stdClass $outputObject
+	 * @return \stdClass
+	 */
+	private function addErrorsAndStatus(array $errors, $code, \stdClass $outputObject) {
 		if(!empty($errors)) {
 			$outputErrors = array();
 			foreach($errors as $error) {
@@ -445,11 +537,10 @@ abstract class Base extends Controller {
 					$code = $error->getCode();
 				}
 			}
-			$object->errors = $outputErrors;
+			$outputObject->errors = $outputErrors;
 		}
-		$object->statusCode = $code;
-		$this->response->setStatusCode($code, 'Check Document Body For More Details');
-		$output->output($object, $this->response);
+		$outputObject->statusCode = $code;
+		return $outputObject;
 	}
 
 	/**
