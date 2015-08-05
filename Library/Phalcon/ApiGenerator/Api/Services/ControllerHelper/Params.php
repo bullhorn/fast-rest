@@ -174,7 +174,7 @@ class Params extends Base {
 			$this->setParams($outputParams);
 		} else {
 			$helper = new SplitHelper($delimiter);
-			$this->setParams($helper->convert($params));
+			$this->setParams($helper->convert((array)$params));
 		}
 	}
 
