@@ -152,7 +152,7 @@ class Params extends Base {
 			throw new Exception('No Data Passed', 400);
 		}
 		if(!is_null($this->getRequest()->getJsonRawBody())) {
-			$params = (array)$this->getRequest()->getJsonRawBody();
+			$params = $this->getRequest()->getJsonRawBody();
 			$delimiter = '.';
 		} else {
 			if($this->getRequest()->isPost()) {
