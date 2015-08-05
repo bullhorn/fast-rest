@@ -208,12 +208,21 @@ abstract class Base extends Controller {
 	public function createAction() {
 		$this->setStatusCode(201);
 		$createObjects = $this->createActionProcess();
+
 		if(sizeOf($createObjects)==1) { //Default handling of passing in one
 			$createObject = $createObjects[0];
 			$this->setErrors($createObject->getErrors());
 			$this->setStatusCode($createObject->getStatusCode());
 			if(!is_null($createObject->getEntity())) {
-				$this->showActionInternal($createObject->getEntity());
+				try {
+					$this->showActionInternal($createObject->getEntity());
+				} catch(Exception $e) {
+					$this->handleError($e);
+				} catch(ValidationException $e) {
+					$this->handleValidationError($e);
+				} catch(AclException $e) {
+					$this->handleAclError($e);
+				}
 			}
 		} else {
 			$this->setStatusCode(400);
@@ -221,11 +230,19 @@ abstract class Base extends Controller {
 			$objects = [];
 			foreach($createObjects as $createObject) {
 				$object = new \stdClass();
-				if(!is_null($createObject->getEntity())) {
-					$hasOneSuccessful = true;
-					$object->{$createObject->getEntity()->getEntityName()} = $this->generateEntityAction($createObject->getEntity());
+				try {
+					if(!is_null($createObject->getEntity())) {
+						$hasOneSuccessful = true;
+						$object->{$createObject->getEntity()->getEntityName()} = $this->generateEntityAction($createObject->getEntity());
+					}
+					$object = $this->addErrorsAndStatus($createObject->getErrors(), $createObject->getStatusCode(), $object);
+				} catch(Exception $e) {
+					$this->handleError($e);
+				} catch(ValidationException $e) {
+					$this->handleValidationError($e);
+				} catch(AclException $e) {
+					$this->handleAclError($e);
 				}
-				$object = $this->addErrorsAndStatus($createObject->getErrors(), $createObject->getStatusCode(), $object);
 				$objects[] = $object;
 			}
 			$blankEntity = $this->generateEntity();
@@ -236,6 +253,7 @@ abstract class Base extends Controller {
 				$this->setStatusCode(201);
 			}
 		}
+
 
 	}
 
@@ -281,7 +299,14 @@ abstract class Base extends Controller {
 		$entity = $this->generateEntity();
 		$this->saveEntity($postParams, $entity, true);
 		// since our entity can be manipulated after saving, we need to find it again, just in case.
-		return $entity->findFirst($entity->getId());
+		/** @var ModelInterface $newEntity */
+		$newEntity = $entity->findFirst($entity->getId());
+		//Fix if there are two entities created (with bulk insert), and the first fails, but the second succeeds, the second with get the first's errors
+		$reflectionClass = new \ReflectionClass($newEntity);
+		$reflectionProperty = $reflectionClass->getProperty('_errorMessages');
+		$reflectionProperty->setAccessible(true);
+		$reflectionProperty->setValue($newEntity, []);
+		return $newEntity;
 	}
 
 	/**
