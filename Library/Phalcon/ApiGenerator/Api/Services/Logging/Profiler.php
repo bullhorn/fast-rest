@@ -1,7 +1,7 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Services\Logging;
 use Phalcon\Logger\AdapterInterface as Logger;
-class Timer {
+class Profiler {
 	/** @type  Logger */
 	private $logger;
 	/** @type  int */
@@ -19,6 +19,19 @@ class Timer {
 		$this->setLogger($logger);
 		$this->nextTime();
 		$this->resetGroups();
+	}
+
+	/**
+	 * profile
+	 * @param string   $description
+	 * @param \Closure $callback
+	 * @return void
+	 * @throws \Exception
+	 */
+	public function profile($description, \Closure $callback) {
+		$this->startGroup($description);
+		$callback();
+		$this->endGroup($description);
 	}
 
 	/**
