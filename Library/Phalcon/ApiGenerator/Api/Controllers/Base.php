@@ -262,13 +262,18 @@ abstract class Base extends Controller {
 	 * @return \Phalcon\ApiGenerator\Api\Models\CreateObject[]
 	 */
 	private function createActionProcess() {
-		$params = new Params($this->request);
+		/** @var CreateObject[] $createObjects */
+		$createObjects = [];
+		try {
+			$params = new Params($this->request);
+		} catch (Exception $e) {
+			$this->handleError($e);
+			return $createObjects;
+		}
 		$postParams = $params->getParams();
 		if(!is_array($postParams)) {
 			$postParams = [$postParams];
 		}
-		/** @var CreateObject[] $createObjects */
-		$createObjects = [];
 		foreach($postParams as $postParam) {
 			$createObject = new CreateObject($postParam);
 			try {

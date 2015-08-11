@@ -145,15 +145,19 @@ class Params extends Base {
 	 */
 	private function loadParams() {
 		if($this->getRequest()->getRawBody()==''
-			&& !empty($this->getRequest()->getPost())
-			&& !empty($this->getRequest()->getPut())
-			&& !empty($this->getRequest()->getUploadedFiles())
+			&& empty($this->getRequest()->getPost())
+			&& empty($this->getRequest()->getPut())
+			&& empty($this->getRequest()->getUploadedFiles())
 		) {
 			throw new Exception('No Data Passed', 400);
 		}
+		$bulkCreation = false;
 		if(!is_null($this->getRequest()->getJsonRawBody())) {
 			$params = $this->getRequest()->getJsonRawBody();
 			$delimiter = '.';
+			if(is_array($params)) {
+				$bulkCreation = true;
+			}
 		} else {
 			if($this->getRequest()->isPost()) {
 				$params = $this->getRequest()->getPost();
@@ -165,7 +169,7 @@ class Params extends Base {
 		if(sizeOf($params)==0 && json_last_error()!=JSON_ERROR_NONE) {
 			$this->dispatchJsonError();
 		}
-		if(is_array($params)) { //Bulk Creation
+		if($bulkCreation) { //Bulk Creation
 			$outputParams = [];
 			foreach($params as $param) {
 				$helper = new SplitHelper($delimiter);
