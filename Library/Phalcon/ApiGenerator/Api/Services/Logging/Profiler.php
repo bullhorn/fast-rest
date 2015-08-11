@@ -25,13 +25,14 @@ class Profiler {
 	 * profile
 	 * @param string   $description
 	 * @param \Closure $callback
-	 * @return void
+	 * @return mixed
 	 * @throws \Exception
 	 */
 	public function profile($description, \Closure $callback) {
 		$this->startGroup($description);
-		$callback();
+		$returnVar = $callback();
 		$this->endGroup($description);
+		return $returnVar;
 	}
 
 	/**
