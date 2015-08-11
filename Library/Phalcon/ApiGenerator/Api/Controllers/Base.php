@@ -542,7 +542,7 @@ abstract class Base extends Controller {
 		$code   = $this->getStatusCode();
 
 		$object = $this->addErrorsAndStatus($errors, $code, $object);
-		$this->response->setStatusCode($code, 'Check Document Body For More Details');
+		$this->response->setStatusCode($object->statusCode, 'Check Document Body For More Details');
 		$output->output($object, $this->response);
 	}
 
