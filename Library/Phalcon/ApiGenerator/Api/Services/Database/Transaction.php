@@ -56,7 +56,8 @@ class Transaction implements InjectionAwareInterface {
 			self::$stackTrace = $e->getTraceAsString();
 		}
 		$transactionManager = new TransactionManager();
-		$this->getDi()->set(self::DI_NAME, $transactionManager->get($this->getDbService()));
+		$transactionManager->setDbService($this->getDbService());
+		$this->getDi()->set(self::DI_NAME, $transactionManager->get());
 	}
 
 	/**
