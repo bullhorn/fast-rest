@@ -364,10 +364,9 @@ abstract class Base extends Model {
 	 * @return \Phalcon\Db\AdapterInterface
 	 */
 	public function selectReadConnection() {
-		if($this->getDi()->has(Transaction::DI_NAME)) {
-			/** @var TransactionInterface $transaction */
-			$transaction = $this->getDi()->get(Transaction::DI_NAME);
-			return $transaction->getConnection();
+		$transaction = new Transaction($this->getReadConnectionService());
+		if($transaction->isInTransaction()) {
+			return $transaction->getTransaction()->getConnection();
 		} else {
 			return $this->getReadConnection();
 		}

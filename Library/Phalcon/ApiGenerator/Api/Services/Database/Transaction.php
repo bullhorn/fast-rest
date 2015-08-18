@@ -8,13 +8,14 @@ use \Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Events\Manager as EventsManager;
 class Transaction implements InjectionAwareInterface {
 	use DependencyInjection;
-	const DI_NAME = 'CurrentTransaction';
 	const EVENT_ROLLBACK = 'transaction:rollback';
 	const EVENT_COMMIT = 'transaction:commit';
 
 	private static $stackTrace;
 	/** @type  string */
 	private $dbService;
+	/** @type TransactionInterface[]  */
+	private static $transactions = [];
 
 	/**
 	 * Transaction constructor.
@@ -23,6 +24,34 @@ class Transaction implements InjectionAwareInterface {
 	public function __construct($dbService='db') {
 		$this->setDbService($dbService);
 	}
+
+	/**
+	 * Getter
+	 * @return TransactionInterface[]
+	 */
+	private function getTransactions() {
+		return self::$transactions;
+	}
+
+	/**
+	 * Setter
+	 * @param TransactionInterface[] $transactions
+	 */
+	private function setTransactions(array $transactions) {
+		self::$transactions = $transactions;
+	}
+
+	/**
+	 * setTransaction
+	 * @param TransactionInterface $transaction
+	 * @return void
+	 */
+	private function setTransaction(TransactionInterface $transaction) {
+		$transactions = $this->getTransactions();
+		$transactions[$this->getDbService()] = $transaction;
+		$this->setTransactions($transactions);
+	}
+
 
 	/**
 	 * Getter
@@ -40,16 +69,13 @@ class Transaction implements InjectionAwareInterface {
 		$this->dbService = $dbService;
 	}
 
-
-
-
 	/**
 	 * Begin a transaction
 	 * @return void
 	 * @throws \Exception
 	 */
 	public function begin() {
-		if($this->getDi()->has(self::DI_NAME)) {
+		if($this->isInTransaction()) {
 			throw new \Exception('You cannot start a new transaction once you are already in one (Originally started at: '.self::$stackTrace.')');
 		} else {
 			$e = new \Exception();
@@ -57,7 +83,7 @@ class Transaction implements InjectionAwareInterface {
 		}
 		$transactionManager = new TransactionManager();
 		$transactionManager->setDbService($this->getDbService());
-		$this->getDi()->set(self::DI_NAME, $transactionManager->get());
+		$this->setTransaction($transactionManager->get());
 	}
 
 	/**
@@ -65,7 +91,16 @@ class Transaction implements InjectionAwareInterface {
 	 * @return bool
 	 */
 	public function isInTransaction() {
-		return $this->getDi()->has(self::DI_NAME);
+		$transactions = $this->getTransactions();
+		return array_key_exists($this->getDbService(), $transactions);
+	}
+
+	/**
+	 * isInAnyTransaction
+	 * @return bool
+	 */
+	public function isInAnyTransaction() {
+		return !empty($this->getTransactions());
 	}
 
 	/**
@@ -74,10 +109,11 @@ class Transaction implements InjectionAwareInterface {
 	 * @throws \Exception
 	 */
 	public function getTransaction() {
-		if(!$this->getDi()->has(self::DI_NAME)) {
+		if(!$this->isInTransaction()) {
 			throw new \Exception('This transaction has already been rolled back, or committed, or has not began yet');
 		}
-		return $this->getDi()->get(self::DI_NAME);
+		$transactions = $this->getTransactions();
+		return $transactions[$this->getDbService()];
 	}
 
 	/**
@@ -93,7 +129,10 @@ class Transaction implements InjectionAwareInterface {
 				throw $e;
 			}
 		}
-		$this->getDi()->remove(self::DI_NAME);
+		$transactions = $this->getTransactions();
+		unset($transactions[$this->getDbService()]);
+		$this->setTransactions($transactions);
+
 		$this->findEventsManager()->fire(self::EVENT_ROLLBACK, $this);
 	}
 
@@ -104,7 +143,11 @@ class Transaction implements InjectionAwareInterface {
 	 */
 	public function commit() {
 		$this->getTransaction()->commit();
-		$this->getDi()->remove(self::DI_NAME);
+
+		$transactions = $this->getTransactions();
+		unset($transactions[$this->getDbService()]);
+		$this->setTransactions($transactions);
+
 		$this->findEventsManager()->fire(self::EVENT_COMMIT, $this);
 	}
 	
