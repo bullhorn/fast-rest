@@ -13,6 +13,9 @@ trait DependencyInjection {
 	public function getDi() {
 		if(is_null($this->di)) {
 			$this->di = FactoryDefault::getDefault();
+			if (is_null($this->di)) {
+				$this->di = new FactoryDefault();
+			}
 		}
 		return $this->di;
 	}
