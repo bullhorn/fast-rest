@@ -13,6 +13,35 @@ class Transaction implements InjectionAwareInterface {
 	const EVENT_COMMIT = 'transaction:commit';
 
 	private static $stackTrace;
+	/** @type  string */
+	private $dbService;
+
+	/**
+	 * Transaction constructor.
+	 * @param string $dbService
+	 */
+	public function __construct($dbService='db') {
+		$this->setDbService($dbService);
+	}
+
+	/**
+	 * Getter
+	 * @return string
+	 */
+	private function getDbService() {
+		return $this->dbService;
+	}
+
+	/**
+	 * Setter
+	 * @param string $dbService
+	 */
+	private function setDbService($dbService) {
+		$this->dbService = $dbService;
+	}
+
+
+
 
 	/**
 	 * Begin a transaction
@@ -27,7 +56,7 @@ class Transaction implements InjectionAwareInterface {
 			self::$stackTrace = $e->getTraceAsString();
 		}
 		$transactionManager = new TransactionManager();
-		$this->getDi()->set(self::DI_NAME, $transactionManager->get());
+		$this->getDi()->set(self::DI_NAME, $transactionManager->get($this->getDbService()));
 	}
 
 	/**
