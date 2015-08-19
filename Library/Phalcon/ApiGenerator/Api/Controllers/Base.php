@@ -1,7 +1,6 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Controllers;
 
-use org\apache\maven\POM\_4_0_0\Model;
 use Phalcon\ApiGenerator\Api\Models\ControllerModelInterface as ModelInterface;
 use Phalcon\ApiGenerator\Api\Models\CreateObject;
 use Phalcon\ApiGenerator\Api\Services\ControllerHelper\Index;
