@@ -219,7 +219,11 @@ class Method {
 				$buffer .= ', ';
 			}
 			if($parameter->isStrictType()) {
-				$buffer .= $parameter->getType().' ';
+				if(!is_null($parameter->getStrictClass())) {
+					$buffer .= $parameter->getStrictClass() . ' ';
+				} else {
+					$buffer .= $parameter->getType() . ' ';
+				}
 			}
 			$buffer .= '$'.$parameter->getName();
 			if(!is_null($parameter->getDefaultValue())) {

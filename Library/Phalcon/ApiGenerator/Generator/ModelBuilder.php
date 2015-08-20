@@ -434,7 +434,9 @@ class ModelBuilder {
 		$method->addParameter($parameter);
 		$parameter = new Object\Parameter();
 		$parameter->setName('entity');
-		$parameter->setType('Model');
+		$parameter->setType('MvcInterface|Model');
+		$parameter->setStrictClass('MvcInterface');
+		$validation->addUse('Phalcon\Mvc\ModelInterface as MvcInterface');
 		$method->addParameter($parameter);
 		$method->setThrows(['ValidationException']);
 		$method->setContent(

@@ -14,6 +14,26 @@ class Parameter {
 	private $class;
 	/** @var  bool */
 	private $strictType;
+	/** @type  string */
+	private $strictClass;
+
+	/**
+	 * String
+	 * @return string
+	 */
+	public function getStrictClass() {
+		return $this->strictClass;
+	}
+
+	/**
+	 * String
+	 * @param string $strictClass
+	 */
+	public function setStrictClass($strictClass) {
+		$this->setStrictType(true);
+		$this->strictClass = $strictClass;
+	}
+
 
 	/**
 	 * Getter

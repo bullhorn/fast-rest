@@ -1,6 +1,7 @@
 <?php
 namespace Phalcon\ApiGenerator\Api\Controllers;
 
+use org\apache\maven\POM\_4_0_0\Model;
 use Phalcon\ApiGenerator\Api\Models\ControllerModelInterface as ModelInterface;
 use Phalcon\ApiGenerator\Api\Models\CreateObject;
 use Phalcon\ApiGenerator\Api\Services\ControllerHelper\Index;
@@ -165,15 +166,12 @@ abstract class Base extends Controller {
 
 			$query = new Index($this->request, $entity, $this->getQueryWhiteList());
 			$this->response->setHeader('link', $query->generateLinks());
-			/** @var ResultSet $entities */
+			/** @var ResultSet|ModelInterface[] $entities */
 			$entities = $query->getResultSet();
 
 			$objects = array();
-			while($entities->valid()) {
-				/** @var ModelInterface $entity */
-				$entity = $entities->current();
+			foreach($entities as $entity) {
 				$objects[] = $this->generateEntityAction($entity);
-				$entities->next();
 			}
 			$outputObject = $this->getOutputObject();
 			$blankEntity = $this->generateEntity();

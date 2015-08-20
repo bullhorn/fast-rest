@@ -4,16 +4,17 @@ use Phalcon\Mvc\Model\ValidatorInterface;
 use Phalcon\Mvc\Model\Validator;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSet;
+use Phalcon\Mvc\EntityInterface;
 class Unique extends Validator implements ValidatorInterface {
 
 	/**
 	 * Validates a method
 	 *
-	 * @param Model $record
+	 * @param Model|EntityInterface $record
 	 *
 	 * @return bool
 	 */
-	public function validate($record) {
+	public function validate(EntityInterface $record) {
 		$fields = $this->getOption('fields');
 		$sql = '1';
 		$params = array();

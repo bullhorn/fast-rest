@@ -2,17 +2,17 @@
 namespace Phalcon\ApiGenerator\Api\Services\Validator;
 use Phalcon\Mvc\Model\ValidatorInterface;
 use Phalcon\Mvc\Model\Validator;
-use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\EntityInterface;
 class EmptyEmail extends Validator implements ValidatorInterface {
 
 	/**
 	 * Validates a method
 	 *
-	 * @param ModelInterface $record
+	 * @param EntityInterface $record
 	 *
 	 * @return bool
 	 */
-	public function validate($record) {
+	public function validate(EntityInterface $record) {
 		$field = $this->getOption('field');
 		$value = $record->readAttribute($field);
 		if($value=='') {

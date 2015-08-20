@@ -28,8 +28,7 @@ interface EntityInterface {
 	 *  	echo "Great, a new robot was saved successfully!";
 	 *	}
 	 * </code>
-	 * @param array|null
 	 * @return \Phalcon\Mvc\Model\MessageInterface[]
 	 */
-	public function getMessages($filter=null);
+	public function getMessages();
 }

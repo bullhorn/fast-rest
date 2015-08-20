@@ -9,6 +9,7 @@ use Phalcon\ApiGenerator\Api\Models\ApiInterface;
 use Phalcon\Http\Request;
 use Phalcon\Http\Request\Exception;
 use Phalcon\Mvc\Model\Message;
+use Phalcon\Mvc\ModelInterface as MvcInterface;
 
 abstract class Base extends Behavior implements BehaviorInterface, InjectionAwareInterface {
 	use DependencyInjection;
@@ -94,11 +95,11 @@ abstract class Base extends Behavior implements BehaviorInterface, InjectionAwar
 
 	/**
 	 * Receives notifications from the Models Manager
-	 * @param string       $eventType
-	 * @param ApiInterface $entity
+	 * @param string                    $eventType
+	 * @param ApiInterface|MvcInterface $entity
 	 * @return bool
 	 */
-	public function notify($eventType, $entity) {
+	public function notify($eventType, MvcInterface $entity) {
 		$this->setEntity($entity);
 		switch($eventType) {
 			case self::EVENT_UPLOAD_FILE_CREATE:

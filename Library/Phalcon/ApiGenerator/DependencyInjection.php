@@ -2,13 +2,14 @@
 //To use this, you must also implement \Phalcon\DI\InjectionAwareInterface
 namespace Phalcon\ApiGenerator;
 use Phalcon\DI\FactoryDefault;
+use Phalcon\DiInterface;
 trait DependencyInjection {
-	/** @var  FactoryDefault */
+	/** @var  DiInterface */
 	private $di;
 
 	/**
 	 * Gets the dependency injector
-	 * @return FactoryDefault
+	 * @return DiInterface
 	 */
 	public function getDi() {
 		if(is_null($this->di)) {
@@ -23,11 +24,11 @@ trait DependencyInjection {
 	/**
 	 * Sets the dependency injector
 	 * We cannot strict type the variable
-	 * @param FactoryDefault $di
+	 * @param DiInterface $di
 	 *
 	 * @return void
 	 */
-	public function setDi($di) {
+	public function setDi(DiInterface $di) {
 		$this->di = $di;
 	}
 }
