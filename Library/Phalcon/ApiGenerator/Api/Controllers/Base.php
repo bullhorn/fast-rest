@@ -501,7 +501,7 @@ abstract class Base extends Controller {
 	 * @return ModelInterface
 	 * @throws Exception
 	 */
-	private function validateEntityId($entityId) {
+	protected function validateEntityId($entityId) {
 		if(!is_numeric($entityId)) {
 			throw new Exception('Invalid Entity Id: Must be numeric', 400);
 		}
