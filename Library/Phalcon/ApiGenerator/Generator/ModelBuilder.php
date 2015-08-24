@@ -1326,7 +1326,7 @@ class ModelBuilder {
 
 		$method = new Object\Method();
 		$method->setName('setUp');
-		$content = '$this->dbMock = new MockTest();
+		$content = '$this->dbMock = new MockTest([]);
 		$this->dbMock->setModelSubNamespace("'.$this->getConfiguration()->getModelSubNamespace().'");
 		$this->getDI()->set(\''.$this->getConfiguration()->getConnectionService().'\', $this->dbMock);
 		$this->model = $this->getMockForAbstractClass(\''.$this->getAbstractClass()->getNamespace().'\\'.$this->getAbstractClass()->getName().'\');
@@ -1447,6 +1447,20 @@ class ModelBuilder {
 
 		$this->getAbstractClass()->addMethod($method);
 	}
+
+	private function buildIdField() {
+		foreach($this->getFields() as $field) {
+			if($field->isPrimary() && $field->getShortName()!='id') {
+				$method = new Object\Method();
+				$method->setAccess('protected');
+				$method->setName('getIdField');
+				$method->setReturnType('string');
+				$method->setContent('return \''.$field->getShortName().'\';');
+				$this->getAbstractClass()->addMethod($method);
+			}
+		}
+	}
+
 	/**
 	 * Builds the buffer
 	 * @return void
@@ -1473,6 +1487,7 @@ class ModelBuilder {
 		);
 		$this->getAbstractClass()->setExtends('Base');
 		$this->getAbstractClass()->setAbstract(true);
+		$this->buildIdField();
 
 		$this->initTestClass();
 		$this->getTestClass()->setNamespace($this->getAbstractClass()->getNamespace());
@@ -1508,27 +1523,8 @@ class ModelBuilder {
 		$this->getTestClass()->setImplements(['InjectionAwareInterface']);
 		$this->getTestClass()->addUse('Phalcon\Di\FactoryDefault');
 		$this->getTestClass()->addUse('Phalcon\Di\InjectionAwareInterface');
-
-		$variable = new Object\Variable();
-		$variable->setAccess('private');
-		$variable->setName('dependencyInjector');
-		$variable->setType('FactoryDefault');
-		$this->getTestClass()->addVariable($variable);
-
-		$method = new Object\Method();
-		$method->setAccess('public');
-		$method->setName('getDi');
-		$method->setDescription('Gets the current dependency injector');
-		$method->setContent(
-			'if(is_null($this->dependencyInjector)) {
-			$this->dependencyInjector = FactoryDefault::getDefault();
-			if(is_null($this->dependencyInjector)) {
-				$this->dependencyInjector = new FactoryDefault();
-			}
-		}
-		return $this->dependencyInjector;'
-		);
-		$this->getTestClass()->addMethod($method);
+		$this->getTestClass()->addUse('Phalcon\ApiGenerator\DependencyInjection');
+		$this->getTestClass()->setTraits(['DependencyInjection']);
 
 
 		$method = new Object\Method();
@@ -1539,20 +1535,6 @@ class ModelBuilder {
 			'FactoryDefault::reset();'
 		);
 		$this->getTestClass()->addMethod($method);
-
-		$method = new Object\Method();
-		$method->setAccess('public');
-		$method->setName('setDi');
-		$method->setDescription('Sets the dependency injector');
-		$parameter = new Object\Parameter();
-		$parameter->setName('dependencyInjector');
-		$parameter->setType('FactoryDefault');
-		$method->addParameter($parameter);
-		$method->setContent(
-			'$this->dependencyInjector = $dependencyInjector;'
-		);
-		$this->getTestClass()->addMethod($method);
-
 
 	}
 
