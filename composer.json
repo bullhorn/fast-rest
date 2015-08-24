@@ -19,7 +19,7 @@
   ],
   "require": {
     "php": ">=5.5.0",
-    "ext-phalcon": ">=2.0.4",
+    "ext-phalcon": ">=2.0.4 <3.0",
     "zircote/swagger-php": "*"
   },
   "require-dev": {
