@@ -6,6 +6,7 @@ use Phalcon\Mvc\Model\Transaction\Failed;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use \Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Db\Exception as DbException;
 class Transaction implements InjectionAwareInterface {
 	use DependencyInjection;
 	const EVENT_ROLLBACK = 'transaction:rollback';
@@ -128,6 +129,10 @@ class Transaction implements InjectionAwareInterface {
 			if($e->getMessage()!='Transaction aborted') {
 				throw $e;
 			}
+		} catch(DbException $e) {
+			if ($e->getMessage() != 'There is no active transaction') {
+				throw $e;
+			}
 		}
 		$transactions = $this->getTransactions();
 		unset($transactions[$this->getDbService()]);
@@ -142,7 +147,13 @@ class Transaction implements InjectionAwareInterface {
 	 * @throws \Exception
 	 */
 	public function commit() {
-		$this->getTransaction()->commit();
+		try {
+			$this->getTransaction()->commit();
+		} catch(DbException $e) {
+			if($e->getMessage()!='There is no active transaction') {
+				throw $e;
+			}
+		}
 
 		$transactions = $this->getTransactions();
 		unset($transactions[$this->getDbService()]);

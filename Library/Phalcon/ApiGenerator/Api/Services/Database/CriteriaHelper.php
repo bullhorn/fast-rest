@@ -116,7 +116,7 @@ class CriteriaHelper {
 	 *
 	 * @return $this
 	 */
-	public function andWhere($conditions, $bindParams=null, $bindTypes=null) {
+	public function andWhere($conditions, array $bindParams=null, array $bindTypes=null) {
 		if(!is_null($bindParams)) {
 			$tmpBindParams = array();
 			foreach($bindParams as $key=>$value) {
