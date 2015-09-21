@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-0": {
-      "Phalcon\\FastRest": "Library/"
+      "Bullhorn\\FastRest": "Library/"
     }
   }
 }
