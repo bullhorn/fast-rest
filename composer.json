@@ -1,5 +1,5 @@
 {
-  "name": "phalcon/fast-rest",
+  "name": "fast-rest",
   "type": "library",
   "description": "This is meant to be a generator to read a mysql database's structure, including foreign keys, table/column comments, and indexes to generate the models and controllers",
   "keywords": [
