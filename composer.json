@@ -1,20 +1,17 @@
 {
-  "name": "phalcon/api-generator",
+  "name": "phalcon/fast-rest",
   "type": "library",
   "description": "This is meant to be a generator to read a mysql database's structure, including foreign keys, table/column comments, and indexes to generate the models and controllers",
   "keywords": [
     "framework",
-    "phalcon"
+    "phalcon",
+    "rest"
   ],
-  "license": "BSD-3",
+  "license": "GPL-3.0",
   "authors": [
     {
-      "name": "Nicholas Lewis",
-      "email": "nlewis@bullhorn.com"
-    },
-    {
-      "name": "Charles {The Only} Thompson",
-      "email": "cthompson@bullhorn.com"
+      "name": "Bullhorn",
+      "email": "fast-rest@bullhorn.com"
     }
   ],
   "require": {
@@ -27,7 +24,7 @@
   },
   "autoload": {
     "psr-0": {
-      "Phalcon\\ApiGenerator": "Library/"
+      "Phalcon\\FastRest": "Library/"
     }
   }
 }
