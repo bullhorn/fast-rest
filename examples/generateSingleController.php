@@ -1,7 +1,7 @@
 <?php
 use Phalcon\DI\FactoryDefault;
-use Phalcon\ApiGenerator\Generator\ControllerBuilder;
-use Phalcon\ApiGenerator\Generator\Configuration;
+use Bullhorn\FastRest\Generator\ControllerBuilder;
+use Bullhorn\FastRest\Generator\Configuration;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 require_once '/var/www/vendor/autoload.php';
 require_once '/var/www/web/app/config/bootstrap.php';
@@ -30,8 +30,6 @@ $configuration->setConnectionService('db');
 $configuration->setRootDirectory('/var/www/web/app/');
 $configuration->setRootTestDirectory('/var/www/tests');
 $configuration->setRootNamespace('Api');
-$configuration->setDateClassName('Api\Services\Date\Date');
-$configuration->setDateTimeClassName('Api\Services\Date\DateTime');
 $configuration->setModelSubNamespace('Instance');
 $instanceConfiguration = $configuration;
 

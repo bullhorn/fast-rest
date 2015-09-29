@@ -1,5 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Generator;
+use Bullhorn\FastRest\Api\Services\Date\Date;
+use Bullhorn\FastRest\Api\Services\Date\DateTime;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Bullhorn\FastRest\Base;
 class Configuration extends Base {
@@ -14,9 +16,9 @@ class Configuration extends Base {
 	/** @var  string */
 	private $connectionService = 'db';
 	/** @var  string */
-	private $dateClassName;
+	private $dateClassName = Date::class;
 	/** @var  string */
-	private $dateTimeClassName;
+	private $dateTimeClassName = DateTime::class;
 
 	/**
 	 * Getter
