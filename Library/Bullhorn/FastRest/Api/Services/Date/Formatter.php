@@ -1,6 +1,6 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\Date;
-use Bullhorn\FastRest\Api\Services\Assert;
+use Bullhorn\FastRest\Api\Services\DataValidation\Assert;
 use Bullhorn\FastRest\DependencyInjection;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;

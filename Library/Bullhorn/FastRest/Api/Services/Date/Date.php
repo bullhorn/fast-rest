@@ -1,5 +1,6 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\Date;
+use Bullhorn\FastRest\Api\Services\DataValidation\StrToTime;
 use Bullhorn\FastRest\DependencyInjection;
 use Phalcon\DI\InjectionAwareInterface;
 
@@ -20,8 +21,14 @@ class Date implements InjectionAwareInterface {
 			$this->dateInt = $dateTime;
 		} elseif(is_object($dateTime) && $dateTime instanceof Date) {
 			$this->dateInt = $dateTime->getEpoch();
+		} elseif(is_null($dateTime)) {
+			$this->dateInt = time();
 		} else {
-			$this->dateInt = \Library_Sanitize::strToTime($dateTime);
+			$strToTime = new StrToTime();
+			$this->dateInt = $strToTime->parse($dateTime);
+			if($this->dateInt===false) {
+				throw new \InvalidArgumentException('Un-Parsable time: '.$dateTime);
+			}
 		}
 		$this->setEqual24(in_array($dateTime, array('24:00:00','24:00')));
 	}

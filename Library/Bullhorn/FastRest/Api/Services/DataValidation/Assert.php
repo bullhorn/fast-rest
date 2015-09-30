@@ -1,5 +1,5 @@
 <?php
-namespace Bullhorn\FastRest\Api\Services;
+namespace Bullhorn\FastRest\Api\Services\DataValidation;
 class Assert {
 	/**
 	 * isString
@@ -24,7 +24,7 @@ class Assert {
 	public static function isInt($value) {
 		if(is_int($value)) {
 			return $value;
-		} elseif(is_scalar($value) && preg_match('@^[0-9]+$', $value)) {
+		} elseif(is_scalar($value) && preg_match('@^[0-9]+$@', $value)) {
 			return (int)$value;
 		} else {
 			throw new \InvalidArgumentException('Must be Int: '.print_r($value, true));
