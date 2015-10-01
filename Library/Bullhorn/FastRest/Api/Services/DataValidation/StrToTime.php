@@ -23,7 +23,7 @@ class StrToTime {
 			$date = trim(Assert::isString($date));
 		}
 		$date = $this->parseHoursMinutes($date);
-		if(preg_match('@^[0-9]+$', $date)) {
+		if(preg_match('@^[0-9]+$@', $date)) {
 			return (int)$date;
 		}
 		$date = $this->stripTimezone($date);
