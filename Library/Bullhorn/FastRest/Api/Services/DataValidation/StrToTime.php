@@ -13,8 +13,8 @@ class StrToTime {
 	 * @return int
 	 */
 	public function parse($date) {
-		if(is_int($date)) {
-			return $date;
+		if(is_int($date) || is_double($date) || (is_string($date) && preg_match('@^[0-9]+$@', $date))) {
+			return (double)$date;
 		} elseif($date instanceof Date) {
 			return $date->getEpoch();
 		} elseif(is_null($date)) {

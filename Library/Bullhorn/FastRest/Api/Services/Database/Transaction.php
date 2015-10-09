@@ -161,7 +161,7 @@ class Transaction implements InjectionAwareInterface {
 
 		$this->findEventsManager()->fire(self::EVENT_COMMIT, $this);
 	}
-	
+
 	/**
 	 * findEventsManager
 	 * @return EventsManager
