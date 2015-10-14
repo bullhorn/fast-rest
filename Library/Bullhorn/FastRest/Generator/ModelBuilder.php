@@ -1558,6 +1558,20 @@ class ModelBuilder {
 		$method->addParameter($parameter);
 		$method->setContent('return parent::findFirst($parameters);');
 		$this->getAbstractClass()->addMethod($method);
+
+		$method = new Object\Method();
+		$method->setAccess('public');
+		$method->setName('findFirstInstance');
+		$method->setDescription('This calls the findFirst method and is used for unit testing so that it is not a static method');
+		$method->setReturnType('ChildModel|false');
+		$parameter = new Object\Parameter();
+		$parameter->setName('parameters');
+		$parameter->setDefaultValue('null');
+		$parameter->setDescription("Array of conditions or primary key.");
+		$parameter->setType('array|int');
+		$method->addParameter($parameter);
+		$method->setContent('return $this->findFirst($parameters);');
+		$this->getAbstractClass()->addMethod($method);
 	}
 
 	/**
@@ -1577,11 +1591,29 @@ class ModelBuilder {
 		$parameter->setDefaultValue('null');
 		$parameter->setType('array');
 		$method->addParameter($parameter);
-		$method->setContent('if(is_array($parameters) && empty($parameters)) {
+		$method->setContent(
+			'if(is_array($parameters) && empty($parameters)) {
 			$model = new ChildModel();
 			return new ResultSet($model->columnMap(), $model, null);
 		}
-		return parent::find($parameters);');
+		return parent::find($parameters);'
+		);
+		$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Resultset\Simple as ResultSet');
+		$this->getAbstractClass()->addMethod($method);
+
+		$method = new Object\Method();
+		$method->setAccess('public');
+		$method->setName('findInstance');
+		$method->setDescription('This calls the find method and is used for unit testing so that it is not a static method');
+		$method->setReturnType('ChildModel[]|ResultSet');
+		$parameter = new Object\Parameter();
+		$parameter->setName('parameters');
+		$parameter->setDefaultValue('null');
+		$parameter->setType('array');
+		$method->addParameter($parameter);
+		$method->setContent(
+			'return $this->find($parameters);'
+		);
 		$this->getAbstractClass()->addUse('Phalcon\Mvc\Model\Resultset\Simple as ResultSet');
 		$this->getAbstractClass()->addMethod($method);
 	}
