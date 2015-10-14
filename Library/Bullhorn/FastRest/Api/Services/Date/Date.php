@@ -7,7 +7,7 @@ use Phalcon\DI\InjectionAwareInterface;
 class Date implements InjectionAwareInterface {
 	use DependencyInjection;
 
-	/** @type  int */
+	/** @type  double|false */
 	private $dateInt;
 	/** @type bool */
 	private $equal24;
@@ -17,12 +17,14 @@ class Date implements InjectionAwareInterface {
 	 * @param string|int|Date $dateTime
 	 */
 	public function __construct($dateTime=null) {
-		if(is_int($dateTime)) {
+		if(is_int($dateTime) || is_double($dateTime)) {
 			$this->dateInt = $dateTime;
 		} elseif(is_object($dateTime) && $dateTime instanceof Date) {
 			$this->dateInt = $dateTime->getEpoch();
 		} elseif(is_null($dateTime)) {
 			$this->dateInt = time();
+		} elseif($dateTime === '') {
+			$this->dateInt = false;
 		} else {
 			$strToTime = new StrToTime();
 			$this->dateInt = $strToTime->parse($dateTime);
@@ -129,10 +131,13 @@ class Date implements InjectionAwareInterface {
 
 	/**
 	 * Gets the raw date as an int timestamp
-	 * @return int
+	 * @return double|false
 	 */
 	public function getEpoch() {
-		return (int)$this->dateInt;
+		if($this->dateInt === false) {
+			return false;
+		}
+		return (double)$this->dateInt;
 	}
 
 	/**
