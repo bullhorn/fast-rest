@@ -1,5 +1,6 @@
 <?php
 namespace Bullhorn\FastRest\Api\Models;
+use Bullhorn\FastRest\Api\Services\Database\CriteriaHelper;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Mvc\ModelInterface;
 interface GeneratedInterface extends InjectionAwareInterface, ModelInterface {
@@ -31,4 +32,12 @@ interface GeneratedInterface extends InjectionAwareInterface, ModelInterface {
 	public function getModelsMetaData();
 
 
+	/**
+	 * This adds a join based off of the aliases to an existing criteria, you can do nested joins, using a ., such as User.BranchSharing
+	 * @param CriteriaHelper $criteriaHelper    The criteria we are adding the join on to
+	 * @param string         $alias             The alias of the relationship
+	 * @param string         $currentModelAlias The current model's alias
+	 * @return string - The name of the model we just joined on
+	 */
+	public function addJoin(CriteriaHelper $criteriaHelper, $alias, $currentModelAlias=null);
 }

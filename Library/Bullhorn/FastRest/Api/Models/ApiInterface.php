@@ -35,13 +35,15 @@ interface ApiInterface extends GeneratedInterface {
 	 * @return \string[]
 	 */
 	public function getUnReadableFields();
+
 	/**
 	 * This adds a join based off of the aliases to an existing criteria, you can do nested joins, using a ., such as User.BranchSharing
-	 * @param CriteriaHelper $criteriaHelper The criteria we are adding the join on to
-	 * @param string         $alias          The alias of the relationship
+	 * @param CriteriaHelper $criteriaHelper    The criteria we are adding the join on to
+	 * @param string         $alias             The alias of the relationship
+	 * @param string         $currentModelAlias The current model's alias
 	 * @return string - The name of the model we just joined on
 	 */
-	public function addJoin(CriteriaHelper $criteriaHelper, $alias);
+	public function addJoin(CriteriaHelper $criteriaHelper, $alias, $currentModelAlias=null);
 
 	/**
 	 * Returns a list of all parent relationships, these will all return a Base Model instance

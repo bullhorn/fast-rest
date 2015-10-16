@@ -18,6 +18,32 @@ class Parameter {
 	private $strictClass;
 
 	/**
+	 * toDocTypeString
+	 * @param Method $method
+	 * @return string
+	 */
+	public function toDocTypeString(Method $method) {
+		$longestType = 0;
+		$longestName = 0;
+		foreach($method->getParameters() as $parameter) {
+			if(strlen($parameter->getType())>$longestType) {
+				$longestType = strlen($parameter->getType());
+			}
+			if(strlen($parameter->getName())>$longestName) {
+				$longestName = strlen($parameter->getName());
+			}
+		}
+		$returnVar = '	 * @param';
+		$returnVar .= ' '.$this->getType().(str_repeat(' ', $longestType-strlen($this->getType())));
+		$returnVar .= ' $'.$this->getName();
+		if(strlen($this->getDescription())>0) {
+			$returnVar .= str_repeat(' ', $longestName-strlen($this->getName())).' '.$this->getDescription();
+		}
+		$returnVar .= "\n";
+		return $returnVar;
+	}
+
+	/**
 	 * String
 	 * @return string
 	 */

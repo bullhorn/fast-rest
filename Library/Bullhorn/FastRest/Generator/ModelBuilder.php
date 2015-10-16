@@ -301,7 +301,7 @@ class ModelBuilder {
 		$method = new Object\Method();
 		$method->setAccess('public');
 		$method->setName('getFieldTypes');
-		$method->setReturnType('Model');
+		$method->setReturnType('string[]');
 		$method->setContent($content);
 		$this->getAbstractClass()->addMethod($method);
 
@@ -1386,24 +1386,19 @@ class ModelBuilder {
 		foreach($this->getRelationships() as $relationship) {
 			$aliases[] = $relationship->getAlias();
 		}
-		$content = 'if(strpos($alias, \'.\')!==false) {
-			$parts = explode(\'.\', $alias);
-			$part = array_shift($parts);
-			$modelName = $this->addJoin($criteriaHelper, $part, $currentModelAlias);
-			$model = new $modelName();
-			return $model->addJoin($criteriaHelper, implode(\'.\', $parts), $part);
-		}
-		if(!in_array($alias, [\''.implode('\', \'', $aliases).'\'])) {
-			throw new \InvalidArgumentException(\'The alias "\'.$alias.\'" is not in the allowed list of: '.implode(', ', $aliases).'\');
-		}
-		switch($alias) {
+		$content = 'switch($alias) {
 ';
 		foreach($this->getRelationships() as $relationship) {
-			$content .= '			case \''.$relationship->getAlias().'\':
-				//Check if join already added
+			$method = new Object\Method();
+			$method->setAccess('private');
+			$method->setName('addJoin'.$relationship->getAlias());
+			$method->setDescription('This adds a join for the specific relationship');
+			$method->setReturnType('string - The name of the model we just joined on');
+			$method->setContent(
+				'//Check if join already added
 				$joins = $criteriaHelper->getJoins();
 				foreach($joins as $join) {
-					if($join[2]==$alias) {
+					if($join[2]==\''.$relationship->getAlias().'\') {
 						return \''.$relationship->getRemoteModel().'\';
 					}
 				}
@@ -1414,18 +1409,81 @@ class ModelBuilder {
 				.'.'.$relationship->getRemoteShortColumn().'\',
 					\''.$relationship->getAlias().'\'
 				);
-				return \''.$relationship->getRemoteModel().'\';
+				return \''.$relationship->getRemoteModel().'\';'
+			);
+			$parameter = new Object\Parameter();
+			$parameter->setName('criteriaHelper');
+			$parameter->setDescription('The criteria we are adding the join on to');
+			$parameter->setType('CriteriaHelper');
+			$parameter->setStrictType(true);
+			$method->addParameter($parameter);
+			$parameter = new Object\Parameter();
+			$parameter->setName('currentModelAlias');
+			$parameter->setDescription('The current model\'s alias');
+			$parameter->setType('string');
+			$method->addParameter($parameter);
+			$this->getAbstractClass()->addMethod($method);
+
+			$content .= '			case \''.$relationship->getAlias().'\':
+				return $this->addJoin'.$relationship->getAlias().'($criteriaHelper, $currentModelAlias);
 				break;
 ';
 		}
-		$content .= '		}';
+		$content .= '		}
+		return null;';
+
+		$method = new Object\Method();
+		$method->setAccess('private');
+		$method->setName('addJoinFromAlias');
+		$method->setDescription('This adds a join based off of the aliases to an existing criteria, you can do nested joins, using a ., such as User.BranchSharing');
+		$method->setReturnType('string - The name of the model we just joined on');
+		$method->setContent($content);
+		$parameter = new Object\Parameter();
+		$parameter->setName('criteriaHelper');
+		$parameter->setDescription('The criteria we are adding the join on to');
+		$parameter->setType('CriteriaHelper');
+		$parameter->setStrictType(true);
+		$method->addParameter($parameter);
+		$parameter = new Object\Parameter();
+		$parameter->setName('alias');
+		$parameter->setDescription('The alias of the relationship');
+		$parameter->setType('string');
+		$method->addParameter($parameter);
+		$parameter = new Object\Parameter();
+		$parameter->setName('currentModelAlias');
+		$parameter->setDescription('The current model\'s alias');
+		$parameter->setType('string');
+		$method->addParameter($parameter);
+
+		$this->getAbstractClass()->addMethod($method);
+
 		$this->getAbstractClass()->addUse('Bullhorn\FastRest\Api\Services\Database\CriteriaHelper');
 		$method = new Object\Method();
 		$method->setAccess('public');
 		$method->setName('addJoin');
 		$method->setDescription('This adds a join based off of the aliases to an existing criteria, you can do nested joins, using a ., such as User.BranchSharing');
 		$method->setReturnType('string - The name of the model we just joined on');
-		$method->setContent($content);
+		$method->setContent(
+			'if(is_null($currentModelAlias)) {
+			$currentModelAlias = \''.str_replace('\Generated', '', $this->getAbstractClass()->getNamespace()).'\\'.$this->getAbstractClass()->getName().'\';
+		}
+		if(strpos($alias, \'.\')!==false) {
+			$parts = explode(\'.\', $alias);
+			$part = array_shift($parts);
+			$modelName = $this->addJoin($criteriaHelper, $part, $currentModelAlias);
+			/** @type GeneratedInterface $model */
+			$model = new $modelName();
+			return $model->addJoin($criteriaHelper, implode(\'.\', $parts), $part);
+		}
+		$allowedAliases = [
+			\''.implode("',\n\t\t\t'", $aliases).'\'
+		];
+		if(!in_array($alias, $allowedAliases)) {
+			throw new \InvalidArgumentException(\'The alias "\'.$alias.\'" is not in the allowed list of: \'.implode(\', \', $allowedAliases));
+		}
+		return $this->addJoinFromAlias($criteriaHelper, $alias, $currentModelAlias);
+'
+		);
 		$parameter = new Object\Parameter();
 		$parameter->setName('criteriaHelper');
 		$parameter->setDescription('The criteria we are adding the join on to');
@@ -1442,7 +1500,7 @@ class ModelBuilder {
 		$parameter->setName('currentModelAlias');
 		$parameter->setDescription('The current model\'s alias');
 		$parameter->setType('string');
-		$parameter->setDefaultValue('\''.str_replace('\Generated', '', $this->getAbstractClass()->getNamespace()).'\\'.$this->getAbstractClass()->getName().'\'');
+		$parameter->setDefaultValue('null');
 		$method->addParameter($parameter);
 
 		$this->getAbstractClass()->addMethod($method);

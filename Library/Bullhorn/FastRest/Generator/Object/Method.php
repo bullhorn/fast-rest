@@ -202,7 +202,7 @@ class Method {
 	 * '.$documentation.'
 ';
 		foreach($this->getParameters() as $parameter) {
-			$buffer .= '	 * @param '.$parameter->getType().' $'.$parameter->getName().' '.$parameter->getDescription()."\n";
+			$buffer .= $parameter->toDocTypeString($this);
 		}
 		if($this->getName()!='__construct') {
 			$buffer .= '	 * @return '.$this->getReturnType().'
