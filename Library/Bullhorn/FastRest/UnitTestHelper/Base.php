@@ -106,6 +106,22 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 	}
 
 	/**
+	 * validatePhql
+	 * @param string    $modelName
+	 * @param int|array $parameters
+	 * @return mixed
+	 */
+	protected function validateFindFirstPhql($modelName, $parameters) {
+		$this->validatePhqlGenerateModelFactory();
+
+		/** @type Model $modelFactory */
+		$modelFactory = new $modelName();
+		$modelFactory->findFirst($parameters);
+
+		return $parameters;
+	}
+
+	/**
 	 * validatePhqlGenerateModelFactory
 	 * @return void
 	 */
