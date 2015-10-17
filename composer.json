@@ -5,7 +5,8 @@
   "keywords": [
     "framework",
     "phalcon",
-    "rest"
+    "rest",
+	"api"
   ],
   "license": "GPL-3.0",
   "authors": [
