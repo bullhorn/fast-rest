@@ -1301,14 +1301,9 @@ class ModelBuilder {
 	 * @throws \Exception
 	 */
 	private function buildTestSetup() {
-		$this->getTestClass()->addUse($this->getConfiguration()->getRootNamespace().'\PhalconHelper\Database\MockTest');
+		$this->getTestClass()->addUse('Bullhorn\FastRest\UnitTestHelper\MockDbAdapter');
 		$variable = new Object\Variable();
 		$variable->setName('model');
-		$variable->setType($this->getAbstractClass()->getName());
-		$this->getTestClass()->addVariable($variable);
-
-		$variable = new Object\Variable();
-		$variable->setName('dbMock');
 		$variable->setType($this->getAbstractClass()->getName());
 		$this->getTestClass()->addVariable($variable);
 
@@ -1320,17 +1315,17 @@ class ModelBuilder {
 
 		$method = new Object\Method();
 		$method->setName('getDbMock');
-		$method->setReturnType('MockTest');
-		$method->setContent('return $this->dbMock;');
+		$method->setReturnType('MockDbAdapter');
+		$method->setContent('return $this->getDi()->get($this->getConnectionService());');
 		$this->getTestClass()->addMethod($method);
 
 		$method = new Object\Method();
 		$method->setName('setUp');
-		$content = '$this->dbMock = new MockTest([]);
-		$this->dbMock->setModelSubNamespace("'.$this->getConfiguration()->getModelSubNamespace().'");
-		$this->getDI()->set(\''.$this->getConfiguration()->getConnectionService().'\', $this->dbMock);
-		$this->model = $this->getMockForAbstractClass(\''.$this->getAbstractClass()->getNamespace().'\\'.$this->getAbstractClass()->getName().'\');
-		parent::setUp();';
+		$content = '$this->setModelSubNamespace(\''.$this->getConfiguration()->getModelSubNamespace().'\');
+		$this->setConnectionService(\''.$this->getConfiguration()->getConnectionService().'\');
+		$this->setPhalconHelperNamespace(\''.$this->getConfiguration()->getRootNamespace().'\PhalconHelper\');
+		parent::setUp();
+		$this->model = $this->getMockForAbstractClass(\''.$this->getAbstractClass()->getNamespace().'\\'.$this->getAbstractClass()->getName().'\', [$this->getDi()]);';
 		$method->setContent($content);
 		$this->getTestClass()->addMethod($method);
 	}
@@ -1347,7 +1342,8 @@ class ModelBuilder {
 		$method->setName('initialize');
 		$method->setReturnType('void');
 		$method->setContent(
-			'parent::initialize();
+			'$this->setConnectionService(\''.$this->getConfiguration()->getConnectionService().'\');
+		parent::initialize();
 '.$this->buildValidation().'
 '.$this->buildRelationshipsBuffer().'
 '.$this->buildUpdateSkips()
@@ -1506,6 +1502,7 @@ class ModelBuilder {
 		$this->getAbstractClass()->addMethod($method);
 	}
 
+
 	private function buildIdField() {
 		foreach($this->getFields() as $field) {
 			if($field->isPrimary() && $field->getShortName()!='id') {
@@ -1577,23 +1574,8 @@ class ModelBuilder {
 	 * @throws \Exception
 	 */
 	private function initTestClass() {
-		$this->getTestClass()->setExtends('\PHPUnit_Framework_TestCase');
-		$this->getTestClass()->setImplements(['InjectionAwareInterface']);
-		$this->getTestClass()->addUse('Phalcon\Di\FactoryDefault');
-		$this->getTestClass()->addUse('Phalcon\Di\InjectionAwareInterface');
-		$this->getTestClass()->addUse('Bullhorn\FastRest\DependencyInjection');
-		$this->getTestClass()->setTraits(['DependencyInjection']);
-
-
-		$method = new Object\Method();
-		$method->setAccess('public');
-		$method->setName('tearDown');
-		$method->setDescription('Resets the di when the test is done');
-		$method->setContent(
-			'FactoryDefault::reset();'
-		);
-		$this->getTestClass()->addMethod($method);
-
+		$this->getTestClass()->setExtends('BaseTest');
+		$this->getTestClass()->addUse('Bullhorn\FastRest\UnitTestHelper\Base as BaseTest');
 	}
 
 	/**
@@ -1717,9 +1699,9 @@ class ModelBuilder {
 			.'\PhalconHelper\Database\Tables\\'.$this->getConfiguration()->getModelSubNamespace()
 		);
 		$class->setName(ucfirst($this->getTableName()).'Test');
-		$class->addUse($this->getConfiguration()->getRootNamespace().'\PhalconHelper\Database\TableTest');
+		$class->addUse('Bullhorn\FastRest\UnitTestHelper\MockTable');
 		$class->addUse('Phalcon\Db\Column');
-		$class->setExtends('TableTest');
+		$class->setExtends('MockTable');
 
 		$method = new Object\Method();
 		$method->setName('__construct');
