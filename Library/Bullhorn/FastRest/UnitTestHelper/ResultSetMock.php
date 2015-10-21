@@ -32,6 +32,10 @@ class ResultSetMock implements ResultsetInterface, \Iterator {
 		$this->models = $models;
 	}
 
+	public function count() {
+		return count($this->models);
+	}
+
 
 	public function getType() {
 		// TODO: Implement getType() method.
