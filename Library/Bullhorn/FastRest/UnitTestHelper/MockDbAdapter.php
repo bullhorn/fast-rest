@@ -2,6 +2,7 @@
 namespace Bullhorn\FastRest\UnitTestHelper;
 use Phalcon\Db\AdapterInterface;
 use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\Dialect\MySQL;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 
@@ -310,7 +311,7 @@ class MockDbAdapter implements AdapterInterface {
 	}
 
 	public function getDialect() {
-		return '';
+		return new MySQL();
 	}
 
 	public function connect($descriptor = null) {

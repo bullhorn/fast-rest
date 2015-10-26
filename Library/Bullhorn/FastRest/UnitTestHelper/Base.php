@@ -1,6 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\UnitTestHelper;
 use Bullhorn\FastRest\DependencyInjection;
+use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Mvc\Model;
@@ -139,8 +140,8 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 					}
 				)
 			);
-
-		$this->getDi()->set('modelsManager', $modelsManager);
+		$this->getDi()->remove('modelsManager');
+		$this->getDi()->setShared('modelsManager', $modelsManager);
 	}
 
 	/**
