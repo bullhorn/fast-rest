@@ -30,4 +30,17 @@ class Assert {
 			throw new \InvalidArgumentException('Must be Int: '.print_r($value, true));
 		}
 	}
+
+	/**
+	 * isArray
+	 * @param mixed $value
+	 * @return array
+	 */
+	public static function isArray($value) {
+		if(!is_array($value)) {
+			throw new \InvalidArgumentException('Must be Array: '.print_r($value, true));
+		}
+		return $value;
+	}
+
 }
