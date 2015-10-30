@@ -4,13 +4,12 @@ use Bullhorn\FastRest\Generator\ModelBuilder;
 use Bullhorn\FastRest\Generator\Configuration;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 require_once '/var/www/vendor/autoload.php';
-require_once '/var/www/web/app/config/bootstrap.php';
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
 $di = FactoryDefault::getDefault();
 $di->set(
-	'instanceDb',
+	'db',
 	function() {
 		return new DbAdapter(
 			array(
@@ -29,7 +28,7 @@ $configuration->setConnectionService('db');
 $configuration->setRootDirectory('/var/www/web/app/');
 $configuration->setRootTestDirectory('/var/www/tests');
 $configuration->setRootNamespace('Api');
-$configuration->setModelSubNamespace('Instance');
+$configuration->setModelSubNamespace('Database');
 $instanceConfiguration = $configuration;
 
 //Build Controller
