@@ -6,7 +6,6 @@ use Phalcon\Mvc\Router;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class ApiRoutesTest extends Base {
-
 	public function testAddRoutes() {
 		//Arrange
 		$apiControllerRootNamespace = 'apiControllerRootNamespace';
@@ -26,27 +25,26 @@ class ApiRoutesTest extends Base {
 				)
 			);
 
-		$router->expects($this->at(0))
+		$router->expects($this->exactly(2))
 			->method('addGet')
-			->with(
-				'/'.$apiRootUrl.'/:controller/:params',
-				array(
-					'namespace'  => $apiControllerRootNamespace,
-					'controller' => 1,
-					'action'     => 'show',
-					'params'     => 2
-				)
-			);
-
-		$router->expects($this->at(1))
-			->method('addGet')
-			->with(
-				'/'.$apiRootUrl.'/:controller',
-				array(
-					'namespace'  => $apiControllerRootNamespace,
-					'controller' => 1,
-					'action'     => 'index'
-				)
+			->withConsecutive(
+				[
+					'/'.$apiRootUrl.'/:controller/:params',
+					array(
+						'namespace'  => $apiControllerRootNamespace,
+						'controller' => 1,
+						'action'     => 'show',
+						'params'     => 2
+					)
+				],
+				[
+					'/'.$apiRootUrl.'/:controller',
+					array(
+						'namespace'  => $apiControllerRootNamespace,
+						'controller' => 1,
+						'action'     => 'index'
+					)
+				]
 			);
 
 		$router->expects($this->once())
@@ -60,26 +58,25 @@ class ApiRoutesTest extends Base {
 				)
 			);
 
-		$router->expects($this->at(0))
+		$router->expects($this->exactly(2))
 			->method('addOptions')
-			->with(
-				'/'.$apiRootUrl.'/:controller',
-				array(
-					'namespace'  => $apiControllerRootNamespace,
-					'controller' => 1,
-					'action'     => 'options'
-				)
-			);
-
-		$router->expects($this->at(1))
-			->method('addOptions')
-			->with(
-				'/'.$apiRootUrl.'/:controller/:params',
-				array(
-					'namespace'  => $apiControllerRootNamespace,
-					'controller' => 1,
-					'action'     => 'options'
-				)
+			->withConsecutive(
+				[
+					'/'.$apiRootUrl.'/:controller',
+					array(
+						'namespace'  => $apiControllerRootNamespace,
+						'controller' => 1,
+						'action'     => 'options'
+					)
+				],
+				[
+					'/'.$apiRootUrl.'/:controller/:params',
+					array(
+						'namespace'  => $apiControllerRootNamespace,
+						'controller' => 1,
+						'action'     => 'options'
+					)
+				]
 			);
 
 		$router->expects($this->once())
