@@ -1,6 +1,21 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\DataValidation;
 class Assert {
+
+	/**
+	 * Cleans bool input
+	 * @param string $input
+	 * @return bool
+	 */
+	public static function isBool($input) {
+		if(is_bool($input)) {
+			return $input; //Already a boolean
+		}
+		if(is_int($input) || is_float($input)) {  return $input!=0; }
+		$input = strtolower(self::isString($input));
+		return in_array($input, array('active','true','yes','1','on','y'), TRUE);
+	}
+
 	/**
 	 * isString
 	 * @param mixed $value
