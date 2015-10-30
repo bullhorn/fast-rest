@@ -116,12 +116,6 @@ interface ApiInterface extends GeneratedInterface {
 	public function getEntityName();
 
 	/**
-	 * Gets a list of all the required modules
-	 * @return string[]
-	 */
-	public function getRequiredModules();
-
-	/**
 	 * Allows us to arbitrarily add read only properties to api entities.
 	 * @return String[]
 	 */
