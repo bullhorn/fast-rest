@@ -545,6 +545,7 @@ abstract class Base extends Controller {
 		$object = $this->addErrorsAndStatus($errors, $code, $object);
 		$this->response->setStatusCode($object->statusCode, 'Check Document Body For More Details');
 		$output->output($object, $this->response);
+		$this->view->disable();
 	}
 
 	/**
