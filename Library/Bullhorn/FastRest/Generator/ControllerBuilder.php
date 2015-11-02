@@ -52,8 +52,6 @@ class ControllerBuilder {
 		$this->configuration = $configuration;
 	}
 
-
-
 	/**
 	 * Getter
 	 * @return ModelBuilder[]
@@ -730,7 +728,15 @@ class ControllerBuilder {
 	 */
 	public function output() {
 		header('Content-Type: text/plain');
-		echo $this->getObject()->toString();
+		echo $this->__toString();
+	}
+
+	/**
+	 * __toString
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->getObject()->toString();
 	}
 
 	/**

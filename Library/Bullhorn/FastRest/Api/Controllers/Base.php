@@ -23,6 +23,8 @@ use Bullhorn\FastRest\Api\Services\DataTransform\Base as DataTransformer;
  * Class ControllerBase
  */
 abstract class Base extends Controller {
+	const DI_NAME_OUTPUT = 'Output';
+	const DI_NAME_ACL = 'Acl';
 	/** @var  \stdClass */
 	private $outputObject;
 	/** @var Exception[]  */
@@ -58,11 +60,11 @@ abstract class Base extends Controller {
 	 * @throws \Exception
 	 */
 	private function validateServicesDefined() {
-		if(!$this->getDi()->has('Acl')) {
-			throw new \Exception('Service Acl must be defined with a type of: '.AclInterface::class);
+		if(!$this->getDi()->has(self::DI_NAME_ACL)) {
+			throw new \Exception('Service '.self::class.'::DI_NAME_ACL must be defined with a type of: '.AclInterface::class);
 		}
-		if(!$this->getDi()->has('Output')) {
-			throw new \Exception('Service Output must be defined with a type of: '.OutputInterface::class);
+		if(!$this->getDi()->has(self::DI_NAME_OUTPUT)) {
+			throw new \Exception('Service '.self::class.'::DI_NAME_OUTPUT must be defined with a type of: '.OutputInterface::class);
 		}
 	}
 
@@ -472,7 +474,7 @@ abstract class Base extends Controller {
 	 * @throws \Exception
 	 */
 	public function getAcl() {
-		$returnVar = $this->getDi()->get('Acl');
+		$returnVar = $this->getDi()->get(self::DI_NAME_ACL);
 		if(!($returnVar instanceof AclInterface)) {
 			throw new \Exception('The Acl must implement: '.AclInterface::class);
 		}
@@ -534,7 +536,7 @@ abstract class Base extends Controller {
 	 */
 	public function afterExecuteRoute() {
 		/** @var \Bullhorn\FastRest\Api\Services\Output\OutputInterface $output */
-		$output = $this->getDI()->get('Output');
+		$output = $this->getDI()->get(self::DI_NAME_OUTPUT);
 		if(!($output instanceof OutputInterface)) {
 			throw new \Exception('The Output must implement: '.OutputInterface::class);
 		}
@@ -545,6 +547,7 @@ abstract class Base extends Controller {
 		$object = $this->addErrorsAndStatus($errors, $code, $object);
 		$this->response->setStatusCode($object->statusCode, 'Check Document Body For More Details');
 		$output->output($object, $this->response);
+		$this->view->disable();
 	}
 
 	/**

@@ -116,12 +116,6 @@ interface ApiInterface extends GeneratedInterface {
 	public function getEntityName();
 
 	/**
-	 * Gets a list of all the required modules
-	 * @return string[]
-	 */
-	public function getRequiredModules();
-
-	/**
 	 * Allows us to arbitrarily add read only properties to api entities.
 	 * @return String[]
 	 */
@@ -135,4 +129,30 @@ interface ApiInterface extends GeneratedInterface {
 	 * @return Model\BehaviorInterface[]
 	 */
 	public function getAllBehaviorsByClassName($className);
+
+	/**
+	 * Stubbed method
+	 *
+	 * @param mixed $attribute
+	 * @param mixed $value
+	 *
+	 * @return void
+	 */
+	public function writeAttribute($attribute, $value);
+
+	/**
+	 * Stubbed method
+	 *
+	 * @param mixed $attribute
+	 *
+	 * @return void
+	 */
+	public function readAttribute($attribute);
+
+	/**
+	 * Gets an array of field types, self::FIELD_TYPE_
+	 *
+	 * @return string[]
+	 */
+	public function getFieldTypes();
 }
