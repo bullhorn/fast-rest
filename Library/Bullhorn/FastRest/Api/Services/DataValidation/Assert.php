@@ -37,6 +37,9 @@ class Assert {
 	 * @return int
 	 */
 	public static function isInt($value) {
+		if(is_object($value)) {
+			$value = Assert::isString($value);
+		}
 		if(is_int($value)) {
 			return $value;
 		} elseif(is_scalar($value) && preg_match('@^-?[0-9]+$@', $value)) {
@@ -52,6 +55,9 @@ class Assert {
 	 * @return float
 	 */
 	public static function isFloat($value) {
+		if(is_object($value)) {
+			$value = Assert::isString($value);
+		}
 		if(is_float($value)) {
 			return $value;
 		} elseif(is_int($value)) {
