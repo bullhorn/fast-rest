@@ -64,21 +64,6 @@ class Assert {
 	}
 
 	/**
-	 * Cleans input to make it into a float
-	 * @param string $input
-	 * @return float
-	 */
-	public static function cleanFloat($input) {
-		if(is_float($input) || is_int($input)) {
-			return $input; //Already a float
-		}
-		self::forceString($input);
-		$input = self::negativeFormatSwitch($input);
-		$input = self::checkCleanEuro($input);
-		return preg_replace('@[^-\d\.]@', '', $input)+0;
-	}
-
-	/**
 	 * isArray
 	 * @param mixed $value
 	 * @return array
