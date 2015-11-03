@@ -39,4 +39,34 @@ class AssertTest extends Base {
 			[new \stdClass()]
 		];
 	}
+
+	/**
+	 * testIsFloat_negativeDecimal
+	 * @return void
+	 */
+	public function testIsFloat_negativeDecimal() {
+		$actual = Assert::isFloat('-124.23');
+		$this->assertSame(-124.23, $actual);
+	}
+
+	/**
+	 * testIsFloat_negativeDecimal
+	 * @return void
+	 * @expectedException \InvalidArgumentException
+	 * @expectedExceptionMessage Must be Float: 124.
+	 */
+	public function testIsFloat_invalidDecimal() {
+		Assert::isFloat('124.');
+	}
+
+	/**
+	 * testIsFloat_negativeDecimal
+	 * @return void
+	 * @expectedException \InvalidArgumentException
+	 * @expectedExceptionMessage Must be Float: Array
+	 */
+	public function testIsFloat_array() {
+		Assert::isFloat(['a']);
+	}
+
 }
