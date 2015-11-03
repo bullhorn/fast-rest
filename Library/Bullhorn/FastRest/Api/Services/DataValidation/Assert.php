@@ -37,12 +37,35 @@ class Assert {
 	 * @return int
 	 */
 	public static function isInt($value) {
+		if(is_object($value)) {
+			$value = Assert::isString($value);
+		}
 		if(is_int($value)) {
 			return $value;
-		} elseif(is_scalar($value) && preg_match('@^[0-9]+$@', $value)) {
+		} elseif(is_scalar($value) && preg_match('@^-?[0-9]+$@', $value)) {
 			return (int)$value;
 		} else {
 			throw new \InvalidArgumentException('Must be Int: '.print_r($value, true));
+		}
+	}
+
+	/**
+	 * isFloat
+	 * @param mixed $value
+	 * @return float
+	 */
+	public static function isFloat($value) {
+		if(is_object($value)) {
+			$value = Assert::isString($value);
+		}
+		if(is_float($value)) {
+			return $value;
+		} elseif(is_int($value)) {
+			return (float)$value;
+		} elseif(is_scalar($value) && preg_match('@^-?[0-9]+(\.[0-9]+)?$@', $value)) {
+			return (float)$value;
+		} else {
+			throw new \InvalidArgumentException('Must be Float: '.print_r($value, true));
 		}
 	}
 
