@@ -372,7 +372,7 @@ namespace '.$this->getNamespace().';
 			$buffer .= $method->toString();
 		}
 		$buffer .= '}';
-		return $buffer;
+		return str_replace("\r\n", "\n", $buffer);
 	}
 
 	/**
