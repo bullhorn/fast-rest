@@ -13,6 +13,8 @@ use PHPUnit_Framework_TestCase;
 
 abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAwareInterface {
 	use DependencyInjection;
+	const PHPUNIT_RUNNING = 'PHPUNIT_RUNNING';
+
 	/** @type  string */
 	private $connectionService = 'db';
 	/** @type  string */
@@ -81,6 +83,9 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 	 * @return void
 	 */
 	protected function setUp() {
+		if(!defined(self::PHPUNIT_RUNNING)) {
+			define(self::PHPUNIT_RUNNING, true);
+		}
 		$_POST = [];
 		$_GET = [];
 		new FactoryDefault();
