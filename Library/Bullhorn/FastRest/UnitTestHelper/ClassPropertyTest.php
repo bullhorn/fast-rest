@@ -137,6 +137,9 @@ class ClassPropertyTest {
 	private function findDefaultsForType($type, $field) {
 		$rawType = $type;
 		$type = strtolower($type);
+		if(strpos($type, '|')!==false) {
+			$type = substr($type, 0, strpos($type, '|'));
+		}
 
 		switch($type) {
 			case 'boolean':
