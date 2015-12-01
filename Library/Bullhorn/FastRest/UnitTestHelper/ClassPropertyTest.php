@@ -7,7 +7,6 @@ use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
 class ClassPropertyTest {
-	private $IGNORED_PROPERTIES = ["_options", "di"];
 
 	/**
 	 * The class to be tested
@@ -32,6 +31,8 @@ class ClassPropertyTest {
 	 * @var bool
 	 */
 	private $testAdders = true;
+
+	private $ignoreList = ["_options", "di"];
 
 	/**
 	 * Constructor ensures object is passed in
@@ -242,7 +243,7 @@ class ClassPropertyTest {
 		$returnVar = array();
 		foreach($reflect as $property) {
 			$name = $property->getName();
-			if (!in_array($name, $this->IGNORED_PROPERTIES)) {
+			if (!in_array($name, $this->getIgnoreList())) {
 				$returnVar[] = $name;
 			}
 		}
@@ -444,6 +445,24 @@ class ClassPropertyTest {
 	 */
 	public function setTestAdders($testAdders) {
 		$this->testAdders = $testAdders;
+		return $this;
+	}
+
+	/**
+	 * Getter
+	 * @return array
+	 */
+	private function getIgnoreList() {
+		return $this->ignoreList;
+	}
+
+	/**
+	 * Setter
+	 * @param array $ignoreList
+	 * @return ClassPropertyTest
+	 */
+	public function setIgnoreList(array $ignoreList) {
+		$this->ignoreList = array_merge($this->getIgnoreList(), $ignoreList);
 		return $this;
 	}
 
