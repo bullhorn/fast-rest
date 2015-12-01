@@ -269,15 +269,18 @@ class Date implements InjectionAwareInterface {
 
 	/**
 	 * Gets the first second in a week
+	 * @param int|null $offset
 	 * @return Date
 	 */
-	public function getStartOfWeek() {
+	public function getStartOfWeek($offset=null) {
 		$dayInWeek = $this->getEpoch();
 		if(date('G', $dayInWeek)<6) {
 			$dayInWeek += 60*60*12; //Offset for daylight savings time
 		}
 		$week = date('w', $dayInWeek);
-		$offset = $this->getFormatter()->getWeekOffset();
+		if(is_null($offset)) {
+			$offset = $this->getFormatter()->getWeekOffset();
+		}
 		if($week>=$offset) {
 			$day = date('j', $dayInWeek)-date('w', $dayInWeek)+$offset;
 		} else { //Go To previous week
@@ -288,15 +291,18 @@ class Date implements InjectionAwareInterface {
 
 	/**
 	 * Gets the last second in a week
+	 * @param int|null $offset
 	 * @return Date
 	 */
-	public function getEndOfWeek( ) {
+	public function getEndOfWeek($offset=null) {
 		$dayInWeek = $this->getEpoch();
 		if(date('G', $dayInWeek)<11) {
 			$dayInWeek += 60 * 60 * 12; //Offset for daylight savings time
 		}
 		$week = date('w', $dayInWeek);
-		$offset = $this->getFormatter()->getWeekOffset();
+		if(is_null($offset)) {
+			$offset = $this->getFormatter()->getWeekOffset();
+		}
 		if($week>=$offset) {
 			$day = date('j', $dayInWeek)-date('w', $dayInWeek)+$offset;
 		} else { //Go To previous week
