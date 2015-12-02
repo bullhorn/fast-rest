@@ -11,6 +11,7 @@ use Phalcon\Mvc\Model\Query;
 use Phalcon\Mvc\Model\Query\Builder;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
+use ReflectionClass;
 
 abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAwareInterface {
 	use DependencyInjection;
@@ -103,12 +104,13 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 	 * @return void
 	 */
 	private function resetDi() {
-		foreach($this->getDi()->getServices() as $service) {
-			$this->getDi()->remove($service->getName());
+		if(is_null($this->getStartingServices())) {
+			throw new \Exception('Starting Services was not set');
 		}
-		foreach($this->getStartingServices() as $service) {
-			$this->getDi()->set($service->getName(), $service->getDefinition(), true);
-		}
+		$reflectionClass = new ReflectionClass(FactoryDefault::class);
+		$reflectionProperty = $reflectionClass->getProperty('_services');
+		$reflectionProperty->setAccessible(true);
+		$reflectionProperty->setValue($this->getDi(), $this->getStartingServices());
 	}
 
 	/**
