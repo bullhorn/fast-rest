@@ -7,7 +7,6 @@ use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
 class ClassPropertyTest {
-	private $IGNORED_PROPERTIES = ["_options", "di"];
 
 	/**
 	 * The class to be tested
@@ -26,6 +25,14 @@ class ClassPropertyTest {
 	 * @var ReflectionClass
 	 */
 	private $reflectionClass;
+
+	/**
+	 * Do we test the adders as well as the getters and setters
+	 * @var bool
+	 */
+	private $testAdders = true;
+
+	private $ignoreList = ["_options", "di"];
 
 	/**
 	 * Constructor ensures object is passed in
@@ -236,7 +243,7 @@ class ClassPropertyTest {
 		$returnVar = array();
 		foreach($reflect as $property) {
 			$name = $property->getName();
-			if (!in_array($name, $this->IGNORED_PROPERTIES)) {
+			if (!in_array($name, $this->getIgnoreList())) {
 				$returnVar[] = $name;
 			}
 		}
@@ -296,7 +303,7 @@ class ClassPropertyTest {
 		}
 		$this->testSetter($field, $values);
 		$this->testGetter($field, $values);
-		if (substr($field, -1) == 's' && method_exists($this->buildObject(), $this->findAdderName($field))) {
+		if (substr($field, -1) == 's' && method_exists($this->buildObject(), $this->findAdderName($field)) && $this->isTestAdders()) {
 			$this->testAdder($field, $values);
 		}
 	}
@@ -422,5 +429,42 @@ class ClassPropertyTest {
 		array_pop($resultList);
 		$this->tester->assertSame($resultList, $reflectionProperty->getValue($object), 'Remover failed for field '.$field);
 	}
+
+	/**
+	 * Do we test the adders as well as the getters and setters
+	 * @return boolean
+	 */
+	private function isTestAdders() {
+		return $this->testAdders;
+	}
+
+	/**
+	 * Do we test the adders as well as the getters and setters
+	 * @param boolean $testAdders
+	 * @return ClassPropertyTest
+	 */
+	public function setTestAdders($testAdders) {
+		$this->testAdders = $testAdders;
+		return $this;
+	}
+
+	/**
+	 * Getter
+	 * @return array
+	 */
+	private function getIgnoreList() {
+		return $this->ignoreList;
+	}
+
+	/**
+	 * Setter
+	 * @param array $ignoreList
+	 * @return ClassPropertyTest
+	 */
+	public function setIgnoreList(array $ignoreList) {
+		$this->ignoreList = array_merge($this->getIgnoreList(), $ignoreList);
+		return $this;
+	}
+
 
 }

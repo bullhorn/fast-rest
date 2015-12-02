@@ -4,12 +4,14 @@ use Bullhorn\FastRest\DependencyInjection;
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Di\ServiceInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\Query;
 use Phalcon\Mvc\Model\Query\Builder;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
+use ReflectionClass;
 
 abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAwareInterface {
 	use DependencyInjection;
@@ -21,6 +23,8 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 	private $modelSubNamespace;
 	/** @var  string */
 	public $phalconHelperNamespace = '';
+	/** @var  ServiceInterface[] */
+	private $startingServices;
 
 	/**
 	 * Getter
@@ -75,7 +79,7 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 	 * @return void
 	 */
 	public function tearDown() {
-		$this->getDi()->reset();
+		$this->resetDi();
 	}
 
 	/**
@@ -88,11 +92,25 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 		}
 		$_POST = [];
 		$_GET = [];
-		new FactoryDefault();
+		$this->setStartingServices($this->getDi()->getServices());
 		$dbMock = new MockDbAdapter([]);
 		$dbMock->setPhalconHelperNamespace($this->getPhalconHelperNamespace());
 		$dbMock->setModelSubNamespace($this->getModelSubNamespace());
 		$this->getDI()->set($this->getConnectionService(), $dbMock);
+	}
+
+	/**
+	 * resetDi
+	 * @return void
+	 */
+	private function resetDi() {
+		if(is_null($this->getStartingServices())) {
+			throw new \Exception('Starting Services was not set');
+		}
+		$reflectionClass = new ReflectionClass(FactoryDefault::class);
+		$reflectionProperty = $reflectionClass->getProperty('_services');
+		$reflectionProperty->setAccessible(true);
+		$reflectionProperty->setValue($this->getDi(), $this->getStartingServices());
 	}
 
 	/**
@@ -197,4 +215,24 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 
 		return $query;
 	}
+
+	/**
+	 * Getter
+	 * @return Di\ServiceInterface[]
+	 */
+	private function getStartingServices() {
+		return $this->startingServices;
+	}
+
+	/**
+	 * Setter
+	 * @param Di\ServiceInterface[] $startingServices
+	 * @return Base
+	 */
+	private function setStartingServices(array $startingServices) {
+		$this->startingServices = $startingServices;
+		return $this;
+	}
+
+
 }
