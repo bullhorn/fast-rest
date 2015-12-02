@@ -88,7 +88,7 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 		}
 		$_POST = [];
 		$_GET = [];
-		new FactoryDefault();
+		$this->setDi(new FactoryDefault());
 		$dbMock = new MockDbAdapter([]);
 		$dbMock->setPhalconHelperNamespace($this->getPhalconHelperNamespace());
 		$dbMock->setModelSubNamespace($this->getModelSubNamespace());
