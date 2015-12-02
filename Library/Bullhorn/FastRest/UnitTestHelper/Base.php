@@ -4,6 +4,7 @@ use Bullhorn\FastRest\DependencyInjection;
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Di\ServiceInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\Query;
@@ -21,6 +22,8 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 	private $modelSubNamespace;
 	/** @var  string */
 	public $phalconHelperNamespace = '';
+	/** @var  ServiceInterface[] */
+	private $startingServices;
 
 	/**
 	 * Getter
@@ -75,7 +78,7 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 	 * @return void
 	 */
 	public function tearDown() {
-		$this->getDi()->reset();
+		$this->resetDi();
 	}
 
 	/**
@@ -88,11 +91,24 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 		}
 		$_POST = [];
 		$_GET = [];
-		$this->setDi(new FactoryDefault());
+		$this->setStartingServices($this->getDi()->getServices());
 		$dbMock = new MockDbAdapter([]);
 		$dbMock->setPhalconHelperNamespace($this->getPhalconHelperNamespace());
 		$dbMock->setModelSubNamespace($this->getModelSubNamespace());
 		$this->getDI()->set($this->getConnectionService(), $dbMock);
+	}
+
+	/**
+	 * resetDi
+	 * @return void
+	 */
+	private function resetDi() {
+		foreach($this->getDi()->getServices() as $service) {
+			$this->getDi()->remove($service->getName());
+		}
+		foreach($this->getStartingServices() as $service) {
+			$this->getDi()->set($service->getName(), $service->getDefinition(), true);
+		}
 	}
 
 	/**
@@ -197,4 +213,24 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
 
 		return $query;
 	}
+
+	/**
+	 * Getter
+	 * @return Di\ServiceInterface[]
+	 */
+	private function getStartingServices() {
+		return $this->startingServices;
+	}
+
+	/**
+	 * Setter
+	 * @param Di\ServiceInterface[] $startingServices
+	 * @return Base
+	 */
+	private function setStartingServices(array $startingServices) {
+		$this->startingServices = $startingServices;
+		return $this;
+	}
+
+
 }
