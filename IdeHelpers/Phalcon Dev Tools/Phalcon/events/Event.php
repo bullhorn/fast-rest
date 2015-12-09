@@ -6,8 +6,7 @@ namespace Phalcon\Events;
  * Phalcon\Events\Event
  * This class offers contextual information of a fired event in the EventsManager
  */
-class Event
-{
+class Event {
     /**
      * Event type
      *
@@ -47,65 +46,74 @@ class Event
     /**
      * Event type
      *
-     * @param string $type 
+     * @param string $type
      */
-    public function setType($type) {}
+    public function setType($type) {
+    }
 
     /**
      * Event type
      *
-     * @return string 
+     * @return string
      */
-    public function getType() {}
+    public function getType() {
+    }
 
     /**
      * Event source
      *
-     * @return object 
+     * @return object
      */
-    public function getSource() {}
+    public function getSource() {
+    }
 
     /**
      * Event data
      *
-     * @param mixed $data 
+     * @param mixed $data
      */
-    public function setData($data) {}
+    public function setData($data) {
+    }
 
     /**
      * Event data
      *
-     * @return mixed 
+     * @return mixed
      */
-    public function getData() {}
+    public function getData() {
+    }
 
     /**
      * Is event cancelable?
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getCancelable() {}
+    public function getCancelable() {
+    }
 
     /**
      * Phalcon\Events\Event constructor
      *
-     * @param string $type 
-     * @param object $source 
-     * @param mixed $data 
-     * @param boolean $cancelable 
+     * @param string $type
+     * @param object $source
+     * @param mixed $data
+     * @param boolean $cancelable
      */
-    public function __construct($type, $source, $data = null, $cancelable = true) {}
+    public function __construct($type, $source, $data = null, $cancelable = true) {
+    }
 
     /**
      * Stops the event preventing propagation
      */
-    public function stop() {}
+    public function stop() {
+    }
 
     /**
      * Check whether the event is currently stopped
      *
-     * @return bool 
+     * @return bool
      */
-    public function isStopped() {}
+    public function isStopped() {
+    }
 
 }

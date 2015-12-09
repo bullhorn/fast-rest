@@ -6,8 +6,7 @@ namespace Phalcon\Mvc\Model;
  * Phalcon\Mvc\Model\ManagerInterface
  * Interface for Phalcon\Mvc\Model\Manager
  */
-interface ManagerInterface
-{
+interface ManagerInterface {
 
     /**
      * Initializes a model in the model manager
@@ -131,10 +130,10 @@ interface ManagerInterface
     /**
      * Setup a 1-1 relation between two models
      *
-     * @param	mixed fields
-     * @param	string referencedModel
-     * @param	mixed referencedFields
-     * @param	array options
+     * @param    mixed fields
+     * @param    string referencedModel
+     * @param    mixed referencedFields
+     * @param    array options
      * @param \Phalcon\Mvc\ModelInterface $model
      * @param mixed $fields
      * @param mixed $referencedModel
@@ -147,10 +146,10 @@ interface ManagerInterface
     /**
      * Setup a relation reverse 1-1  between two models
      *
-     * @param	mixed fields
-     * @param	string referencedModel
-     * @param	mixed referencedFields
-     * @param	array options
+     * @param    mixed fields
+     * @param    string referencedModel
+     * @param    mixed referencedFields
+     * @param    array options
      * @param mixed $model
      * @param mixed $fields
      * @param mixed $referencedModel
@@ -164,10 +163,10 @@ interface ManagerInterface
     /**
      * Setup a relation 1-n between two models
      *
-     * @param	mixed fields
-     * @param	string referencedModel
-     * @param	mixed referencedFields
-     * @param	array options
+     * @param    mixed fields
+     * @param    string referencedModel
+     * @param    mixed referencedFields
+     * @param    array options
      * @param mixed $model
      * @param mixed $fields
      * @param mixed $referencedModel

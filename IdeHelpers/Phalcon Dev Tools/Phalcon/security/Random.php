@@ -51,8 +51,7 @@ namespace Phalcon\Security;
  *
  * @link http://ruby-doc.org/stdlib-2.2.2/libdoc/securerandom/rdoc/SecureRandom.html
  */
-class Random
-{
+class Random {
 
     /**
      * Generates a random binary string
@@ -64,10 +63,11 @@ class Random
      * </code>
      *
      * @throws Exception If secure random number generator is not available or unexpected partial read
-     * @param int $len 
-     * @return string 
+     * @param int $len
+     * @return string
      */
-    public function bytes($len = 16) {}
+    public function bytes($len = 16) {
+    }
 
     /**
      * Generates a random hex string
@@ -79,10 +79,11 @@ class Random
      * </code>
      *
      * @throws Exception If secure random number generator is not available or unexpected partial read
-     * @param int $len 
-     * @return string 
+     * @param int $len
+     * @return string
      */
-    public function hex($len = null) {}
+    public function hex($len = null) {
+    }
 
     /**
      * Generates a random base58 string
@@ -97,10 +98,11 @@ class Random
      *
      * @link https://en.wikipedia.org/wiki/Base58
      * @throws Exception If secure random number generator is not available or unexpected partial read
-     * @param mixed $n 
-     * @return string 
+     * @param mixed $n
+     * @return string
      */
-    public function base58($n = null) {}
+    public function base58($n = null) {
+    }
 
     /**
      * Generates a random base64 string
@@ -113,10 +115,11 @@ class Random
      * </code>
      *
      * @throws Exception If secure random number generator is not available or unexpected partial read
-     * @param int $len 
-     * @return string 
+     * @param int $len
+     * @return string
      */
-    public function base64($len = null) {}
+    public function base64($len = null) {
+    }
 
     /**
      * Generates a random URL-safe base64 string
@@ -132,11 +135,12 @@ class Random
      *
      * @link https://www.ietf.org/rfc/rfc3548.txt
      * @throws Exception If secure random number generator is not available or unexpected partial read
-     * @param int $len 
-     * @param bool $padding 
-     * @return string 
+     * @param int $len
+     * @param bool $padding
+     * @return string
      */
-    public function base64Safe($len = null, $padding = false) {}
+    public function base64Safe($len = null, $padding = false) {
+    }
 
     /**
      * Generates a v4 random UUID (Universally Unique IDentifier)
@@ -153,9 +157,10 @@ class Random
      *
      * @link https://www.ietf.org/rfc/rfc4122.txt
      * @throws Exception If secure random number generator is not available or unexpected partial read
-     * @return string 
+     * @return string
      */
-    public function uuid() {}
+    public function uuid() {
+    }
 
     /**
      * Generates a random number between 0 and $len
@@ -166,9 +171,10 @@ class Random
      * </code>
      *
      * @throws Exception If secure random number generator is not available, unexpected partial read or $len <= 0
-     * @param int $len 
-     * @return int 
+     * @param int $len
+     * @return int
      */
-    public function number($len) {}
+    public function number($len) {
+    }
 
 }

@@ -9,8 +9,7 @@ namespace Phalcon\Annotations\Adapter;
  * $annotations = new \Phalcon\Annotations\Adapter\Apc();
  * </code>
  */
-class Apc extends \Phalcon\Annotations\Adapter implements \Phalcon\Annotations\AdapterInterface
-{
+class Apc extends \Phalcon\Annotations\Adapter implements \Phalcon\Annotations\AdapterInterface {
 
     protected $_prefix = "";
 
@@ -21,24 +20,27 @@ class Apc extends \Phalcon\Annotations\Adapter implements \Phalcon\Annotations\A
     /**
      * Phalcon\Annotations\Adapter\Apc constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function __construct($options = null) {}
+    public function __construct($options = null) {
+    }
 
     /**
      * Reads parsed annotations from APC
      *
-     * @param string $key 
-     * @return \Phalcon\Annotations\Reflection 
+     * @param string $key
+     * @return \Phalcon\Annotations\Reflection
      */
-    public function read($key) {}
+    public function read($key) {
+    }
 
     /**
      * Writes parsed annotations to APC
      *
-     * @param string $key 
-     * @param mixed $data 
+     * @param string $key
+     * @param mixed $data
      */
-    public function write($key, \Phalcon\Annotations\Reflection $data) {}
+    public function write($key, \Phalcon\Annotations\Reflection $data) {
+    }
 
 }

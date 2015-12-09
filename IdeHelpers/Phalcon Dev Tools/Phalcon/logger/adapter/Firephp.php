@@ -11,8 +11,7 @@ namespace Phalcon\Logger\Adapter;
  * $logger->error("This is another error");
  * </code>
  */
-class Firephp extends \Phalcon\Logger\Adapter implements \Phalcon\Logger\AdapterInterface
-{
+class Firephp extends \Phalcon\Logger\Adapter implements \Phalcon\Logger\AdapterInterface {
 
     static private $_initialized;
 
@@ -23,30 +22,33 @@ class Firephp extends \Phalcon\Logger\Adapter implements \Phalcon\Logger\Adapter
     /**
      * Returns the internal formatter
      *
-     * @return \Phalcon\Logger\FormatterInterface 
+     * @return \Phalcon\Logger\FormatterInterface
      */
-    public function getFormatter() {}
+    public function getFormatter() {
+    }
 
     /**
      * Writes the log to the stream itself
      *
      * @see http://www.firephp.org/Wiki/Reference/Protocol
-     * @param string $message 
-     * @param int $type 
-     * @param int $time 
-     * @param array $context 
-     * @param string $$message 
-     * @param int $$type 
-     * @param int $$time 
-     * @param array $$context 
+     * @param string $message
+     * @param int $type
+     * @param int $time
+     * @param array $context
+     * @param string $$message
+     * @param int $$type
+     * @param int $$time
+     * @param array $$context
      */
-    public function logInternal($message, $type, $time, $context) {}
+    public function logInternal($message, $type, $time, $context) {
+    }
 
     /**
      * Closes the logger
      *
-     * @return bool 
+     * @return bool
      */
-    public function close() {}
+    public function close() {
+    }
 
 }

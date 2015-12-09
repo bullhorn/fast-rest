@@ -6,8 +6,7 @@ namespace Phalcon\Forms\Element;
  * Phalcon\Forms\Element\Select
  * Component SELECT (choice) for forms
  */
-class Select extends \Phalcon\Forms\Element implements \Phalcon\Forms\ElementInterface
-{
+class Select extends \Phalcon\Forms\Element implements \Phalcon\Forms\ElementInterface {
 
     protected $_optionsValues;
 
@@ -15,41 +14,46 @@ class Select extends \Phalcon\Forms\Element implements \Phalcon\Forms\ElementInt
     /**
      * Phalcon\Forms\Element constructor
      *
-     * @param string $name 
-     * @param object|array $options 
-     * @param array $attributes 
+     * @param string $name
+     * @param object|array $options
+     * @param array $attributes
      */
-    public function __construct($name, $options = null, $attributes = null) {}
+    public function __construct($name, $options = null, $attributes = null) {
+    }
 
     /**
      * Set the choice's options
      *
-     * @param array|object $options 
-     * @return \Phalcon\Forms\Element 
+     * @param array|object $options
+     * @return \Phalcon\Forms\Element
      */
-    public function setOptions($options) {}
+    public function setOptions($options) {
+    }
 
     /**
      * Returns the choices' options
      *
-     * @return array|object 
+     * @return array|object
      */
-    public function getOptions() {}
+    public function getOptions() {
+    }
 
     /**
      * Adds an option to the current options
      *
-     * @param array $option 
-     * @return this 
+     * @param array $option
+     * @return this
      */
-    public function addOption($option) {}
+    public function addOption($option) {
+    }
 
     /**
      * Renders the element widget returning html
      *
-     * @param array $attributes 
-     * @return string 
+     * @param array $attributes
+     * @return string
      */
-    public function render($attributes = null) {}
+    public function render($attributes = null) {
+    }
 
 }

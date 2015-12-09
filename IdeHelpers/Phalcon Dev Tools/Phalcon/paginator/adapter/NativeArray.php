@@ -21,8 +21,7 @@ namespace Phalcon\Paginator\Adapter;
  * );
  * </code>
  */
-class NativeArray extends \Phalcon\Paginator\Adapter implements \Phalcon\Paginator\AdapterInterface
-{
+class NativeArray extends \Phalcon\Paginator\Adapter implements \Phalcon\Paginator\AdapterInterface {
     /**
      * Configuration of the paginator
      */
@@ -32,15 +31,17 @@ class NativeArray extends \Phalcon\Paginator\Adapter implements \Phalcon\Paginat
     /**
      * Phalcon\Paginator\Adapter\NativeArray constructor
      *
-     * @param array $config 
+     * @param array $config
      */
-    public function __construct($config) {}
+    public function __construct($config) {
+    }
 
     /**
      * Returns a slice of the resultset to show in the pagination
      *
-     * @return \stdClass 
+     * @return \stdClass
      */
-    public function getPaginate() {}
+    public function getPaginate() {
+    }
 
 }

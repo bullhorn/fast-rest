@@ -8,15 +8,15 @@ namespace Phalcon\Assets\Filters;
  * replaced with spaces. Carriage returns will be replaced with linefeeds.
  * Most spaces and linefeeds will be removed.
  */
-class Jsmin implements \Phalcon\Assets\FilterInterface
-{
+class Jsmin implements \Phalcon\Assets\FilterInterface {
 
     /**
      * Filters the content using JSMIN
      *
-     * @param string $content 
-     * @return string 
+     * @param string $content
+     * @return string
      */
-    public function filter($content) {}
+    public function filter($content) {
+    }
 
 }

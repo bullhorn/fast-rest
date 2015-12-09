@@ -15,8 +15,7 @@ namespace Phalcon\Mvc;
  * $app->handle();
  * </code>
  */
-class Micro extends \Phalcon\Di\Injectable implements \ArrayAccess
-{
+class Micro extends \Phalcon\Di\Injectable implements \ArrayAccess {
 
     protected $_dependencyInjector;
 
@@ -54,199 +53,223 @@ class Micro extends \Phalcon\Di\Injectable implements \ArrayAccess
     /**
      * Phalcon\Mvc\Micro constructor
      *
-     * @param mixed $dependencyInjector 
+     * @param mixed $dependencyInjector
      */
-    public function __construct(\Phalcon\DiInterface $dependencyInjector = null) {}
+    public function __construct(\Phalcon\DiInterface $dependencyInjector = null) {
+    }
 
     /**
      * Sets the DependencyInjector container
      *
-     * @param mixed $dependencyInjector 
+     * @param mixed $dependencyInjector
      */
-    public function setDI(\Phalcon\DiInterface $dependencyInjector) {}
+    public function setDI(\Phalcon\DiInterface $dependencyInjector) {
+    }
 
     /**
      * Maps a route to a handler without any HTTP method constraint
      *
-     * @param string $routePattern 
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Router\RouteInterface 
+     * @param string $routePattern
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Router\RouteInterface
      */
-    public function map($routePattern, $handler) {}
+    public function map($routePattern, $handler) {
+    }
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is GET
      *
-     * @param string $routePattern 
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Router\RouteInterface 
+     * @param string $routePattern
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Router\RouteInterface
      */
-    public function get($routePattern, $handler) {}
+    public function get($routePattern, $handler) {
+    }
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is POST
      *
-     * @param string $routePattern 
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Router\RouteInterface 
+     * @param string $routePattern
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Router\RouteInterface
      */
-    public function post($routePattern, $handler) {}
+    public function post($routePattern, $handler) {
+    }
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is PUT
      *
-     * @param string $routePattern 
-     * @param mixed $handler 
-     * @param string $$routePattern 
-     * @param callable $$handler 
-     * @return \Phalcon\Mvc\Router\RouteInterface 
+     * @param string $routePattern
+     * @param mixed $handler
+     * @param string $$routePattern
+     * @param callable $$handler
+     * @return \Phalcon\Mvc\Router\RouteInterface
      */
-    public function put($routePattern, $handler) {}
+    public function put($routePattern, $handler) {
+    }
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is PATCH
      *
-     * @param string $routePattern 
-     * @param mixed $handler 
-     * @param string $$routePattern 
-     * @param callable $$handler 
-     * @return \Phalcon\Mvc\Router\RouteInterface 
+     * @param string $routePattern
+     * @param mixed $handler
+     * @param string $$routePattern
+     * @param callable $$handler
+     * @return \Phalcon\Mvc\Router\RouteInterface
      */
-    public function patch($routePattern, $handler) {}
+    public function patch($routePattern, $handler) {
+    }
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is HEAD
      *
-     * @param string $routePattern 
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Router\RouteInterface 
+     * @param string $routePattern
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Router\RouteInterface
      */
-    public function head($routePattern, $handler) {}
+    public function head($routePattern, $handler) {
+    }
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is DELETE
      *
-     * @param string $routePattern 
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Router\RouteInterface 
+     * @param string $routePattern
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Router\RouteInterface
      */
-    public function delete($routePattern, $handler) {}
+    public function delete($routePattern, $handler) {
+    }
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is OPTIONS
      *
-     * @param string $routePattern 
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Router\RouteInterface 
+     * @param string $routePattern
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Router\RouteInterface
      */
-    public function options($routePattern, $handler) {}
+    public function options($routePattern, $handler) {
+    }
 
     /**
      * Mounts a collection of handlers
      *
-     * @param mixed $collection 
-     * @return Micro 
+     * @param mixed $collection
+     * @return Micro
      */
-    public function mount(\Phalcon\Mvc\Micro\CollectionInterface $collection) {}
+    public function mount(\Phalcon\Mvc\Micro\CollectionInterface $collection) {
+    }
 
     /**
      * Sets a handler that will be called when the router doesn't match any of the defined routes
      *
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Micro 
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Micro
      */
-    public function notFound($handler) {}
+    public function notFound($handler) {
+    }
 
     /**
      * Sets a handler that will be called when an exception is thrown handling the route
      *
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Micro 
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Micro
      */
-    public function error($handler) {}
+    public function error($handler) {
+    }
 
     /**
      * Returns the internal router used by the application
      *
-     * @return RouterInterface 
+     * @return RouterInterface
      */
-    public function getRouter() {}
+    public function getRouter() {
+    }
 
     /**
      * Sets a service from the DI
      *
-     * @param string $serviceName 
-     * @param mixed $definition 
-     * @param boolean $shared 
-     * @return \Phalcon\Di\ServiceInterface 
+     * @param string $serviceName
+     * @param mixed $definition
+     * @param boolean $shared
+     * @return \Phalcon\Di\ServiceInterface
      */
-    public function setService($serviceName, $definition, $shared = false) {}
+    public function setService($serviceName, $definition, $shared = false) {
+    }
 
     /**
      * Checks if a service is registered in the DI
      *
-     * @param string $serviceName 
-     * @return bool 
+     * @param string $serviceName
+     * @return bool
      */
-    public function hasService($serviceName) {}
+    public function hasService($serviceName) {
+    }
 
     /**
      * Obtains a service from the DI
      *
-     * @param string $serviceName 
-     * @return object 
+     * @param string $serviceName
+     * @return object
      */
-    public function getService($serviceName) {}
+    public function getService($serviceName) {
+    }
 
     /**
      * Obtains a shared service from the DI
      *
-     * @param string $serviceName 
-     * @return mixed 
+     * @param string $serviceName
+     * @return mixed
      */
-    public function getSharedService($serviceName) {}
+    public function getSharedService($serviceName) {
+    }
 
     /**
      * Handle the whole request
      *
-     * @param string $uri 
-     * @return mixed 
+     * @param string $uri
+     * @return mixed
      */
-    public function handle($uri = null) {}
+    public function handle($uri = null) {
+    }
 
     /**
      * Stops the middleware execution avoiding than other middlewares be executed
      */
-    public function stop() {}
+    public function stop() {
+    }
 
     /**
      * Sets externally the handler that must be called by the matched route
      *
-     * @param callable $activeHandler 
+     * @param callable $activeHandler
      */
-    public function setActiveHandler($activeHandler) {}
+    public function setActiveHandler($activeHandler) {
+    }
 
     /**
      * Return the handler that will be called for the matched route
      *
-     * @return callable 
+     * @return callable
      */
-    public function getActiveHandler() {}
+    public function getActiveHandler() {
+    }
 
     /**
      * Returns the value returned by the executed handler
      *
-     * @return mixed 
+     * @return mixed
      */
-    public function getReturnedValue() {}
+    public function getReturnedValue() {
+    }
 
     /**
      * Check if a service is registered in the internal services container using the array syntax
      *
-     * @param string $alias 
-     * @return boolean 
+     * @param string $alias
+     * @return boolean
      */
-    public function offsetExists($alias) {}
+    public function offsetExists($alias) {
+    }
 
     /**
      * Allows to register a shared service in the internal services container using the array syntax
@@ -254,10 +277,11 @@ class Micro extends \Phalcon\Di\Injectable implements \ArrayAccess
      * $app['request'] = new \Phalcon\Http\Request();
      * </code>
      *
-     * @param string $alias 
-     * @param mixed $definition 
+     * @param string $alias
+     * @param mixed $definition
      */
-    public function offsetSet($alias, $definition) {}
+    public function offsetSet($alias, $definition) {
+    }
 
     /**
      * Allows to obtain a shared service in the internal services container using the array syntax
@@ -265,47 +289,53 @@ class Micro extends \Phalcon\Di\Injectable implements \ArrayAccess
      * var_dump($di['request']);
      * </code>
      *
-     * @param string $alias 
-     * @return mixed 
+     * @param string $alias
+     * @return mixed
      */
-    public function offsetGet($alias) {}
+    public function offsetGet($alias) {
+    }
 
     /**
      * Removes a service from the internal services container using the array syntax
      *
-     * @param string $alias 
+     * @param string $alias
      */
-    public function offsetUnset($alias) {}
+    public function offsetUnset($alias) {
+    }
 
     /**
      * Appends a before middleware to be called before execute the route
      *
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Micro 
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Micro
      */
-    public function before($handler) {}
+    public function before($handler) {
+    }
 
     /**
      * Appends an 'after' middleware to be called after execute the route
      *
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Micro 
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Micro
      */
-    public function after($handler) {}
+    public function after($handler) {
+    }
 
     /**
      * Appends a 'finish' middleware to be called when the request is finished
      *
-     * @param callable $handler 
-     * @return \Phalcon\Mvc\Micro 
+     * @param callable $handler
+     * @return \Phalcon\Mvc\Micro
      */
-    public function finish($handler) {}
+    public function finish($handler) {
+    }
 
     /**
      * Returns the internal handlers attached to the application
      *
-     * @return array 
+     * @return array
      */
-    public function getHandlers() {}
+    public function getHandlers() {
+    }
 
 }

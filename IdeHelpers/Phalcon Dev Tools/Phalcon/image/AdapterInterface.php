@@ -5,8 +5,7 @@ namespace Phalcon\Image;
 
 use Phalcon\Image;
 
-interface AdapterInterface
-{
+interface AdapterInterface {
 
     /**
      * @param int $width

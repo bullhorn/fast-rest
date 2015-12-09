@@ -6,15 +6,15 @@ namespace Phalcon\Forms\Element;
  * Phalcon\Forms\Element\Submit
  * Component INPUT[type=submit] for forms
  */
-class Submit extends \Phalcon\Forms\Element implements \Phalcon\Forms\ElementInterface
-{
+class Submit extends \Phalcon\Forms\Element implements \Phalcon\Forms\ElementInterface {
 
     /**
      * Renders the element widget
      *
-     * @param array $attributes 
-     * @return string 
+     * @param array $attributes
+     * @return string
      */
-    public function render($attributes = null) {}
+    public function render($attributes = null) {
+    }
 
 }

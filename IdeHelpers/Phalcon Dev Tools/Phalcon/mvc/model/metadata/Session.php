@@ -13,8 +13,7 @@ namespace Phalcon\Mvc\Model\MetaData;
  * ));
  * </code>
  */
-class Session extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\Model\MetaDataInterface
-{
+class Session extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\Model\MetaDataInterface {
 
     protected $_prefix = "";
 
@@ -22,24 +21,27 @@ class Session extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\Model\
     /**
      * Phalcon\Mvc\Model\MetaData\Session constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function __construct($options = null) {}
+    public function __construct($options = null) {
+    }
 
     /**
      * Reads meta-data from $_SESSION
      *
-     * @param string $key 
-     * @return array 
+     * @param string $key
+     * @return array
      */
-    public function read($key) {}
+    public function read($key) {
+    }
 
     /**
      * Writes the meta-data to $_SESSION
      *
-     * @param string $key 
-     * @param array $data 
+     * @param string $key
+     * @param array $data
      */
-    public function write($key, $data) {}
+    public function write($key, $data) {
+    }
 
 }

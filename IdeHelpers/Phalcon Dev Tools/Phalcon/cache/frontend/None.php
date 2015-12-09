@@ -30,54 +30,60 @@ namespace Phalcon\Cache\Frontend;
  * }
  * </code>
  */
-class None implements \Phalcon\Cache\FrontendInterface
-{
+class None implements \Phalcon\Cache\FrontendInterface {
 
     /**
      * Returns cache lifetime, always one second expiring content
      *
-     * @return int 
+     * @return int
      */
-    public function getLifetime() {}
+    public function getLifetime() {
+    }
 
     /**
      * Check whether if frontend is buffering output, always false
      *
-     * @return bool 
+     * @return bool
      */
-    public function isBuffering() {}
+    public function isBuffering() {
+    }
 
     /**
      * Starts output frontend
      */
-    public function start() {}
+    public function start() {
+    }
 
     /**
      * Returns output cached content
      *
-     * @return string 
+     * @return string
      */
-    public function getContent() {}
+    public function getContent() {
+    }
 
     /**
      * Stops output frontend
      */
-    public function stop() {}
+    public function stop() {
+    }
 
     /**
      * Prepare data to be stored
      *
-     * @param mixed $data 
-     * @param mixed $$data 
+     * @param mixed $data
+     * @param mixed $$data
      */
-    public function beforeStore($data) {}
+    public function beforeStore($data) {
+    }
 
     /**
      * Prepares data to be retrieved to user
      *
-     * @param mixed $data 
-     * @param mixed $$data 
+     * @param mixed $data
+     * @param mixed $$data
      */
-    public function afterRetrieve($data) {}
+    public function afterRetrieve($data) {
+    }
 
 }

@@ -6,8 +6,7 @@ namespace Phalcon;
  * Phalcon\Debug
  * Provides debug capabilities to Phalcon applications
  */
-class Debug
-{
+class Debug {
 
     protected $_uri = "//static.phalconphp.com/www/debug/2.0.0/";
 
@@ -36,157 +35,177 @@ class Debug
     /**
      * Change the base URI for static resources
      *
-     * @param string $uri 
-     * @return Debug 
+     * @param string $uri
+     * @return Debug
      */
-    public function setUri($uri) {}
+    public function setUri($uri) {
+    }
 
     /**
      * Sets if files the exception's backtrace must be showed
      *
-     * @param bool $showBackTrace 
-     * @return Debug 
+     * @param bool $showBackTrace
+     * @return Debug
      */
-    public function setShowBackTrace($showBackTrace) {}
+    public function setShowBackTrace($showBackTrace) {
+    }
 
     /**
      * Set if files part of the backtrace must be shown in the output
      *
-     * @param bool $showFiles 
-     * @return Debug 
+     * @param bool $showFiles
+     * @return Debug
      */
-    public function setShowFiles($showFiles) {}
+    public function setShowFiles($showFiles) {
+    }
 
     /**
      * Sets if files must be completely opened and showed in the output
      * or just the fragment related to the exception
      *
-     * @param bool $showFileFragment 
-     * @return Debug 
+     * @param bool $showFileFragment
+     * @return Debug
      */
-    public function setShowFileFragment($showFileFragment) {}
+    public function setShowFileFragment($showFileFragment) {
+    }
 
     /**
      * Listen for uncaught exceptions and unsilent notices or warnings
      *
-     * @param bool $exceptions 
-     * @param bool $lowSeverity 
-     * @return Debug 
+     * @param bool $exceptions
+     * @param bool $lowSeverity
+     * @return Debug
      */
-    public function listen($exceptions = true, $lowSeverity = false) {}
+    public function listen($exceptions = true, $lowSeverity = false) {
+    }
 
     /**
      * Listen for uncaught exceptions
      *
-     * @return Debug 
+     * @return Debug
      */
-    public function listenExceptions() {}
+    public function listenExceptions() {
+    }
 
     /**
      * Listen for unsilent notices or warnings
      *
-     * @return Debug 
+     * @return Debug
      */
-    public function listenLowSeverity() {}
+    public function listenLowSeverity() {
+    }
 
     /**
      * Halts the request showing a backtrace
      */
-    public function halt() {}
+    public function halt() {
+    }
 
     /**
      * Adds a variable to the debug output
      *
-     * @param mixed $varz 
-     * @param string $key 
-     * @return Debug 
+     * @param mixed $varz
+     * @param string $key
+     * @return Debug
      */
-    public function debugVar($varz, $key = null) {}
+    public function debugVar($varz, $key = null) {
+    }
 
     /**
      * Clears are variables added previously
      *
-     * @return Debug 
+     * @return Debug
      */
-    public function clearVars() {}
+    public function clearVars() {
+    }
 
     /**
      * Escapes a string with htmlentities
      *
-     * @param mixed $value 
-     * @return string 
+     * @param mixed $value
+     * @return string
      */
-    protected function _escapeString($value) {}
+    protected function _escapeString($value) {
+    }
 
     /**
      * Produces a recursive representation of an array
      *
-     * @param array $argument 
-     * @param mixed $n 
-     * @return string|null 
+     * @param array $argument
+     * @param mixed $n
+     * @return string|null
      */
-    protected function _getArrayDump($argument, $n = 0) {}
+    protected function _getArrayDump($argument, $n = 0) {
+    }
 
     /**
      * Produces an string representation of a variable
      *
-     * @param mixed $variable 
-     * @return string 
+     * @param mixed $variable
+     * @return string
      */
-    protected function _getVarDump($variable) {}
+    protected function _getVarDump($variable) {
+    }
 
     /**
      * Returns the major framework's version
      *
-     * @return string 
+     * @return string
      */
-    public function getMajorVersion() {}
+    public function getMajorVersion() {
+    }
 
     /**
      * Generates a link to the current version documentation
      *
-     * @return string 
+     * @return string
      */
-    public function getVersion() {}
+    public function getVersion() {
+    }
 
     /**
      * Returns the css sources
      *
-     * @return string 
+     * @return string
      */
-    public function getCssSources() {}
+    public function getCssSources() {
+    }
 
     /**
      * Returns the javascript sources
      *
-     * @return string 
+     * @return string
      */
-    public function getJsSources() {}
+    public function getJsSources() {
+    }
 
     /**
      * Shows a backtrace item
      *
-     * @param int $n 
-     * @param array $trace 
+     * @param int $n
+     * @param array $trace
      */
-    protected final function showTraceItem($n, $trace) {}
+    protected final function showTraceItem($n, $trace) {
+    }
 
     /**
      * Throws an exception when a notice or warning is raised
      *
-     * @param mixed $severity 
-     * @param mixed $message 
-     * @param mixed $file 
-     * @param mixed $line 
+     * @param mixed $severity
+     * @param mixed $message
+     * @param mixed $file
+     * @param mixed $line
      */
-    public function onUncaughtLowSeverity($severity, $message, $file, $line) {}
+    public function onUncaughtLowSeverity($severity, $message, $file, $line) {
+    }
 
     /**
      * Handles uncaught exceptions
      *
-     * @param mixed $exception 
-     * @return bool 
+     * @param mixed $exception
+     * @return bool
      */
-    public function onUncaughtException(\Exception $exception) {}
+    public function onUncaughtException(\Exception $exception) {
+    }
 
 }
