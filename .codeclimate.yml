@@ -17,3 +17,6 @@ exclude_paths:
 - tests/**/*
 - examples/**/*
 - IdeHelpers/**/*
+- IdeHelpers/**/*
+- "**/*.yml"
+- "*.yml"
