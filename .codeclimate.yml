@@ -1,0 +1,19 @@
+engines:
+  phpmd:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+  fixme:
+    enabled: true
+  eslint:
+    enabled: true
+  csslint:
+    enabled: true
+ratings:
+   paths:
+   - Library/**
+   - "**.php"
+exclude_paths:
+- tests/**/*
+- examples/**/*
+- IdeHelpers/**/*
