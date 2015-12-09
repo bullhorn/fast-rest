@@ -20,12 +20,12 @@ namespace Phalcon\Cli;
  * }
  * </code>
  */
-class Task extends \Phalcon\Di\Injectable
-{
+class Task extends \Phalcon\Di\Injectable {
 
     /**
      * Phalcon\Cli\Task constructor
      */
-    public final function __construct() {}
+    public final function __construct() {
+    }
 
 }

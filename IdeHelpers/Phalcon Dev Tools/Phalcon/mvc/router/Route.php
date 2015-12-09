@@ -6,8 +6,7 @@ namespace Phalcon\Mvc\Router;
  * Phalcon\Mvc\Router\Route
  * This class represents every route added to the router
  */
-class Route implements \Phalcon\Mvc\Router\RouteInterface
-{
+class Route implements \Phalcon\Mvc\Router\RouteInterface {
 
     protected $_pattern;
 
@@ -45,19 +44,21 @@ class Route implements \Phalcon\Mvc\Router\RouteInterface
     /**
      * Phalcon\Mvc\Router\Route constructor
      *
-     * @param string $pattern 
-     * @param mixed $paths 
-     * @param mixed $httpMethods 
+     * @param string $pattern
+     * @param mixed $paths
+     * @param mixed $httpMethods
      */
-    public function __construct($pattern, $paths = null, $httpMethods = null) {}
+    public function __construct($pattern, $paths = null, $httpMethods = null) {
+    }
 
     /**
      * Replaces placeholders from pattern returning a valid PCRE regular expression
      *
-     * @param string $pattern 
-     * @return string 
+     * @param string $pattern
+     * @return string
      */
-    public function compilePattern($pattern) {}
+    public function compilePattern($pattern) {
+    }
 
     /**
      * Set one or more HTTP methods that constraint the matching of the route
@@ -66,41 +67,46 @@ class Route implements \Phalcon\Mvc\Router\RouteInterface
      * $route->via(array('GET', 'POST'));
      * </code>
      *
-     * @param mixed $httpMethods 
-     * @return Route 
+     * @param mixed $httpMethods
+     * @return Route
      */
-    public function via($httpMethods) {}
+    public function via($httpMethods) {
+    }
 
     /**
      * Extracts parameters from a string
      *
-     * @param string $pattern 
-     * @return array|bool 
+     * @param string $pattern
+     * @return array|bool
      */
-    public function extractNamedParams($pattern) {}
+    public function extractNamedParams($pattern) {
+    }
 
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param string $pattern 
-     * @param mixed $paths 
+     * @param string $pattern
+     * @param mixed $paths
      */
-    public function reConfigure($pattern, $paths = null) {}
+    public function reConfigure($pattern, $paths = null) {
+    }
 
     /**
      * Returns routePaths
      *
-     * @param mixed $paths 
-     * @return array 
+     * @param mixed $paths
+     * @return array
      */
-    public static function getRoutePaths($paths = null) {}
+    public static function getRoutePaths($paths = null) {
+    }
 
     /**
      * Returns the route's name
      *
-     * @return string 
+     * @return string
      */
-    public function getName() {}
+    public function getName() {
+    }
 
     /**
      * Sets the route's name
@@ -110,62 +116,70 @@ class Route implements \Phalcon\Mvc\Router\RouteInterface
      * ))->setName('about');
      * </code>
      *
-     * @param string $name 
-     * @return Route 
+     * @param string $name
+     * @return Route
      */
-    public function setName($name) {}
+    public function setName($name) {
+    }
 
     /**
      * Sets a callback that is called if the route is matched.
      * The developer can implement any arbitrary conditions here
      * If the callback returns false the route is treated as not matched
      *
-     * @param callable $callback 
-     * @return Route 
+     * @param callable $callback
+     * @return Route
      */
-    public function beforeMatch($callback) {}
+    public function beforeMatch($callback) {
+    }
 
     /**
      * Returns the 'before match' callback if any
      *
-     * @return callable 
+     * @return callable
      */
-    public function getBeforeMatch() {}
+    public function getBeforeMatch() {
+    }
 
     /**
      * Returns the route's id
      *
-     * @return string 
+     * @return string
      */
-    public function getRouteId() {}
+    public function getRouteId() {
+    }
 
     /**
      * Returns the route's pattern
      *
-     * @return string 
+     * @return string
      */
-    public function getPattern() {}
+    public function getPattern() {
+    }
 
     /**
      * Returns the route's compiled pattern
      *
-     * @return string 
+     * @return string
      */
-    public function getCompiledPattern() {}
+    public function getCompiledPattern() {
+    }
 
     /**
      * Returns the paths
      *
-     * @return array 
+     * @return array
      */
-    public function getPaths() {}
+    public function getPaths() {
+    }
 
     /**
      * Returns the paths using positions as keys and names as values
      *
-     * @return array 
+     * @return array
      */
-    public function getReversedPaths() {}
+    public function getReversedPaths() {
+    }
 
     /**
      * Sets a set of HTTP methods that constraint the matching of the route (alias of via)
@@ -174,17 +188,19 @@ class Route implements \Phalcon\Mvc\Router\RouteInterface
      * $route->setHttpMethods(array('GET', 'POST'));
      * </code>
      *
-     * @param mixed $httpMethods 
-     * @return Route 
+     * @param mixed $httpMethods
+     * @return Route
      */
-    public function setHttpMethods($httpMethods) {}
+    public function setHttpMethods($httpMethods) {
+    }
 
     /**
      * Returns the HTTP methods that constraint matching the route
      *
-     * @return array|string 
+     * @return array|string
      */
-    public function getHttpMethods() {}
+    public function getHttpMethods() {
+    }
 
     /**
      * Sets a hostname restriction to the route
@@ -192,52 +208,59 @@ class Route implements \Phalcon\Mvc\Router\RouteInterface
      * $route->setHostname('localhost');
      * </code>
      *
-     * @param string $hostname 
-     * @return Route 
+     * @param string $hostname
+     * @return Route
      */
-    public function setHostname($hostname) {}
+    public function setHostname($hostname) {
+    }
 
     /**
      * Returns the hostname restriction if any
      *
-     * @return string 
+     * @return string
      */
-    public function getHostname() {}
+    public function getHostname() {
+    }
 
     /**
      * Sets the group associated with the route
      *
-     * @param mixed $group 
-     * @return Route 
+     * @param mixed $group
+     * @return Route
      */
-    public function setGroup(GroupInterface $group) {}
+    public function setGroup(GroupInterface $group) {
+    }
 
     /**
      * Returns the group associated with the route
      *
-     * @return null|GroupInterface 
+     * @return null|GroupInterface
      */
-    public function getGroup() {}
+    public function getGroup() {
+    }
 
     /**
      * Adds a converter to perform an additional transformation for certain parameter
      *
-     * @param string $name 
-     * @param mixed $converter 
-     * @return Route 
+     * @param string $name
+     * @param mixed $converter
+     * @return Route
      */
-    public function convert($name, $converter) {}
+    public function convert($name, $converter) {
+    }
 
     /**
      * Returns the router converter
      *
-     * @return array 
+     * @return array
      */
-    public function getConverters() {}
+    public function getConverters() {
+    }
 
     /**
      * Resets the internal route id generator
      */
-    public static function reset() {}
+    public static function reset() {
+    }
 
 }

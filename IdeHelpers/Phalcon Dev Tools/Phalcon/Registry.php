@@ -42,8 +42,7 @@ namespace Phalcon;
  * are implemented using object handlers or similar techniques: this allows
  * to bypass relatively slow method calls.
  */
-final class Registry implements \ArrayAccess, \Countable, \Iterator
-{
+final class Registry implements \ArrayAccess, \Countable, \Iterator {
 
     protected $_data;
 
@@ -51,100 +50,115 @@ final class Registry implements \ArrayAccess, \Countable, \Iterator
     /**
      * Registry constructor
      */
-    public final function __construct() {}
+    public final function __construct() {
+    }
 
     /**
      * Checks if the element is present in the registry
      *
-     * @param string $offset 
-     * @return bool 
+     * @param string $offset
+     * @return bool
      */
-    public final function offsetExists($offset) {}
+    public final function offsetExists($offset) {
+    }
 
     /**
      * Returns an index in the registry
      *
-     * @param string $offset 
-     * @return mixed 
+     * @param string $offset
+     * @return mixed
      */
-    public final function offsetGet($offset) {}
+    public final function offsetGet($offset) {
+    }
 
     /**
      * Sets an element in the registry
      *
-     * @param string $offset 
-     * @param mixed $value 
+     * @param string $offset
+     * @param mixed $value
      */
-    public final function offsetSet($offset, $value) {}
+    public final function offsetSet($offset, $value) {
+    }
 
     /**
      * Unsets an element in the registry
      *
-     * @param string $offset 
+     * @param string $offset
      */
-    public final function offsetUnset($offset) {}
+    public final function offsetUnset($offset) {
+    }
 
     /**
      * Checks how many elements are in the register
      *
-     * @return int 
+     * @return int
      */
-    public final function count() {}
+    public final function count() {
+    }
 
     /**
      * Moves cursor to next row in the registry
      */
-    public final function next() {}
+    public final function next() {
+    }
 
     /**
      * Gets pointer number of active row in the registry
      *
-     * @return int 
+     * @return int
      */
-    public final function key() {}
+    public final function key() {
+    }
 
     /**
      * Rewinds the registry cursor to its beginning
      */
-    public final function rewind() {}
+    public final function rewind() {
+    }
 
     /**
      * Checks if the iterator is valid
      *
-     * @return bool 
+     * @return bool
      */
-    public function valid() {}
+    public function valid() {
+    }
 
     /**
      * Obtains the current value in the internal iterator
      */
-    public function current() {}
+    public function current() {
+    }
 
     /**
      * Sets an element in the registry
      *
-     * @param string $key 
-     * @param mixed $value 
+     * @param string $key
+     * @param mixed $value
      */
-    public final function __set($key, $value) {}
+    public final function __set($key, $value) {
+    }
 
     /**
      * Returns an index in the registry
      *
-     * @param string $key 
-     * @return mixed 
+     * @param string $key
+     * @return mixed
      */
-    public final function __get($key) {}
+    public final function __get($key) {
+    }
 
     /**
-     * @param string $key 
-     * @return bool 
+     * @param string $key
+     * @return bool
      */
-    public final function __isset($key) {}
+    public final function __isset($key) {
+    }
 
     /**
-     * @param string $key 
+     * @param string $key
      */
-    public final function __unset($key) {}
+    public final function __unset($key) {
+    }
 
 }

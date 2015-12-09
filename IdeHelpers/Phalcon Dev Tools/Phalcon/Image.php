@@ -3,8 +3,7 @@
 namespace Phalcon;
 
 
-class Image
-{
+class Image {
 
     const NONE = 1;
 

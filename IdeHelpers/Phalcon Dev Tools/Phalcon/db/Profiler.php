@@ -25,8 +25,7 @@ namespace Phalcon\Db;
  * echo "Total Elapsed Time: ", $profile->getTotalElapsedSeconds(), "\n";
  * </code>
  */
-class Profiler
-{
+class Profiler {
     /**
      * All the Phalcon\Db\Profiler\Item in the active profile
      *
@@ -57,48 +56,55 @@ class Profiler
      * @param mixed $sqlBindTypes
      * @return \Phalcon\Db\Profiler
      */
-    public function startProfile($sqlStatement, $sqlVariables = null, $sqlBindTypes = null) {}
+    public function startProfile($sqlStatement, $sqlVariables = null, $sqlBindTypes = null) {
+    }
 
     /**
      * Stops the active profile
      *
      * @return Profiler
      */
-    public function stopProfile() {}
+    public function stopProfile() {
+    }
 
     /**
      * Returns the total number of SQL statements processed
      *
      * @return int
      */
-    public function getNumberTotalStatements() {}
+    public function getNumberTotalStatements() {
+    }
 
     /**
      * Returns the total time in seconds spent by the profiles
      *
      * @return double
      */
-    public function getTotalElapsedSeconds() {}
+    public function getTotalElapsedSeconds() {
+    }
 
     /**
      * Returns all the processed profiles
      *
      * @return \Phalcon\Db\Profiler\Item
      */
-    public function getProfiles() {}
+    public function getProfiles() {
+    }
 
     /**
      * Resets the profiler, cleaning up all the profiles
      *
      * @return Profiler
      */
-    public function reset() {}
+    public function reset() {
+    }
 
     /**
      * Returns the last profile executed in the profiler
      *
      * @return \Phalcon\Db\Profiler\Item
      */
-    public function getLastProfile() {}
+    public function getLastProfile() {
+    }
 
 }

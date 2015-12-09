@@ -12,8 +12,7 @@ namespace Phalcon\Mvc;
  * echo $url->get(array('for' => 'blog-post', 'title' => 'some-cool-stuff', 'year' => '2012'));
  * </code>
  */
-class Url implements \Phalcon\Mvc\UrlInterface, \Phalcon\Di\InjectionAwareInterface
-{
+class Url implements \Phalcon\Mvc\UrlInterface, \Phalcon\Di\InjectionAwareInterface {
 
     protected $_dependencyInjector;
 
@@ -33,16 +32,18 @@ class Url implements \Phalcon\Mvc\UrlInterface, \Phalcon\Di\InjectionAwareInterf
     /**
      * Sets the DependencyInjector container
      *
-     * @param mixed $dependencyInjector 
+     * @param mixed $dependencyInjector
      */
-    public function setDI(\Phalcon\DiInterface $dependencyInjector) {}
+    public function setDI(\Phalcon\DiInterface $dependencyInjector) {
+    }
 
     /**
      * Returns the DependencyInjector container
      *
-     * @return \Phalcon\DiInterface 
+     * @return \Phalcon\DiInterface
      */
-    public function getDI() {}
+    public function getDI() {
+    }
 
     /**
      * Sets a prefix for all the URIs to be generated
@@ -51,10 +52,11 @@ class Url implements \Phalcon\Mvc\UrlInterface, \Phalcon\Di\InjectionAwareInterf
      * $url->setBaseUri('/invo/index.php/');
      * </code>
      *
-     * @param string $baseUri 
-     * @return Url 
+     * @param string $baseUri
+     * @return Url
      */
-    public function setBaseUri($baseUri) {}
+    public function setBaseUri($baseUri) {
+    }
 
     /**
      * Sets a prefix for all static URLs generated
@@ -62,24 +64,27 @@ class Url implements \Phalcon\Mvc\UrlInterface, \Phalcon\Di\InjectionAwareInterf
      * $url->setStaticBaseUri('/invo/');
      * </code>
      *
-     * @param string $staticBaseUri 
-     * @return Url 
+     * @param string $staticBaseUri
+     * @return Url
      */
-    public function setStaticBaseUri($staticBaseUri) {}
+    public function setStaticBaseUri($staticBaseUri) {
+    }
 
     /**
      * Returns the prefix for all the generated urls. By default /
      *
-     * @return string 
+     * @return string
      */
-    public function getBaseUri() {}
+    public function getBaseUri() {
+    }
 
     /**
      * Returns the prefix for all the generated static urls. By default /
      *
-     * @return string 
+     * @return string
      */
-    public function getStaticBaseUri() {}
+    public function getStaticBaseUri() {
+    }
 
     /**
      * Sets a base path for all the generated paths
@@ -87,17 +92,19 @@ class Url implements \Phalcon\Mvc\UrlInterface, \Phalcon\Di\InjectionAwareInterf
      * $url->setBasePath('/var/www/htdocs/');
      * </code>
      *
-     * @param string $basePath 
-     * @return Url 
+     * @param string $basePath
+     * @return Url
      */
-    public function setBasePath($basePath) {}
+    public function setBasePath($basePath) {
+    }
 
     /**
      * Returns the base path
      *
-     * @return string 
+     * @return string
      */
-    public function getBasePath() {}
+    public function getBasePath() {
+    }
 
     /**
      * Generates a URL
@@ -108,13 +115,14 @@ class Url implements \Phalcon\Mvc\UrlInterface, \Phalcon\Di\InjectionAwareInterf
      * echo $url->get(array('for' => 'blog-post', 'title' => 'some-cool-stuff', 'year' => '2015'));
      * </code>
      *
-     * @param mixed $uri 
-     * @param mixed $args 
-     * @param mixed $local 
-     * @param mixed $baseUri 
-     * @return string 
+     * @param mixed $uri
+     * @param mixed $args
+     * @param mixed $local
+     * @param mixed $baseUri
+     * @return string
      */
-    public function get($uri = null, $args = null, $local = null, $baseUri = null) {}
+    public function get($uri = null, $args = null, $local = null, $baseUri = null) {
+    }
 
     /**
      * Generates a URL for a static resource
@@ -125,17 +133,19 @@ class Url implements \Phalcon\Mvc\UrlInterface, \Phalcon\Di\InjectionAwareInterf
      * echo $url->getStatic(array('for' => 'logo-cdn'));
      * </code>
      *
-     * @param mixed $uri 
-     * @return string 
+     * @param mixed $uri
+     * @return string
      */
-    public function getStatic($uri = null) {}
+    public function getStatic($uri = null) {
+    }
 
     /**
      * Generates a local path
      *
-     * @param string $path 
-     * @return string 
+     * @param string $path
+     * @return string
      */
-    public function path($path = null) {}
+    public function path($path = null) {
+    }
 
 }

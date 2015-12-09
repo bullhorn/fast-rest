@@ -16,8 +16,7 @@ namespace Phalcon\Paginator\Adapter;
  * $paginate = $paginator->getPaginate();
  * </code>
  */
-class Model extends \Phalcon\Paginator\Adapter implements \Phalcon\Paginator\AdapterInterface
-{
+class Model extends \Phalcon\Paginator\Adapter implements \Phalcon\Paginator\AdapterInterface {
     /**
      * Configuration of paginator by model
      */
@@ -27,15 +26,17 @@ class Model extends \Phalcon\Paginator\Adapter implements \Phalcon\Paginator\Ada
     /**
      * Phalcon\Paginator\Adapter\Model constructor
      *
-     * @param array $config 
+     * @param array $config
      */
-    public function __construct($config) {}
+    public function __construct($config) {
+    }
 
     /**
      * Returns a slice of the resultset to show in the pagination
      *
-     * @return \stdclass 
+     * @return \stdclass
      */
-    public function getPaginate() {}
+    public function getPaginate() {
+    }
 
 }

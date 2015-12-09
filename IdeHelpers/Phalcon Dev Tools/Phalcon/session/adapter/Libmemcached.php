@@ -22,8 +22,7 @@ namespace Phalcon\Session\Adapter;
  * echo $session->get('var');
  * </code>
  */
-class Libmemcached extends \Phalcon\Session\Adapter implements \Phalcon\Session\AdapterInterface
-{
+class Libmemcached extends \Phalcon\Session\Adapter implements \Phalcon\Session\AdapterInterface {
 
     protected $_libmemcached = null;
 
@@ -31,58 +30,66 @@ class Libmemcached extends \Phalcon\Session\Adapter implements \Phalcon\Session\
     protected $_lifetime = 8600;
 
 
+    public function getLibmemcached() {
+    }
 
-    public function getLibmemcached() {}
 
-
-    public function getLifetime() {}
+    public function getLifetime() {
+    }
 
     /**
      * Phalcon\Session\Adapter\Libmemcached constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function __construct($options) {}
+    public function __construct($options) {
+    }
 
     /**
-     * @return bool 
+     * @return bool
      */
-    public function open() {}
+    public function open() {
+    }
 
     /**
-     * @return bool 
+     * @return bool
      */
-    public function close() {}
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $sessionId 
-     * @return mixed 
-     */
-    public function read($sessionId) {}
+    public function close() {
+    }
 
     /**
      * {@inheritdoc}
      *
-     * @param string $sessionId 
-     * @param string $data 
+     * @param string $sessionId
+     * @return mixed
      */
-    public function write($sessionId, $data) {}
+    public function read($sessionId) {
+    }
 
     /**
      * {@inheritdoc}
      *
-     * @param string $sessionId 
-     * @return boolean 
+     * @param string $sessionId
+     * @param string $data
      */
-    public function destroy($sessionId = null) {}
+    public function write($sessionId, $data) {
+    }
 
     /**
      * {@inheritdoc}
      *
-     * @return bool 
+     * @param string $sessionId
+     * @return boolean
      */
-    public function gc() {}
+    public function destroy($sessionId = null) {
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function gc() {
+    }
 
 }

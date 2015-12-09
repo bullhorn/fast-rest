@@ -12,8 +12,7 @@ namespace Phalcon\Db\Adapter\Pdo;
  * $connection = new \Phalcon\Db\Adapter\Pdo\Sqlite($config);
  * </code>
  */
-class Sqlite extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInterface
-{
+class Sqlite extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInterface {
 
     protected $_type = "sqlite";
 
@@ -29,7 +28,8 @@ class Sqlite extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInter
      * @param array $$descriptor
      * @return boolean
      */
-    public function connect($descriptor = null) {}
+    public function connect($descriptor = null) {
+    }
 
     /**
      * Returns an array of Phalcon\Db\Column objects describing a table
@@ -41,38 +41,42 @@ class Sqlite extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInter
      * @param string $schema
      * @return \Phalcon\Db\Column
      */
-    public function describeColumns($table, $schema = null) {}
+    public function describeColumns($table, $schema = null) {
+    }
 
     /**
      * Lists table indexes
      *
-     * @param	string table
-     * @param	string schema
-     * @return	\Phalcon\Db\IndexInterface[]
+     * @param    string table
+     * @param    string schema
+     * @return    \Phalcon\Db\IndexInterface[]
      * @param mixed $table
      * @param mixed $schema
      * @return \Phalcon\Db\IndexInterface
      */
-    public function describeIndexes($table, $schema = null) {}
+    public function describeIndexes($table, $schema = null) {
+    }
 
     /**
      * Lists table references
      *
-     * @param	string table
-     * @param	string schema
-     * @return	\Phalcon\Db\ReferenceInterface[]
+     * @param    string table
+     * @param    string schema
+     * @return    \Phalcon\Db\ReferenceInterface[]
      * @param mixed $table
      * @param mixed $schema
      * @return \Phalcon\Db\ReferenceInterface
      */
-    public function describeReferences($table, $schema = null) {}
+    public function describeReferences($table, $schema = null) {
+    }
 
     /**
      * Check whether the database system requires an explicit value for identity columns
      *
      * @return bool
      */
-    public function useExplicitIdValue() {}
+    public function useExplicitIdValue() {
+    }
 
     /**
      * Returns the default value to make the RBDM use the default value declared in the table definition
@@ -87,6 +91,7 @@ class Sqlite extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInter
      *
      * @return \Phalcon\Db\RawValue
      */
-    public function getDefaultValue() {}
+    public function getDefaultValue() {
+    }
 
 }

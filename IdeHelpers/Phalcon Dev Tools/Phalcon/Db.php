@@ -32,8 +32,7 @@ namespace Phalcon;
  * }
  * </code>
  */
-abstract class Db
-{
+abstract class Db {
 
     const FETCH_LAZY = 1;
 
@@ -89,8 +88,9 @@ abstract class Db
     /**
      * Enables/disables options in the Database component
      *
-     * @param array $options 
+     * @param array $options
      */
-    public static function setup($options) {}
+    public static function setup($options) {
+    }
 
 }
