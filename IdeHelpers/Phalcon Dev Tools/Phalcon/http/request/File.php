@@ -21,8 +21,7 @@ namespace Phalcon\Http\Request;
  * }
  * </code>
  */
-class File implements \Phalcon\Http\Request\FileInterface
-{
+class File implements \Phalcon\Http\Request\FileInterface {
 
     protected $_name;
 
@@ -55,77 +54,88 @@ class File implements \Phalcon\Http\Request\FileInterface
 
 
     /**
-     * @return string|null 
+     * @return string|null
      */
-    public function getError() {}
+    public function getError() {
+    }
 
     /**
-     * @return string|null 
+     * @return string|null
      */
-    public function getKey() {}
+    public function getKey() {
+    }
 
     /**
-     * @return string 
+     * @return string
      */
-    public function getExtension() {}
+    public function getExtension() {
+    }
 
     /**
      * Phalcon\Http\Request\File constructor
      *
-     * @param array $file 
-     * @param mixed $key 
+     * @param array $file
+     * @param mixed $key
      */
-    public function __construct($file, $key = null) {}
+    public function __construct($file, $key = null) {
+    }
 
     /**
      * Returns the file size of the uploaded file
      *
-     * @return int 
+     * @return int
      */
-    public function getSize() {}
+    public function getSize() {
+    }
 
     /**
      * Returns the real name of the uploaded file
      *
-     * @return string 
+     * @return string
      */
-    public function getName() {}
+    public function getName() {
+    }
 
     /**
      * Returns the temporal name of the uploaded file
      *
-     * @return string 
+     * @return string
      */
-    public function getTempName() {}
+    public function getTempName() {
+    }
 
     /**
      * Returns the mime type reported by the browser
      * This mime type is not completely secure, use getRealType() instead
      *
-     * @return string 
+     * @return string
      */
-    public function getType() {}
+    public function getType() {
+    }
 
     /**
      * Gets the real mime type of the upload file using finfo
      *
-     * @return string 
+     * @return string
      */
-    public function getRealType() {}
+    public function getRealType() {
+    }
 
     /**
      * Checks whether the file has been uploaded via Post.
      *
-     * @return bool 
+     * @return bool
      */
-    public function isUploadedFile() {}
+    public function isUploadedFile() {
+    }
 
     /**
      * Moves the temporary file to a destination within the application
      *
-     * @param string $destination 
-     * @return bool 
+     * @param string $destination
+     * @return bool
      */
-    public function moveTo($destination) {}
+    public function moveTo($destination) {
+    }
 
 }

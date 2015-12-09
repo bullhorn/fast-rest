@@ -32,61 +32,68 @@ namespace Phalcon\Cache\Frontend;
  * }
  * </code>
  */
-class Igbinary extends \Phalcon\Cache\Frontend\Data implements \Phalcon\Cache\FrontendInterface
-{
+class Igbinary extends \Phalcon\Cache\Frontend\Data implements \Phalcon\Cache\FrontendInterface {
 
     /**
      * Phalcon\Cache\Frontend\Data constructor
      *
-     * @param array $frontendOptions 
+     * @param array $frontendOptions
      */
-    public function __construct($frontendOptions = null) {}
+    public function __construct($frontendOptions = null) {
+    }
 
     /**
      * Returns the cache lifetime
      *
-     * @return int 
+     * @return int
      */
-    public function getLifetime() {}
+    public function getLifetime() {
+    }
 
     /**
      * Check whether if frontend is buffering output
      *
-     * @return bool 
+     * @return bool
      */
-    public function isBuffering() {}
+    public function isBuffering() {
+    }
 
     /**
      * Starts output frontend. Actually, does nothing
      */
-    public function start() {}
+    public function start() {
+    }
 
     /**
      * Returns output cached content
      *
-     * @return string 
+     * @return string
      */
-    public function getContent() {}
+    public function getContent() {
+    }
 
     /**
      * Stops output frontend
      */
-    public function stop() {}
+    public function stop() {
+    }
 
     /**
      * Serializes data before storing them
      *
-     * @param mixed $data 
-     * @return string 
+     * @param mixed $data
+     * @return string
      */
-    public function beforeStore($data) {}
+    public function beforeStore($data) {
+    }
 
     /**
      * Unserializes data after retrieval
      *
-     * @param mixed $data 
-     * @return mixed 
+     * @param mixed $data
+     * @return mixed
      */
-    public function afterRetrieve($data) {}
+    public function afterRetrieve($data) {
+    }
 
 }

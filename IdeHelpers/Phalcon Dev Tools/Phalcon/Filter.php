@@ -15,8 +15,7 @@ namespace Phalcon;
  * $filter->sanitize("!100a019.01a", "float"); // returns "100019.01"
  * </code>
  */
-class Filter implements \Phalcon\FilterInterface
-{
+class Filter implements \Phalcon\FilterInterface {
 
     const FILTER_EMAIL = "email";
 
@@ -60,34 +59,38 @@ class Filter implements \Phalcon\FilterInterface
     /**
      * Adds a user-defined filter
      *
-     * @param string $name 
-     * @param mixed $handler 
-     * @return Filter 
+     * @param string $name
+     * @param mixed $handler
+     * @return Filter
      */
-    public function add($name, $handler) {}
+    public function add($name, $handler) {
+    }
 
     /**
      * Sanitizes a value with a specified single or set of filters
      *
-     * @param mixed $value 
-     * @param mixed $filters 
-     * @param bool $noRecursive 
+     * @param mixed $value
+     * @param mixed $filters
+     * @param bool $noRecursive
      */
-    public function sanitize($value, $filters, $noRecursive = false) {}
+    public function sanitize($value, $filters, $noRecursive = false) {
+    }
 
     /**
      * Internal sanitize wrapper to filter_var
      *
-     * @param mixed $value 
-     * @param string $filter 
+     * @param mixed $value
+     * @param string $filter
      */
-    protected function _sanitize($value, $filter) {}
+    protected function _sanitize($value, $filter) {
+    }
 
     /**
      * Return the user-defined filters in the instance
      *
-     * @return array 
+     * @return array
      */
-    public function getFilters() {}
+    public function getFilters() {
+    }
 
 }

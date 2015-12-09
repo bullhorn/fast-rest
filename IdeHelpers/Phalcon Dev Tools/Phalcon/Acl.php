@@ -33,8 +33,7 @@ namespace Phalcon;
  * $acl->isAllowed('Guests', 'Customers', 'create'); //Returns 1
  * </code>
  */
-abstract class Acl
-{
+abstract class Acl {
 
     const ALLOW = 1;
 

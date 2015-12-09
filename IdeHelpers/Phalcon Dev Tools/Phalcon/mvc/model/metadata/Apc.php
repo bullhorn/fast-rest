@@ -14,8 +14,7 @@ namespace Phalcon\Mvc\Model\MetaData;
  * ));
  * </code>
  */
-class Apc extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\Model\MetaDataInterface
-{
+class Apc extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\Model\MetaDataInterface {
 
     protected $_prefix = "";
 
@@ -26,24 +25,27 @@ class Apc extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\Model\Meta
     /**
      * Phalcon\Mvc\Model\MetaData\Apc constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function __construct($options = null) {}
+    public function __construct($options = null) {
+    }
 
     /**
      * Reads meta-data from APC
      *
-     * @param string $key 
-     * @return array|null 
+     * @param string $key
+     * @return array|null
      */
-    public function read($key) {}
+    public function read($key) {
+    }
 
     /**
      * Writes the meta-data to APC
      *
-     * @param string $key 
-     * @param mixed $data 
+     * @param string $key
+     * @param mixed $data
      */
-    public function write($key, $data) {}
+    public function write($key, $data) {
+    }
 
 }

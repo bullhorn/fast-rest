@@ -22,15 +22,15 @@ namespace Phalcon\Mvc\Model\Validator;
  * }
  * </code>
  */
-class Inclusionin extends \Phalcon\Mvc\Model\Validator implements \Phalcon\Mvc\Model\ValidatorInterface
-{
+class Inclusionin extends \Phalcon\Mvc\Model\Validator implements \Phalcon\Mvc\Model\ValidatorInterface {
 
     /**
      * Executes validator
      *
-     * @param mixed $record 
-     * @return bool 
+     * @param mixed $record
+     * @return bool
      */
-    public function validate(\Phalcon\Mvc\EntityInterface $record) {}
+    public function validate(\Phalcon\Mvc\EntityInterface $record) {
+    }
 
 }

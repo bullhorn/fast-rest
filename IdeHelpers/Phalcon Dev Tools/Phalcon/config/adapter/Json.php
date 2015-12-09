@@ -16,14 +16,14 @@ namespace Phalcon\Config\Adapter;
  * echo $config->models->metadata;
  * </code>
  */
-class Json extends \Phalcon\Config
-{
+class Json extends \Phalcon\Config {
 
     /**
      * Phalcon\Config\Adapter\Json constructor
      *
-     * @param string $filePath 
+     * @param string $filePath
      */
-    public function __construct($filePath) {}
+    public function __construct($filePath) {
+    }
 
 }

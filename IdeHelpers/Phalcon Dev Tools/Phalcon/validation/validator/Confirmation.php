@@ -13,25 +13,26 @@ namespace Phalcon\Validation\Validator;
  * )));
  * </code>
  */
-class Confirmation extends \Phalcon\Validation\Validator
-{
+class Confirmation extends \Phalcon\Validation\Validator {
 
     /**
      * Executes the validation
      *
-     * @param mixed $validation 
-     * @param string $field 
-     * @return bool 
+     * @param mixed $validation
+     * @param string $field
+     * @return bool
      */
-    public function validate(\Phalcon\Validation $validation, $field) {}
+    public function validate(\Phalcon\Validation $validation, $field) {
+    }
 
     /**
      * Compare strings
      *
-     * @param string $a 
-     * @param string $b 
-     * @return bool 
+     * @param string $a
+     * @param string $b
+     * @return bool
      */
-    protected final function compare($a, $b) {}
+    protected final function compare($a, $b) {
+    }
 
 }

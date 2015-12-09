@@ -25,15 +25,15 @@ namespace Phalcon\Config\Adapter;
  * echo $config->database->username;
  * </code>
  */
-class Ini extends \Phalcon\Config
-{
+class Ini extends \Phalcon\Config {
 
     /**
      * Phalcon\Config\Adapter\Ini constructor
      *
-     * @param string $filePath 
+     * @param string $filePath
      */
-    public function __construct($filePath) {}
+    public function __construct($filePath) {
+    }
 
     /**
      * Build multidimensional array from string
@@ -49,10 +49,11 @@ class Ini extends \Phalcon\Config
      * ];
      * </code>
      *
-     * @param string $path 
-     * @param mixed $value 
-     * @return array 
+     * @param string $path
+     * @param mixed $value
+     * @return array
      */
-    protected function _parseIniString($path, $value) {}
+    protected function _parseIniString($path, $value) {
+    }
 
 }

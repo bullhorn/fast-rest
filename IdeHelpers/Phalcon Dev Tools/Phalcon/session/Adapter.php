@@ -6,8 +6,7 @@ namespace Phalcon\Session;
  * Phalcon\Session\Adapter
  * Base class for Phalcon\Session adapters
  */
-abstract class Adapter
-{
+abstract class Adapter {
 
     const SESSION_ACTIVE = 2;
 
@@ -30,16 +29,18 @@ abstract class Adapter
     /**
      * Phalcon\Session\Adapter constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function __construct($options = null) {}
+    public function __construct($options = null) {
+    }
 
     /**
      * Starts the session (if headers are already sent the session will not be started)
      *
-     * @return bool 
+     * @return bool
      */
-    public function start() {}
+    public function start() {
+    }
 
     /**
      * Sets session's options
@@ -49,38 +50,43 @@ abstract class Adapter
      * ));
      * </code>
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function setOptions($options) {}
+    public function setOptions($options) {
+    }
 
     /**
      * Get internal options
      *
-     * @return array 
+     * @return array
      */
-    public function getOptions() {}
+    public function getOptions() {
+    }
 
     /**
      * Set session name
      *
-     * @param string $name 
+     * @param string $name
      */
-    public function setName($name) {}
+    public function setName($name) {
+    }
 
     /**
      * Get session name
      *
-     * @return string 
+     * @return string
      */
-    public function getName() {}
+    public function getName() {
+    }
 
     /**
      * {@inheritdoc}
      *
-     * @param bool $deleteOldSession 
-     * @return Adapter 
+     * @param bool $deleteOldSession
+     * @return Adapter
      */
-    public function regenerateId($deleteOldSession = true) {}
+    public function regenerateId($deleteOldSession = true) {
+    }
 
     /**
      * Gets a session variable from an application context
@@ -88,12 +94,13 @@ abstract class Adapter
      * $session->get('auth', 'yes');
      * </code>
      *
-     * @param string $index 
-     * @param mixed $defaultValue 
-     * @param bool $remove 
-     * @return mixed 
+     * @param string $index
+     * @param mixed $defaultValue
+     * @param bool $remove
+     * @return mixed
      */
-    public function get($index, $defaultValue = null, $remove = false) {}
+    public function get($index, $defaultValue = null, $remove = false) {
+    }
 
     /**
      * Sets a session variable in an application context
@@ -101,10 +108,11 @@ abstract class Adapter
      * $session->set('auth', 'yes');
      * </code>
      *
-     * @param string $index 
-     * @param mixed $value 
+     * @param string $index
+     * @param mixed $value
      */
-    public function set($index, $value) {}
+    public function set($index, $value) {
+    }
 
     /**
      * Check whether a session variable is set in an application context
@@ -112,10 +120,11 @@ abstract class Adapter
      * var_dump($session->has('auth'));
      * </code>
      *
-     * @param string $index 
-     * @return bool 
+     * @param string $index
+     * @return bool
      */
-    public function has($index) {}
+    public function has($index) {
+    }
 
     /**
      * Removes a session variable from an application context
@@ -123,9 +132,10 @@ abstract class Adapter
      * $session->remove('auth');
      * </code>
      *
-     * @param string $index 
+     * @param string $index
      */
-    public function remove($index) {}
+    public function remove($index) {
+    }
 
     /**
      * Returns active session id
@@ -133,9 +143,10 @@ abstract class Adapter
      * echo $session->getId();
      * </code>
      *
-     * @return string 
+     * @return string
      */
-    public function getId() {}
+    public function getId() {
+    }
 
     /**
      * Set the current session id
@@ -143,9 +154,10 @@ abstract class Adapter
      * $session->setId($id);
      * </code>
      *
-     * @param string $id 
+     * @param string $id
      */
-    public function setId($id) {}
+    public function setId($id) {
+    }
 
     /**
      * Check whether the session has been started
@@ -153,9 +165,10 @@ abstract class Adapter
      * var_dump($session->isStarted());
      * </code>
      *
-     * @return bool 
+     * @return bool
      */
-    public function isStarted() {}
+    public function isStarted() {
+    }
 
     /**
      * Destroys the active session
@@ -164,10 +177,11 @@ abstract class Adapter
      * var_dump($session->destroy(true));
      * </code>
      *
-     * @param bool $removeData 
-     * @return bool 
+     * @param bool $removeData
+     * @return bool
      */
-    public function destroy($removeData = false) {}
+    public function destroy($removeData = false) {
+    }
 
     /**
      * Returns the status of the current session. For PHP 5.3 this function will always return SESSION_NONE
@@ -179,41 +193,47 @@ abstract class Adapter
      * }
      * </code>
      *
-     * @return int 
+     * @return int
      */
-    public function status() {}
+    public function status() {
+    }
 
     /**
      * Alias: Gets a session variable from an application context
      *
-     * @param string $index 
+     * @param string $index
      */
-    public function __get($index) {}
+    public function __get($index) {
+    }
 
     /**
      * Alias: Sets a session variable in an application context
      *
-     * @param string $index 
-     * @param mixed $value 
+     * @param string $index
+     * @param mixed $value
      */
-    public function __set($index, $value) {}
+    public function __set($index, $value) {
+    }
 
     /**
      * Alias: Check whether a session variable is set in an application context
      *
-     * @param string $index 
-     * @return bool 
+     * @param string $index
+     * @return bool
      */
-    public function __isset($index) {}
+    public function __isset($index) {
+    }
 
     /**
      * Alias: Removes a session variable from an application context
      *
-     * @param string $index 
+     * @param string $index
      */
-    public function __unset($index) {}
+    public function __unset($index) {
+    }
 
 
-    public function __destruct() {}
+    public function __destruct() {
+    }
 
 }

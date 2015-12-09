@@ -13,8 +13,7 @@ namespace Phalcon\Db;
  * $subscriber->save();
  * </code>
  */
-class RawValue
-{
+class RawValue {
     /**
      * Raw value without quoting or formating
      *
@@ -26,22 +25,25 @@ class RawValue
     /**
      * Raw value without quoting or formating
      *
-     * @return string 
+     * @return string
      */
-    public function getValue() {}
+    public function getValue() {
+    }
 
     /**
      * Raw value without quoting or formating
      *
-     * @return string 
+     * @return string
      */
-    public function __toString() {}
+    public function __toString() {
+    }
 
     /**
      * Phalcon\Db\RawValue constructor
      *
-     * @param mixed $value 
+     * @param mixed $value
      */
-    public function __construct($value) {}
+    public function __construct($value) {
+    }
 
 }

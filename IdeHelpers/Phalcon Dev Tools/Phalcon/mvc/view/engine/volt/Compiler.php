@@ -11,8 +11,7 @@ namespace Phalcon\Mvc\View\Engine\Volt;
  * require $compiler->getCompiledTemplatePath();
  * </code>
  */
-class Compiler implements \Phalcon\Di\InjectionAwareInterface
-{
+class Compiler implements \Phalcon\Di\InjectionAwareInterface {
 
     protected $_dependencyInjector;
 
@@ -83,302 +82,339 @@ class Compiler implements \Phalcon\Di\InjectionAwareInterface
     /**
      * Phalcon\Mvc\View\Engine\Volt\Compiler
      *
-     * @param mixed $view 
+     * @param mixed $view
      */
-    public function __construct(\Phalcon\Mvc\ViewBaseInterface $view = null) {}
+    public function __construct(\Phalcon\Mvc\ViewBaseInterface $view = null) {
+    }
 
     /**
      * Sets the dependency injector
      *
-     * @param mixed $dependencyInjector 
+     * @param mixed $dependencyInjector
      */
-    public function setDI(\Phalcon\DiInterface $dependencyInjector) {}
+    public function setDI(\Phalcon\DiInterface $dependencyInjector) {
+    }
 
     /**
      * Returns the internal dependency injector
      *
-     * @return \Phalcon\DiInterface 
+     * @return \Phalcon\DiInterface
      */
-    public function getDI() {}
+    public function getDI() {
+    }
 
     /**
      * Sets the compiler options
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function setOptions($options) {}
+    public function setOptions($options) {
+    }
 
     /**
      * Sets a single compiler option
      *
-     * @param string $option 
-     * @param mixed $value 
+     * @param string $option
+     * @param mixed $value
      */
-    public function setOption($option, $value) {}
+    public function setOption($option, $value) {
+    }
 
     /**
      * Returns a compiler's option
      *
-     * @param string $option 
-     * @return string 
+     * @param string $option
+     * @return string
      */
-    public function getOption($option) {}
+    public function getOption($option) {
+    }
 
     /**
      * Returns the compiler options
      *
-     * @return array 
+     * @return array
      */
-    public function getOptions() {}
+    public function getOptions() {
+    }
 
     /**
      * Fires an event to registered extensions
      *
-     * @param string $name 
-     * @param array $arguments 
-     * @return mixed 
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
      */
-    public final function fireExtensionEvent($name, $arguments = null) {}
+    public final function fireExtensionEvent($name, $arguments = null) {
+    }
 
     /**
      * Registers a Volt's extension
      *
-     * @param mixed $extension 
-     * @return Compiler 
+     * @param mixed $extension
+     * @return Compiler
      */
-    public function addExtension($extension) {}
+    public function addExtension($extension) {
+    }
 
     /**
      * Returns the list of extensions registered in Volt
      *
-     * @return array 
+     * @return array
      */
-    public function getExtensions() {}
+    public function getExtensions() {
+    }
 
     /**
      * Register a new function in the compiler
      *
-     * @param string $name 
-     * @param mixed $definition 
-     * @return Compiler 
+     * @param string $name
+     * @param mixed $definition
+     * @return Compiler
      */
-    public function addFunction($name, $definition) {}
+    public function addFunction($name, $definition) {
+    }
 
     /**
      * Register the user registered functions
      *
-     * @return array 
+     * @return array
      */
-    public function getFunctions() {}
+    public function getFunctions() {
+    }
 
     /**
      * Register a new filter in the compiler
      *
-     * @param string $name 
-     * @param mixed $definition 
-     * @return Compiler 
+     * @param string $name
+     * @param mixed $definition
+     * @return Compiler
      */
-    public function addFilter($name, $definition) {}
+    public function addFilter($name, $definition) {
+    }
 
     /**
      * Register the user registered filters
      *
-     * @return array 
+     * @return array
      */
-    public function getFilters() {}
+    public function getFilters() {
+    }
 
     /**
      * Set a unique prefix to be used as prefix for compiled variables
      *
-     * @param string $prefix 
-     * @return Compiler 
+     * @param string $prefix
+     * @return Compiler
      */
-    public function setUniquePrefix($prefix) {}
+    public function setUniquePrefix($prefix) {
+    }
 
     /**
      * Return a unique prefix to be used as prefix for compiled variables and contexts
      *
-     * @return string 
+     * @return string
      */
-    public function getUniquePrefix() {}
+    public function getUniquePrefix() {
+    }
 
     /**
      * Resolves attribute reading
      *
-     * @param array $expr 
-     * @return string 
+     * @param array $expr
+     * @return string
      */
-    public function attributeReader($expr) {}
+    public function attributeReader($expr) {
+    }
 
     /**
      * Resolves function intermediate code into PHP function calls
      *
-     * @param array $expr 
-     * @return string 
+     * @param array $expr
+     * @return string
      */
-    public function functionCall($expr) {}
+    public function functionCall($expr) {
+    }
 
     /**
      * Resolves filter intermediate code into a valid PHP expression
      *
-     * @param array $test 
-     * @param string $left 
-     * @return string 
+     * @param array $test
+     * @param string $left
+     * @return string
      */
-    public function resolveTest($test, $left) {}
+    public function resolveTest($test, $left) {
+    }
 
     /**
      * Resolves filter intermediate code into PHP function calls
      *
-     * @param array $filter 
-     * @param string $left 
-     * @return string 
+     * @param array $filter
+     * @param string $left
+     * @return string
      */
-    final protected function resolveFilter($filter, $left) {}
+    final protected function resolveFilter($filter, $left) {
+    }
 
     /**
      * Resolves an expression node in an AST volt tree
      *
-     * @param array $expr 
-     * @return string 
+     * @param array $expr
+     * @return string
      */
-    final public function expression($expr) {}
+    final public function expression($expr) {
+    }
 
     /**
      * Compiles a block of statements
      *
-     * @param array $statements 
-     * @return string|array 
+     * @param array $statements
+     * @return string|array
      */
-    final protected function _statementListOrExtends($statements) {}
+    final protected function _statementListOrExtends($statements) {
+    }
 
     /**
      * Compiles a "foreach" intermediate code representation into plain PHP code
      *
-     * @param array $statement 
-     * @param bool $extendsMode 
-     * @return string 
+     * @param array $statement
+     * @param bool $extendsMode
+     * @return string
      */
-    public function compileForeach($statement, $extendsMode = false) {}
+    public function compileForeach($statement, $extendsMode = false) {
+    }
 
     /**
      * Generates a 'forelse' PHP code
      *
-     * @return string 
+     * @return string
      */
-    public function compileForElse() {}
+    public function compileForElse() {
+    }
 
     /**
      * Compiles a 'if' statement returning PHP code
      *
-     * @param array $statement 
-     * @param bool $extendsMode 
-     * @return string 
+     * @param array $statement
+     * @param bool $extendsMode
+     * @return string
      */
-    public function compileIf($statement, $extendsMode = false) {}
+    public function compileIf($statement, $extendsMode = false) {
+    }
 
     /**
      * Compiles a "elseif" statement returning PHP code
      *
-     * @param array $statement 
-     * @return string 
+     * @param array $statement
+     * @return string
      */
-    public function compileElseIf($statement) {}
+    public function compileElseIf($statement) {
+    }
 
     /**
      * Compiles a "cache" statement returning PHP code
      *
-     * @param array $statement 
-     * @param bool $extendsMode 
-     * @return string 
+     * @param array $statement
+     * @param bool $extendsMode
+     * @return string
      */
-    public function compileCache($statement, $extendsMode = false) {}
+    public function compileCache($statement, $extendsMode = false) {
+    }
 
     /**
      * Compiles a "set" statement returning PHP code
      *
-     * @param array $statement 
-     * @return string 
+     * @param array $statement
+     * @return string
      */
-    public function compileSet($statement) {}
+    public function compileSet($statement) {
+    }
 
     /**
      * Compiles a "do" statement returning PHP code
      *
-     * @param array $statement 
-     * @return string 
+     * @param array $statement
+     * @return string
      */
-    public function compileDo($statement) {}
+    public function compileDo($statement) {
+    }
 
     /**
      * Compiles a "return" statement returning PHP code
      *
-     * @param array $statement 
-     * @return string 
+     * @param array $statement
+     * @return string
      */
-    public function compileReturn($statement) {}
+    public function compileReturn($statement) {
+    }
 
     /**
      * Compiles a "autoescape" statement returning PHP code
      *
-     * @param array $statement 
-     * @param bool $extendsMode 
-     * @return string 
+     * @param array $statement
+     * @param bool $extendsMode
+     * @return string
      */
-    public function compileAutoEscape($statement, $extendsMode) {}
+    public function compileAutoEscape($statement, $extendsMode) {
+    }
 
     /**
      * Compiles a '{{' '}}' statement returning PHP code
      *
-     * @param array $statement 
-     * @param boolean $extendsMode 
-     * @return string 
+     * @param array $statement
+     * @param boolean $extendsMode
+     * @return string
      */
-    public function compileEcho($statement) {}
+    public function compileEcho($statement) {
+    }
 
     /**
      * Compiles a 'include' statement returning PHP code
      *
-     * @param array $statement 
-     * @return string 
+     * @param array $statement
+     * @return string
      */
-    public function compileInclude($statement) {}
+    public function compileInclude($statement) {
+    }
 
     /**
      * Compiles macros
      *
-     * @param array $statement 
-     * @param bool $extendsMode 
-     * @return string 
+     * @param array $statement
+     * @param bool $extendsMode
+     * @return string
      */
-    public function compileMacro($statement, $extendsMode) {}
+    public function compileMacro($statement, $extendsMode) {
+    }
 
     /**
      * Compiles calls to macros
      *
-     * @param array $statement 
-     * @param boolean $extendsMode 
-     * @return string 
+     * @param array $statement
+     * @param boolean $extendsMode
+     * @return string
      */
-    public function compileCall($statement, $extendsMode) {}
+    public function compileCall($statement, $extendsMode) {
+    }
 
     /**
      * Traverses a statement list compiling each of its nodes
      *
-     * @param array $statements 
-     * @param bool $extendsMode 
-     * @return string 
+     * @param array $statements
+     * @param bool $extendsMode
+     * @return string
      */
-    final protected function _statementList($statements, $extendsMode = false) {}
+    final protected function _statementList($statements, $extendsMode = false) {
+    }
 
     /**
      * Compiles a Volt source code returning a PHP plain version
      *
-     * @param string $viewCode 
-     * @param bool $extendsMode 
-     * @return string 
+     * @param string $viewCode
+     * @param bool $extendsMode
+     * @return string
      */
-    protected function _compileSource($viewCode, $extendsMode = false) {}
+    protected function _compileSource($viewCode, $extendsMode = false) {
+    }
 
     /**
      * Compiles a template into a string
@@ -386,11 +422,12 @@ class Compiler implements \Phalcon\Di\InjectionAwareInterface
      * echo $compiler->compileString('{{ "hello world" }}');
      * </code>
      *
-     * @param string $viewCode 
-     * @param bool $extendsMode 
-     * @return string 
+     * @param string $viewCode
+     * @param bool $extendsMode
+     * @return string
      */
-    public function compileString($viewCode, $extendsMode = false) {}
+    public function compileString($viewCode, $extendsMode = false) {
+    }
 
     /**
      * Compiles a template into a file forcing the destination path
@@ -398,12 +435,13 @@ class Compiler implements \Phalcon\Di\InjectionAwareInterface
      * $compiler->compile('views/layouts/main.volt', 'views/layouts/main.volt.php');
      * </code>
      *
-     * @param string $path 
-     * @param string $compiledPath 
-     * @param boolean $extendsMode 
-     * @return string|array 
+     * @param string $path
+     * @param string $compiledPath
+     * @param boolean $extendsMode
+     * @return string|array
      */
-    public function compileFile($path, $compiledPath, $extendsMode = false) {}
+    public function compileFile($path, $compiledPath, $extendsMode = false) {
+    }
 
     /**
      * Compiles a template into a file applying the compiler options
@@ -413,24 +451,27 @@ class Compiler implements \Phalcon\Di\InjectionAwareInterface
      * require $compiler->getCompiledTemplatePath();
      * </code>
      *
-     * @param string $templatePath 
-     * @param bool $extendsMode 
+     * @param string $templatePath
+     * @param bool $extendsMode
      */
-    public function compile($templatePath, $extendsMode = false) {}
+    public function compile($templatePath, $extendsMode = false) {
+    }
 
     /**
      * Returns the path that is currently being compiled
      *
-     * @return string 
+     * @return string
      */
-    public function getTemplatePath() {}
+    public function getTemplatePath() {
+    }
 
     /**
      * Returns the path to the last compiled template
      *
-     * @return string 
+     * @return string
      */
-    public function getCompiledTemplatePath() {}
+    public function getCompiledTemplatePath() {
+    }
 
     /**
      * Parses a Volt template returning its intermediate representation
@@ -438,9 +479,10 @@ class Compiler implements \Phalcon\Di\InjectionAwareInterface
      * print_r($compiler->parse('{{ 3 + 2 }}'));
      * </code>
      *
-     * @param string $viewCode 
-     * @return array 
+     * @param string $viewCode
+     * @return array
      */
-    public function parse($viewCode) {}
+    public function parse($viewCode) {
+    }
 
 }

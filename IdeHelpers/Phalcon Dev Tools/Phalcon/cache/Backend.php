@@ -6,8 +6,7 @@ namespace Phalcon\Cache;
  * Phalcon\Cache\Backend
  * This class implements common functionality for backend adapters. A backend cache adapter may extend this class
  */
-abstract class Backend
-{
+abstract class Backend {
 
     protected $_frontend;
 
@@ -30,73 +29,84 @@ abstract class Backend
     protected $_started = false;
 
 
-
-    public function getFrontend() {}
-
-    /**
-     * @param mixed $frontend 
-     */
-    public function setFrontend($frontend) {}
-
-
-    public function getOptions() {}
+    public function getFrontend() {
+    }
 
     /**
-     * @param mixed $options 
+     * @param mixed $frontend
      */
-    public function setOptions($options) {}
+    public function setFrontend($frontend) {
+    }
 
 
-    public function getLastKey() {}
+    public function getOptions() {
+    }
 
     /**
-     * @param mixed $lastKey 
+     * @param mixed $options
      */
-    public function setLastKey($lastKey) {}
+    public function setOptions($options) {
+    }
+
+
+    public function getLastKey() {
+    }
+
+    /**
+     * @param mixed $lastKey
+     */
+    public function setLastKey($lastKey) {
+    }
 
     /**
      * Phalcon\Cache\Backend constructor
      *
-     * @param \Phalcon\Cache\FrontendInterface $frontend 
-     * @param array $options 
+     * @param \Phalcon\Cache\FrontendInterface $frontend
+     * @param array $options
      */
-    public function __construct(\Phalcon\Cache\FrontendInterface $frontend, $options = null) {}
+    public function __construct(\Phalcon\Cache\FrontendInterface $frontend, $options = null) {
+    }
 
     /**
      * Starts a cache. The keyname allows to identify the created fragment
      *
-     * @param int|string $keyName 
-     * @param int $lifetime 
-     * @return mixed 
+     * @param int|string $keyName
+     * @param int $lifetime
+     * @return mixed
      */
-    public function start($keyName, $lifetime = null) {}
+    public function start($keyName, $lifetime = null) {
+    }
 
     /**
      * Stops the frontend without store any cached content
      *
-     * @param bool $stopBuffer 
+     * @param bool $stopBuffer
      */
-    public function stop($stopBuffer = true) {}
+    public function stop($stopBuffer = true) {
+    }
 
     /**
      * Checks whether the last cache is fresh or cached
      *
-     * @return bool 
+     * @return bool
      */
-    public function isFresh() {}
+    public function isFresh() {
+    }
 
     /**
      * Checks whether the cache has starting buffering or not
      *
-     * @return bool 
+     * @return bool
      */
-    public function isStarted() {}
+    public function isStarted() {
+    }
 
     /**
      * Gets the last lifetime set
      *
-     * @return int 
+     * @return int
      */
-    public function getLifetime() {}
+    public function getLifetime() {
+    }
 
 }

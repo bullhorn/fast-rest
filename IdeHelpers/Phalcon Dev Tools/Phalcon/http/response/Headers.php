@@ -6,8 +6,7 @@ namespace Phalcon\Http\Response;
  * Phalcon\Http\Response\Headers
  * This class is a bag to manage the response headers
  */
-class Headers implements \Phalcon\Http\Response\HeadersInterface
-{
+class Headers implements \Phalcon\Http\Response\HeadersInterface {
 
     protected $_headers = array();
 
@@ -15,58 +14,66 @@ class Headers implements \Phalcon\Http\Response\HeadersInterface
     /**
      * Sets a header to be sent at the end of the request
      *
-     * @param string $name 
-     * @param string $value 
+     * @param string $name
+     * @param string $value
      */
-    public function set($name, $value) {}
+    public function set($name, $value) {
+    }
 
     /**
      * Gets a header value from the internal bag
      *
-     * @param string $name 
-     * @return string|bool 
+     * @param string $name
+     * @return string|bool
      */
-    public function get($name) {}
+    public function get($name) {
+    }
 
     /**
      * Sets a raw header to be sent at the end of the request
      *
-     * @param string $header 
+     * @param string $header
      */
-    public function setRaw($header) {}
+    public function setRaw($header) {
+    }
 
     /**
      * Removes a header to be sent at the end of the request
      *
-     * @param string $header 
+     * @param string $header
      */
-    public function remove($header) {}
+    public function remove($header) {
+    }
 
     /**
      * Sends the headers to the client
      *
-     * @return bool 
+     * @return bool
      */
-    public function send() {}
+    public function send() {
+    }
 
     /**
      * Reset set headers
      */
-    public function reset() {}
+    public function reset() {
+    }
 
     /**
      * Returns the current headers as an array
      *
-     * @return array 
+     * @return array
      */
-    public function toArray() {}
+    public function toArray() {
+    }
 
     /**
      * Restore a \Phalcon\Http\Response\Headers object
      *
-     * @param array $data 
-     * @return Headers 
+     * @param array $data
+     * @return Headers
      */
-    public static function __set_state($data) {}
+    public static function __set_state($data) {
+    }
 
 }
