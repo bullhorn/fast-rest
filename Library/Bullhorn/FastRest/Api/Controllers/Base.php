@@ -23,597 +23,600 @@ use Bullhorn\FastRest\Api\Services\DataTransform\Base as DataTransformer;
  * Class ControllerBase
  */
 abstract class Base extends Controller {
-	/** @var  \stdClass */
-	private $outputObject;
-	/** @var Exception[]  */
-	private $errors = array();
-	/** @var int Server Status Code */
-	private $statusCode;
+    const DI_NAME_OUTPUT = 'Output';
+    const DI_NAME_ACL = 'Acl';
+    /** @var  \stdClass */
+    private $outputObject;
+    /** @var Exception[] */
+    private $errors = array();
+    /** @var int Server Status Code */
+    private $statusCode;
 
-	const STATUS_CODE_BAD_REQUEST = 400;
-	const STATUS_CODE_NOT_FOUND = 404;
+    const STATUS_CODE_BAD_REQUEST = 400;
+    const STATUS_CODE_NOT_FOUND = 404;
 
-	/**
-	 * Initializes
-	 * @return void
-	 */
-	public function beforeExecuteRoute() {
-		$this->validateServicesDefined();
-		$this->getDi()->set('Request', $this->request);
-		$this->setStatusCode(200);
-		$this->setOutputObject(new \stdClass());
-		$this->response->setHeader('Access-Control-Allow-Origin', '*');
-		try {
-			$this->validateLogin();
-		} catch(Exception $e) {
-			$this->handleError($e);
-			$this->afterExecuteRoute();
-			exit;
-		}
-	}
+    /**
+     * Initializes
+     * @return void
+     */
+    public function beforeExecuteRoute() {
+        $this->validateServicesDefined();
+        $this->getDi()->set('Request', $this->request);
+        $this->setStatusCode(200);
+        $this->setOutputObject(new \stdClass());
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
+        try {
+            $this->validateLogin();
+        } catch(Exception $e) {
+            $this->handleError($e);
+            $this->afterExecuteRoute();
+            exit;
+        }
+    }
 
-	/**
-	 * Validates to make sure all required services are defined
-	 * @return void
-	 * @throws \Exception
-	 */
-	private function validateServicesDefined() {
-		if(!$this->getDi()->has('Acl')) {
-			throw new \Exception('Service Acl must be defined with a type of: '.AclInterface::class);
-		}
-		if(!$this->getDi()->has('Output')) {
-			throw new \Exception('Service Output must be defined with a type of: '.OutputInterface::class);
-		}
-	}
-
-
-	/**
-	 * This is used to give an error if you are accessing an action that you are not allowed to, such as if a controller is not creatable or deletable
-	 *
-	 * @param string $errorMessage
-	 *
-	 * @return void
-	 */
-	protected function throwUnAccessibleAction($errorMessage) {
-		$this->setErrors(
-			[
-				new Exception($errorMessage, 405)
-			]
-		);
-	}
-
-	/**
-	 * When called, this should return a new entity
-	 * @return ModelInterface
-	 */
-	abstract public function generateEntity();
-
-	/**
-	 * Sets HTTP Status Code
-	 * @return int
-	 */
-	public function getStatusCode() {
-		return $this->statusCode;
-	}
-
-	/**
-	 * Returns HTTP Status Code
-	 * @param int $statusCode
-	 */
-	public function setStatusCode($statusCode) {
-		$this->statusCode = $statusCode;
-	}
-
-	/**
-	 * Adds an error
-	 *
-	 * @param Exception $e
-	 *
-	 * @return void
-	 */
-	protected function addError(Exception $e) {
-		$errors = $this->getErrors();
-		$errors[] = $e;
-		$this->setErrors($errors);
-	}
-
-	/**
-	 * Getter
-	 * @return \Phalcon\Http\Request\Exception[]
-	 */
-	protected function getErrors() {
-		return $this->errors;
-	}
-
-	/**
-	 * Setter
-	 * @param \Phalcon\Http\Request\Exception[] $errors
-	 */
-	protected function setErrors(array $errors) {
-		$this->errors = $errors;
-	}
-
-	/**
-	 * Getter
-	 * @return \stdClass
-	 */
-	protected function getOutputObject() {
-		return $this->outputObject;
-	}
-
-	/**
-	 * Setter
-	 * @param \stdClass $outputObject
-	 */
-	protected function setOutputObject(\stdClass $outputObject) {
-		$this->outputObject = $outputObject;
-	}
-
-	/**
-	 * Gets a list of parameters that are always allowed in the query, aka any tokens or authentication information
-	 * @return string[]
-	 */
-	abstract protected function getQueryWhiteList();
-
-	/**
-	 * This provides a list of the entities
-	 * @return void
-	 */
-	protected function indexAction() {
-		try {
-			$entity = $this->generateEntity();
-
-			$query = new Index($this->request, $entity, $this->getQueryWhiteList());
-			$this->response->setHeader('link', $query->generateLinks());
-			/** @var ResultSet|ModelInterface[] $entities */
-			$entities = $query->getResultSet();
-
-			$objects = array();
-			foreach($entities as $entity) {
-				$objects[] = $this->generateEntityAction($entity);
-			}
-			$outputObject = $this->getOutputObject();
-			$blankEntity = $this->generateEntity();
-			$outputObject->{$blankEntity->getEntityName().'s'} = $objects;
-			$this->setOutputObject($outputObject);
-		} catch(Exception $e) {
-			$this->handleError($e);
-		} catch(ValidationException $e) {
-			$this->handleValidationError($e);
-		} catch(AclException $e) {
-			$this->handleAclError($e);
-		}
-	}
-
-	/**
-	 * Needed for CORs
-	 * @return void
-	 */
-	public function optionsAction() {
-		$this->response->setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
-		$this->response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-		$this->setStatusCode(200);
-	}
-
-	/**
-	 * This is how you create a new entity, returns showAction on the specified entity.
-	 * This would be called using the POST method, with the url: v{versionNumber}/{Entities}
-	 * This returns the showAction
-	 * @return void
-	 */
-	public function createAction() {
-		$this->setStatusCode(201);
-		$createObjects = $this->createActionProcess();
-
-		if(sizeOf($createObjects)==1) { //Default handling of passing in one
-			$createObject = $createObjects[0];
-			$this->setErrors($createObject->getErrors());
-			$this->setStatusCode($createObject->getStatusCode());
-			if(!is_null($createObject->getEntity())) {
-				try {
-					$this->showActionInternal($createObject->getEntity());
-				} catch(Exception $e) {
-					$this->handleError($e);
-				} catch(ValidationException $e) {
-					$this->handleValidationError($e);
-				} catch(AclException $e) {
-					$this->handleAclError($e);
-				}
-			}
-		} else {
-			$this->setStatusCode(400);
-			$hasOneSuccessful = false;
-			$objects = [];
-			foreach($createObjects as $createObject) {
-				$object = new \stdClass();
-				try {
-					if(!is_null($createObject->getEntity())) {
-						$hasOneSuccessful = true;
-						$object->{$createObject->getEntity()->getEntityName()} = $this->generateEntityAction($createObject->getEntity());
-					}
-					$object = $this->addErrorsAndStatus($createObject->getErrors(), $createObject->getStatusCode(), $object);
-				} catch(Exception $e) {
-					$this->handleError($e);
-				} catch(ValidationException $e) {
-					$this->handleValidationError($e);
-				} catch(AclException $e) {
-					$this->handleAclError($e);
-				}
-				$objects[] = $object;
-			}
-			$blankEntity = $this->generateEntity();
-			$outputObject = $this->getOutputObject();
-			$outputObject->{$blankEntity->getEntityName().'s'} = $objects;
-			$this->setOutputObject($outputObject);
-			if($hasOneSuccessful) {
-				$this->setStatusCode(201);
-			}
-		}
+    /**
+     * Validates to make sure all required services are defined
+     * @return void
+     * @throws \Exception
+     */
+    private function validateServicesDefined() {
+        if(!$this->getDi()->has(self::DI_NAME_ACL)) {
+            throw new \Exception('Service ' . self::class . '::DI_NAME_ACL must be defined with a type of: ' . AclInterface::class);
+        }
+        if(!$this->getDi()->has(self::DI_NAME_OUTPUT)) {
+            throw new \Exception('Service ' . self::class . '::DI_NAME_OUTPUT must be defined with a type of: ' . OutputInterface::class);
+        }
+    }
 
 
-	}
+    /**
+     * This is used to give an error if you are accessing an action that you are not allowed to, such as if a controller is not creatable or deletable
+     *
+     * @param string $errorMessage
+     *
+     * @return void
+     */
+    protected function throwUnAccessibleAction($errorMessage) {
+        $this->setErrors(
+            [
+                new Exception($errorMessage, 405)
+            ]
+        );
+    }
 
-	/**
-	 * Creates the entities, returns a list of createObjects, to process accordingly
-	 * @return \Bullhorn\FastRest\Api\Models\CreateObject[]
-	 */
-	private function createActionProcess() {
-		/** @var CreateObject[] $createObjects */
-		$createObjects = [];
-		try {
-			$params = new Params($this->request);
-		} catch (Exception $e) {
-			$this->handleError($e);
-			return $createObjects;
-		}
-		$postParams = $params->getParams();
-		if(!is_array($postParams)) {
-			$postParams = [$postParams];
-		}
-		foreach($postParams as $postParam) {
-			$createObject = new CreateObject($postParam);
-			try {
-				$entity = $this->createActionInternal($postParam);
-				$createObject->setEntity($entity);
+    /**
+     * When called, this should return a new entity
+     * @return ModelInterface
+     */
+    abstract public function generateEntity();
 
-			} catch (Exception $e) {
-				$this->handleError($e);
-			} catch (ValidationException $e) {
-				$this->handleValidationError($e);
-			} catch (AclException $e) {
-				$this->handleAclError($e);
-			}
-			$createObject->setStatusCode($this->getStatusCode());
-			$createObject->setErrors($this->getErrors());
-			$this->setErrors([]);
-			$createObjects[] = $createObject;
-		}
-		return $createObjects;
-	}
+    /**
+     * Sets HTTP Status Code
+     * @return int
+     */
+    public function getStatusCode() {
+        return $this->statusCode;
+    }
 
-	/**
-	 * Provides the actual creating of a new entity.
-	 * @param \stdClass $postParams
-	 * @return ModelInterface
-	 */
-	private function createActionInternal(\stdClass $postParams) {
-		$entity = $this->generateEntity();
-		$this->saveEntity($postParams, $entity, true);
-		// since our entity can be manipulated after saving, we need to find it again, just in case.
-		/** @var ModelInterface $newEntity */
-		$newEntity = $entity->findFirst($entity->getId());
-		//Fix if there are two entities created (with bulk insert), and the first fails, but the second succeeds, the second with get the first's errors
-		$reflectionClass = new \ReflectionClass($newEntity);
-		$reflectionProperty = $reflectionClass->getProperty('_errorMessages');
-		$reflectionProperty->setAccessible(true);
-		$reflectionProperty->setValue($newEntity, []);
-		return $newEntity;
-	}
+    /**
+     * Returns HTTP Status Code
+     * @param int $statusCode
+     */
+    public function setStatusCode($statusCode) {
+        $this->statusCode = $statusCode;
+    }
 
-	/**
-	 * Looks up an individual entity
-	 * This would be called using the GET method, with the url: v{versionNumber}/{Entities}/{entityId}
-	 *
-	 * @return void
-	 */
-	public function showAction() {
-		try {
-			if(sizeOf($this->dispatcher->getParams())==0) {
-				throw new Exception('Invalid Entity Id Passed In', 400);
-			}
-			$entity = $this->validateEntityId($this->dispatcher->getParam(0));
-			$this->showActionInternal($entity);
-		} catch(Exception $e) {
-			$this->handleError($e);
-		} catch(ValidationException $e) {
-			$this->handleValidationError($e);
-		} catch(AclException $e) {
-			$this->handleAclError($e);
-		}
-	}
+    /**
+     * Adds an error
+     *
+     * @param Exception $e
+     *
+     * @return void
+     */
+    protected function addError(Exception $e) {
+        $errors = $this->getErrors();
+        $errors[] = $e;
+        $this->setErrors($errors);
+    }
 
-	/**
-	 * Looks up an individual entity
-	 *
-	 * @param ModelInterface $entity
-	 *
-	 * @return void
-	 */
-	protected function showActionInternal(ModelInterface $entity) {
-		$outputObject = $this->getOutputObject();
-		$outputObject->{$entity->getEntityName()} = $this->generateEntityAction($entity);
-		$this->setOutputObject($outputObject);
-	}
+    /**
+     * Getter
+     * @return \Phalcon\Http\Request\Exception[]
+     */
+    protected function getErrors() {
+        return $this->errors;
+    }
 
-	/**
-	 * Generates the output of an entity
-	 *
-	 * @param ModelInterface $entity
-	 *
-	 * @return \stdClass
-	 */
-	private function generateEntityAction(ModelInterface $entity) {
-		$show = new Show($this->request, $entity);
-		$showCriteria = new ShowCriteria($this->request);
-		return $show->generate($showCriteria->getField());
-	}
+    /**
+     * Setter
+     * @param \Phalcon\Http\Request\Exception[] $errors
+     */
+    protected function setErrors(array $errors) {
+        $this->errors = $errors;
+    }
+
+    /**
+     * Getter
+     * @return \stdClass
+     */
+    protected function getOutputObject() {
+        return $this->outputObject;
+    }
+
+    /**
+     * Setter
+     * @param \stdClass $outputObject
+     */
+    protected function setOutputObject(\stdClass $outputObject) {
+        $this->outputObject = $outputObject;
+    }
+
+    /**
+     * Gets a list of parameters that are always allowed in the query, aka any tokens or authentication information
+     * @return string[]
+     */
+    abstract protected function getQueryWhiteList();
+
+    /**
+     * This provides a list of the entities
+     * @return void
+     */
+    protected function indexAction() {
+        try {
+            $entity = $this->generateEntity();
+
+            $query = new Index($this->request, $entity, $this->getQueryWhiteList());
+            $this->response->setHeader('link', $query->generateLinks());
+            /** @var ResultSet|ModelInterface[] $entities */
+            $entities = $query->getResultSet();
+
+            $objects = array();
+            foreach($entities as $entity) {
+                $objects[] = $this->generateEntityAction($entity);
+            }
+            $outputObject = $this->getOutputObject();
+            $blankEntity = $this->generateEntity();
+            $outputObject->{$blankEntity->getEntityName() . 's'} = $objects;
+            $this->setOutputObject($outputObject);
+        } catch(Exception $e) {
+            $this->handleError($e);
+        } catch(ValidationException $e) {
+            $this->handleValidationError($e);
+        } catch(AclException $e) {
+            $this->handleAclError($e);
+        }
+    }
+
+    /**
+     * Needed for CORs
+     * @return void
+     */
+    public function optionsAction() {
+        $this->response->setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+        $this->response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+        $this->setStatusCode(200);
+    }
+
+    /**
+     * This is how you create a new entity, returns showAction on the specified entity.
+     * This would be called using the POST method, with the url: v{versionNumber}/{Entities}
+     * This returns the showAction
+     * @return void
+     */
+    public function createAction() {
+        $this->setStatusCode(201);
+        $createObjects = $this->createActionProcess();
+
+        if(sizeOf($createObjects) == 1) { //Default handling of passing in one
+            $createObject = $createObjects[0];
+            $this->setErrors($createObject->getErrors());
+            $this->setStatusCode($createObject->getStatusCode());
+            if(!is_null($createObject->getEntity())) {
+                try {
+                    $this->showActionInternal($createObject->getEntity());
+                } catch(Exception $e) {
+                    $this->handleError($e);
+                } catch(ValidationException $e) {
+                    $this->handleValidationError($e);
+                } catch(AclException $e) {
+                    $this->handleAclError($e);
+                }
+            }
+        } else {
+            $this->setStatusCode(400);
+            $hasOneSuccessful = false;
+            $objects = [];
+            foreach($createObjects as $createObject) {
+                $object = new \stdClass();
+                try {
+                    if(!is_null($createObject->getEntity())) {
+                        $hasOneSuccessful = true;
+                        $object->{$createObject->getEntity()->getEntityName()} = $this->generateEntityAction($createObject->getEntity());
+                    }
+                    $object = $this->addErrorsAndStatus($createObject->getErrors(), $createObject->getStatusCode(), $object);
+                } catch(Exception $e) {
+                    $this->handleError($e);
+                } catch(ValidationException $e) {
+                    $this->handleValidationError($e);
+                } catch(AclException $e) {
+                    $this->handleAclError($e);
+                }
+                $objects[] = $object;
+            }
+            $blankEntity = $this->generateEntity();
+            $outputObject = $this->getOutputObject();
+            $outputObject->{$blankEntity->getEntityName() . 's'} = $objects;
+            $this->setOutputObject($outputObject);
+            if($hasOneSuccessful) {
+                $this->setStatusCode(201);
+            }
+        }
 
 
-	/**
-	 * Updates an individual entity
-	 * This would be called using the PUT method, with the url: v{versionNumber}/{Entities}/{entityId}
-	 * This returns the showAction
-	 *
-	 * @return void
-	 */
-	public function updateAction() {
-		try {
-			if(sizeOf($this->dispatcher->getParams())==0) {
-				throw new Exception('Invalid Entity Id Passed In', 400);
-			}
-			$entity = $this->validateEntityId($this->dispatcher->getParam(0));
-			$isChanged = $this->updateActionInternal($entity);
-			if($isChanged) {
-				$this->showActionInternal($entity->findFirst($entity->getId()));
-			}
-		} catch(Exception $e) {
-			$this->handleError($e);
-		} catch(ValidationException $e) {
-			$this->handleValidationError($e);
-		} catch(AclException $e) {
-			$this->handleAclError($e);
-		}
-	}
+    }
 
-	/**
-	 * Gets the data transformer, if there is one
-	 * @param Params $params
-	 * @return null|DataTransformer
-	 */
-	protected function getDataTransformer(Params $params) {
-		return null;
-	}
+    /**
+     * Creates the entities, returns a list of createObjects, to process accordingly
+     * @return \Bullhorn\FastRest\Api\Models\CreateObject[]
+     */
+    private function createActionProcess() {
+        /** @var CreateObject[] $createObjects */
+        $createObjects = [];
+        try {
+            $params = new Params($this->request);
+        } catch(Exception $e) {
+            $this->handleError($e);
+            return $createObjects;
+        }
+        $postParams = $params->getParams();
+        if(!is_array($postParams)) {
+            $postParams = [$postParams];
+        }
+        foreach($postParams as $postParam) {
+            $createObject = new CreateObject($postParam);
+            try {
+                $entity = $this->createActionInternal($postParam);
+                $createObject->setEntity($entity);
 
-	/**
-	 * Saves an entity (either creating or updating)
-	 *
-	 * @param \stdClass      $postParams
-	 * @param ModelInterface $entity
-	 * @param bool           $isCreating
-	 *
-	 * @return bool if anything was changed
-	 */
-	private function saveEntity(\stdClass $postParams, ModelInterface $entity, $isCreating) {
-		$save = new Save($this->request, $entity, $isCreating);
-		return $save->process($postParams);
-	}
+            } catch(Exception $e) {
+                $this->handleError($e);
+            } catch(ValidationException $e) {
+                $this->handleValidationError($e);
+            } catch(AclException $e) {
+                $this->handleAclError($e);
+            }
+            $createObject->setStatusCode($this->getStatusCode());
+            $createObject->setErrors($this->getErrors());
+            $this->setErrors([]);
+            $createObjects[] = $createObject;
+        }
+        return $createObjects;
+    }
 
-	/**
-	 * Finds the post parameters
-	 * @param ModelInterface $entity
-	 * @return Params
-	 */
-	protected function findPostParams(ModelInterface $entity) {
-		//Entity is passed in so children can access it
-		$params = new Params($this->request);
-		$dataTransformer = $this->getDataTransformer($params);
-		if(!is_null($dataTransformer)) {
-			$dataTransformer->transform($entity);
-			$params = $dataTransformer->getParams();
-		}
-		return $params;
-	}
+    /**
+     * Provides the actual creating of a new entity.
+     * @param \stdClass $postParams
+     * @return ModelInterface
+     */
+    private function createActionInternal(\stdClass $postParams) {
+        $entity = $this->generateEntity();
+        $this->saveEntity($postParams, $entity, true);
+        // since our entity can be manipulated after saving, we need to find it again, just in case.
+        /** @var ModelInterface $newEntity */
+        $newEntity = $entity->findFirst($entity->getId());
+        //Fix if there are two entities created (with bulk insert), and the first fails, but the second succeeds, the second with get the first's errors
+        $reflectionClass = new \ReflectionClass($newEntity);
+        $reflectionProperty = $reflectionClass->getProperty('_errorMessages');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($newEntity, []);
+        return $newEntity;
+    }
 
-	/**
-	 * Updates an entity
-	 *
-	 * @param ModelInterface $entity
-	 *
-	 * @return bool
-	 *
-	 * @throws Exception
-	 */
-	protected function updateActionInternal(ModelInterface $entity) {
-		$params = new Params($this->request);
-		if(is_array($params->getParams())) {
-			throw new Exception('Bulk Updating is not supported: An array of objects was passed in', 400);
-		}
-		$isChanged = $this->saveEntity($params->getParams(), $entity, false);
-		if(!$isChanged) {
-			$this->setStatusCode(304); //Nothing is changed
-		}
-		return $isChanged;
-	}
+    /**
+     * Looks up an individual entity
+     * This would be called using the GET method, with the url: v{versionNumber}/{Entities}/{entityId}
+     *
+     * @return void
+     */
+    public function showAction() {
+        try {
+            if(sizeOf($this->dispatcher->getParams()) == 0) {
+                throw new Exception('Invalid Entity Id Passed In', 400);
+            }
+            $entity = $this->validateEntityId($this->dispatcher->getParam(0));
+            $this->showActionInternal($entity);
+        } catch(Exception $e) {
+            $this->handleError($e);
+        } catch(ValidationException $e) {
+            $this->handleValidationError($e);
+        } catch(AclException $e) {
+            $this->handleAclError($e);
+        }
+    }
 
-	/**
-	 * Deletes an individual entity
-	 *
-	 * @return void
-	 */
-	public function deleteAction() {
-		try {
-			if(sizeOf($this->dispatcher->getParams())==0) {
-				throw new Exception('Invalid Entity Id Passed In', 400);
-			}
-			$entity = $this->validateEntityId($this->dispatcher->getParam(0));
-			$this->deleteActionInternal($entity);
-		} catch(Exception $e) {
-			$this->handleError($e);
-		} catch(ValidationException $e) {
-			$this->handleValidationError($e);
-		} catch(AclException $e) {
-			$this->handleAclError($e);
-		}
-	}
+    /**
+     * Looks up an individual entity
+     *
+     * @param ModelInterface $entity
+     *
+     * @return void
+     */
+    protected function showActionInternal(ModelInterface $entity) {
+        $outputObject = $this->getOutputObject();
+        $outputObject->{$entity->getEntityName()} = $this->generateEntityAction($entity);
+        $this->setOutputObject($outputObject);
+    }
 
-	/**
-	 * Gets the Access Control Layer
-	 * @return AclInterface
-	 * @throws \Exception
-	 */
-	public function getAcl() {
-		$returnVar = $this->getDi()->get('Acl');
-		if(!($returnVar instanceof AclInterface)) {
-			throw new \Exception('The Acl must implement: '.AclInterface::class);
-		}
-		return $returnVar;
-	}
+    /**
+     * Generates the output of an entity
+     *
+     * @param ModelInterface $entity
+     *
+     * @return \stdClass
+     */
+    private function generateEntityAction(ModelInterface $entity) {
+        $show = new Show($this->request, $entity);
+        $showCriteria = new ShowCriteria($this->request);
+        return $show->generate($showCriteria->getField());
+    }
 
-	/**
-	 * Default delete action for our entities.
-	 *
-	 * @param ModelInterface $entity
-	 *
-	 * @return void
-	 */
-	protected function deleteActionInternal(ModelInterface $entity) {
-		$this->setStatusCode(204);
-		$delete = new Delete($entity);
-		$delete->process($this->getAcl());
-	}
 
-	/**
-	 * This validates an entity id, and looks up the entity associated with it
-	 *
-	 * @param int $entityId
-	 *
-	 * @return ModelInterface
-	 * @throws Exception
-	 */
-	protected function validateEntityId($entityId) {
-		if(!is_numeric($entityId)) {
-			throw new Exception('Invalid Entity Id: Must be numeric', 400);
-		}
-		return $this->lookUpEntity($entityId);
-	}
+    /**
+     * Updates an individual entity
+     * This would be called using the PUT method, with the url: v{versionNumber}/{Entities}/{entityId}
+     * This returns the showAction
+     *
+     * @return void
+     */
+    public function updateAction() {
+        try {
+            if(sizeOf($this->dispatcher->getParams()) == 0) {
+                throw new Exception('Invalid Entity Id Passed In', 400);
+            }
+            $entity = $this->validateEntityId($this->dispatcher->getParam(0));
+            $isChanged = $this->updateActionInternal($entity);
+            if($isChanged) {
+                $this->showActionInternal($entity->findFirst($entity->getId()));
+            }
+        } catch(Exception $e) {
+            $this->handleError($e);
+        } catch(ValidationException $e) {
+            $this->handleValidationError($e);
+        } catch(AclException $e) {
+            $this->handleAclError($e);
+        }
+    }
 
-	/**
-	 * This looks up an entity based off of the entity id
-	 *
-	 * @param int $entityId
-	 *
-	 * @throws Exception - If unable to find the entity, return a 404 to the user.
-	 *
-	 * @return ModelInterface
-	 */
-	protected function lookUpEntity($entityId) {
-		$entity = $this->generateEntity();
-		$entityInstance = $entity->findFirst($entityId);
-		if($entityInstance===false) {
-			throw new Exception("Invalid Entity Id: Entity not found.", 404);
-		}
-		return $entityInstance;
-	}
+    /**
+     * Gets the data transformer, if there is one
+     * @param Params $params
+     * @return null|DataTransformer
+     */
+    protected function getDataTransformer(Params $params) {
+        return null;
+    }
 
-	/**
-	 * Executed after it is routed
-	 *
-	 * @return void
-	 *
-	 * @throws \Exception
-	 */
-	public function afterExecuteRoute() {
-		/** @var \Bullhorn\FastRest\Api\Services\Output\OutputInterface $output */
-		$output = $this->getDI()->get('Output');
-		if(!($output instanceof OutputInterface)) {
-			throw new \Exception('The Output must implement: '.OutputInterface::class);
-		}
-		$object = $this->getOutputObject();
-		$errors = $this->getErrors();
-		$code   = $this->getStatusCode();
+    /**
+     * Saves an entity (either creating or updating)
+     *
+     * @param \stdClass $postParams
+     * @param ModelInterface $entity
+     * @param bool $isCreating
+     *
+     * @return bool if anything was changed
+     */
+    private function saveEntity(\stdClass $postParams, ModelInterface $entity, $isCreating) {
+        $save = new Save($this->request, $entity, $isCreating);
+        return $save->process($postParams);
+    }
 
-		$object = $this->addErrorsAndStatus($errors, $code, $object);
-		$this->response->setStatusCode($object->statusCode, 'Check Document Body For More Details');
-		$output->output($object, $this->response);
-	}
+    /**
+     * Finds the post parameters
+     * @param ModelInterface $entity
+     * @return Params
+     */
+    protected function findPostParams(ModelInterface $entity) {
+        //Entity is passed in so children can access it
+        $params = new Params($this->request);
+        $dataTransformer = $this->getDataTransformer($params);
+        if(!is_null($dataTransformer)) {
+            $dataTransformer->transform($entity);
+            $params = $dataTransformer->getParams();
+        }
+        return $params;
+    }
 
-	/**
-	 * addErrorsAndStatus
-	 * @param Exception[] $errors
-	 * @param int         $code
-	 * @param \stdClass $outputObject
-	 * @return \stdClass
-	 */
-	private function addErrorsAndStatus(array $errors, $code, \stdClass $outputObject) {
-		if(!empty($errors)) {
-			$outputErrors = array();
-			foreach($errors as $error) {
-				$outputErrors[] = $error->getMessage();
-				if($error->getCode()!=0) {
-					$code = $error->getCode();
-				}
-			}
-			$outputObject->errors = $outputErrors;
-		}
-		$outputObject->statusCode = $code;
-		return $outputObject;
-	}
+    /**
+     * Updates an entity
+     *
+     * @param ModelInterface $entity
+     *
+     * @return bool
+     *
+     * @throws Exception
+     */
+    protected function updateActionInternal(ModelInterface $entity) {
+        $params = new Params($this->request);
+        if(is_array($params->getParams())) {
+            throw new Exception('Bulk Updating is not supported: An array of objects was passed in', 400);
+        }
+        $isChanged = $this->saveEntity($params->getParams(), $entity, false);
+        if(!$isChanged) {
+            $this->setStatusCode(304); //Nothing is changed
+        }
+        return $isChanged;
+    }
 
-	/**
-	 * Adds the error message
-	 *
-	 * @param Exception $e
-	 *
-	 * @return void
-	 */
-	protected function handleError(Exception $e) {
-		$this->addError($e);
-	}
+    /**
+     * Deletes an individual entity
+     *
+     * @return void
+     */
+    public function deleteAction() {
+        try {
+            if(sizeOf($this->dispatcher->getParams()) == 0) {
+                throw new Exception('Invalid Entity Id Passed In', 400);
+            }
+            $entity = $this->validateEntityId($this->dispatcher->getParam(0));
+            $this->deleteActionInternal($entity);
+        } catch(Exception $e) {
+            $this->handleError($e);
+        } catch(ValidationException $e) {
+            $this->handleValidationError($e);
+        } catch(AclException $e) {
+            $this->handleAclError($e);
+        }
+    }
 
-	/**
-	 * Handles exceptions from validations
-	 *
-	 * @param ValidationException $e
-	 * @param int                 $errorCode
-	 *
-	 * @return void
-	 */
-	protected function handleValidationError(ValidationException $e, $errorCode=409) {
-		$entity = $e->getEntity();
-		foreach($entity->getMessages() as $message) {
-			$this->addError(new Exception($message->getMessage(), $errorCode));
-		}
-	}
+    /**
+     * Gets the Access Control Layer
+     * @return AclInterface
+     * @throws \Exception
+     */
+    public function getAcl() {
+        $returnVar = $this->getDi()->get(self::DI_NAME_ACL);
+        if(!($returnVar instanceof AclInterface)) {
+            throw new \Exception('The Acl must implement: ' . AclInterface::class);
+        }
+        return $returnVar;
+    }
 
-	/**
-	 * Handles exceptions from acl
-	 *
-	 * @param AclException $e
-	 *
-	 * @return void
-	 */
-	protected function handleAclError(AclException $e) {
-		$entity = $e->getEntity();
-		foreach($entity->getMessages() as $message) {
-			$this->addError(new Exception($message->getMessage(), 401));
-		}
-	}
+    /**
+     * Default delete action for our entities.
+     *
+     * @param ModelInterface $entity
+     *
+     * @return void
+     */
+    protected function deleteActionInternal(ModelInterface $entity) {
+        $this->setStatusCode(204);
+        $delete = new Delete($entity);
+        $delete->process($this->getAcl());
+    }
 
-	/**
-	 * Validates that they have a valid login
-	 * @return void
-	 * @throws Exception
-	 */
-	abstract protected function validateLogin();
+    /**
+     * This validates an entity id, and looks up the entity associated with it
+     *
+     * @param int $entityId
+     *
+     * @return ModelInterface
+     * @throws Exception
+     */
+    protected function validateEntityId($entityId) {
+        if(!is_numeric($entityId)) {
+            throw new Exception('Invalid Entity Id: Must be numeric', 400);
+        }
+        return $this->lookUpEntity($entityId);
+    }
+
+    /**
+     * This looks up an entity based off of the entity id
+     *
+     * @param int $entityId
+     *
+     * @throws Exception - If unable to find the entity, return a 404 to the user.
+     *
+     * @return ModelInterface
+     */
+    protected function lookUpEntity($entityId) {
+        $entity = $this->generateEntity();
+        $entityInstance = $entity->findFirst($entityId);
+        if($entityInstance === false) {
+            throw new Exception("Invalid Entity Id: Entity not found.", 404);
+        }
+        return $entityInstance;
+    }
+
+    /**
+     * Executed after it is routed
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function afterExecuteRoute() {
+        /** @var \Bullhorn\FastRest\Api\Services\Output\OutputInterface $output */
+        $output = $this->getDI()->get(self::DI_NAME_OUTPUT);
+        if(!($output instanceof OutputInterface)) {
+            throw new \Exception('The Output must implement: ' . OutputInterface::class);
+        }
+        $object = $this->getOutputObject();
+        $errors = $this->getErrors();
+        $code = $this->getStatusCode();
+
+        $object = $this->addErrorsAndStatus($errors, $code, $object);
+        $this->response->setStatusCode($object->statusCode, 'Check Document Body For More Details');
+        $output->output($object, $this->response);
+        $this->view->disable();
+    }
+
+    /**
+     * addErrorsAndStatus
+     * @param Exception[] $errors
+     * @param int $code
+     * @param \stdClass $outputObject
+     * @return \stdClass
+     */
+    private function addErrorsAndStatus(array $errors, $code, \stdClass $outputObject) {
+        if(!empty($errors)) {
+            $outputErrors = array();
+            foreach($errors as $error) {
+                $outputErrors[] = $error->getMessage();
+                if($error->getCode() != 0) {
+                    $code = $error->getCode();
+                }
+            }
+            $outputObject->errors = $outputErrors;
+        }
+        $outputObject->statusCode = $code;
+        return $outputObject;
+    }
+
+    /**
+     * Adds the error message
+     *
+     * @param Exception $e
+     *
+     * @return void
+     */
+    protected function handleError(Exception $e) {
+        $this->addError($e);
+    }
+
+    /**
+     * Handles exceptions from validations
+     *
+     * @param ValidationException $e
+     * @param int $errorCode
+     *
+     * @return void
+     */
+    protected function handleValidationError(ValidationException $e, $errorCode = 409) {
+        $entity = $e->getEntity();
+        foreach($entity->getMessages() as $message) {
+            $this->addError(new Exception($message->getMessage(), $errorCode));
+        }
+    }
+
+    /**
+     * Handles exceptions from acl
+     *
+     * @param AclException $e
+     *
+     * @return void
+     */
+    protected function handleAclError(AclException $e) {
+        $entity = $e->getEntity();
+        foreach($entity->getMessages() as $message) {
+            $this->addError(new Exception($message->getMessage(), 401));
+        }
+    }
+
+    /**
+     * Validates that they have a valid login
+     * @return void
+     * @throws Exception
+     */
+    abstract protected function validateLogin();
 
 }

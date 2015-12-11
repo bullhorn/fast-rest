@@ -1,5 +1,5 @@
 .idea/*
+*.iml
 composer.lock
-composer.phar
 /vendor
 /localTests
