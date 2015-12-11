@@ -8,7 +8,7 @@ before_install:
     - ./install
     - cd ../..
     - rm -rf cphalcon
-before_script: composer update
+before_script: composer install --dev
 addons:
     code_climate:
         repo_token: 87116a44b7c286b0e95599be7fd864f6116ab1beb8c38a39a0295e846323a5c5
