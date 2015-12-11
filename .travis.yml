@@ -8,5 +8,8 @@ before_install:
     - ./install
     - cd ../..
     - rm -rf cphalcon
-before_script: composer install
-script: phpunit --configuration tests/phpunit.xml --bootstrap tests/autoload.php
+before_script: composer update
+addons:
+    code_climate:
+        repo_token: 87116a44b7c286b0e95599be7fd864f6116ab1beb8c38a39a0295e846323a5c5
+script: phpunit --configuration tests/phpunit.xml --bootstrap tests/autoload.php  --coverage-clover build/logs/clover.xml
