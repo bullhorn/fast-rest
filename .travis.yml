@@ -9,4 +9,4 @@ before_install:
     - cd ../..
     - rm -rf cphalcon
 before_script: composer install
-script: phpunit --configuration tests/phpunit.xml
+script: phpunit --configuration tests/phpunit.xml --bootstrap tests/autoload.php
