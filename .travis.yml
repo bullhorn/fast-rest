@@ -10,4 +10,5 @@ before_install:
     - rm -rf cphalcon
 before_script: composer install --dev
 script: phpunit --configuration tests/phpunit.xml --bootstrap tests/autoload.php  --coverage-clover build/logs/clover.xml
-after_script: ./codeclimate.sh
+after_script:
+    - vendor/bin/test-reporter
