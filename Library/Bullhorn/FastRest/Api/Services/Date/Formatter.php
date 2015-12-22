@@ -30,17 +30,16 @@ class Formatter implements InjectionAwareInterface {
 
     }
 
-    /**
-     * getFormatter
-     * @return Formatter
-     */
-    public static function getDefault() {
-        if(is_null(self::$lastCreated)) {
-            return new self();
-        } else {
-            return self::$lastCreated;
-        }
-    }
+	/**
+	 * getFormatter
+	 * @return Formatter
+	 */
+	public static function getDefault() {
+		if(is_null(self::$lastCreated)) {
+			self::$lastCreated = new self();
+		}
+		return self::$lastCreated;
+	}
 
     /**
      * getMysqlDateFormat
