@@ -35,10 +35,9 @@ class Formatter implements InjectionAwareInterface {
 	 */
 	public static function getDefault() {
 		if(is_null(self::$lastCreated)) {
-			return new self();
-		} else {
-			return self::$lastCreated;
+			self::$lastCreated = new self();
 		}
+		return self::$lastCreated;
 	}
 
 	/**
