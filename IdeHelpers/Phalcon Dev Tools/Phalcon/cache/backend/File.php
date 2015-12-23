@@ -27,8 +27,7 @@ namespace Phalcon\Cache\Backend;
  * }
  * </code>
  */
-class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInterface
-{
+class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInterface {
     /**
      * Default to false for backwards compatibility
      *
@@ -40,12 +39,13 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
     /**
      * Phalcon\Cache\Backend\File constructor
      *
-     * @param	\Phalcon\Cache\FrontendInterface frontend
-     * @param	array options
+     * @param    \Phalcon\Cache\FrontendInterface frontend
+     * @param    array options
      * @param mixed $frontend
      * @param mixed $options
      */
-    public function __construct(\Phalcon\Cache\FrontendInterface $frontend, $options = null) {}
+    public function __construct(\Phalcon\Cache\FrontendInterface $frontend, $options = null) {
+    }
 
     /**
      * Returns a cached content
@@ -54,7 +54,8 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param int $lifetime
      * @return mixed
      */
-    public function get($keyName, $lifetime = null) {}
+    public function get($keyName, $lifetime = null) {
+    }
 
     /**
      * Stores cached content into the file backend and stops the frontend
@@ -64,7 +65,8 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param int $lifetime
      * @param boolean $stopBuffer
      */
-    public function save($keyName = null, $content = null, $lifetime = null, $stopBuffer = true) {}
+    public function save($keyName = null, $content = null, $lifetime = null, $stopBuffer = true) {
+    }
 
     /**
      * Deletes a value from the cache by its key
@@ -72,7 +74,8 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param int|string $keyName
      * @return boolean
      */
-    public function delete($keyName) {}
+    public function delete($keyName) {
+    }
 
     /**
      * Query the existing cached keys
@@ -80,7 +83,8 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param string|int $prefix
      * @return array
      */
-    public function queryKeys($prefix = null) {}
+    public function queryKeys($prefix = null) {
+    }
 
     /**
      * Checks if cache exists and it isn't expired
@@ -89,7 +93,8 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param int $lifetime
      * @return boolean
      */
-    public function exists($keyName = null, $lifetime = null) {}
+    public function exists($keyName = null, $lifetime = null) {
+    }
 
     /**
      * Increment of a given key, by number $value
@@ -98,7 +103,8 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param int $value
      * @return mixed
      */
-    public function increment($keyName = null, $value = 1) {}
+    public function increment($keyName = null, $value = 1) {
+    }
 
     /**
      * Decrement of a given key, by number $value
@@ -107,14 +113,16 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param int $value
      * @return mixed
      */
-    public function decrement($keyName = null, $value = 1) {}
+    public function decrement($keyName = null, $value = 1) {
+    }
 
     /**
      * Immediately invalidates all existing items.
      *
      * @return bool
      */
-    public function flush() {}
+    public function flush() {
+    }
 
     /**
      * Return a file-system safe identifier for a given key
@@ -122,7 +130,8 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param mixed $key
      * @return string
      */
-    public function getKey($key) {}
+    public function getKey($key) {
+    }
 
     /**
      * Set whether to use the safekey or not
@@ -130,6 +139,7 @@ class File extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInter
      * @param bool $useSafeKey
      * @return this
      */
-    public function useSafeKey($useSafeKey) {}
+    public function useSafeKey($useSafeKey) {
+    }
 
 }

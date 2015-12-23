@@ -4,25 +4,26 @@ use Phalcon\DI\FactoryDefault;
 use Bullhorn\FastRest\Generator\ControllerBuilder;
 use Bullhorn\FastRest\Generator\Configuration;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+
 require_once '/var/www/vendor/autoload.php';
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
 $di = FactoryDefault::getDefault();
 $di->set(
-	'YourService',
-	function() {
-		return new DbAdapter(
-			array(
-				'host'     => 'localhost',
-				'username' => 'root',
-				'password' => 'root',
-				'dbname'   => 'db',
-				'port'     => '3306'
+    'YourService',
+    function () {
+        return new DbAdapter(
+            array(
+                'host' => 'localhost',
+                'username' => 'root',
+                'password' => 'root',
+                'dbname' => 'db',
+                'port' => '3306'
 
-			)
-		);
-	}
+            )
+        );
+    }
 );
 
 $configuration = new Configuration();
@@ -42,4 +43,4 @@ $controllerBuilder = new ControllerBuilder($instanceConfiguration, $model);
 //Output to ui
 $controllerBuilder->output();
 //Return as a string to write directly
-file_put_contents('/var/www/web/app/controllers/Api/'.ucfirst(strtolower($model->getSource())).'sController.php', $controllerBuilder->__toString());
+file_put_contents('/var/www/web/app/controllers/Api/' . ucfirst(strtolower($model->getSource())) . 'sController.php', $controllerBuilder->__toString());

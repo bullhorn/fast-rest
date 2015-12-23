@@ -7,15 +7,15 @@ namespace Phalcon\Mvc\Collection\Behavior;
  * Instead of permanently delete a record it marks the record as
  * deleted changing the value of a flag column
  */
-class SoftDelete extends \Phalcon\Mvc\Collection\Behavior implements \Phalcon\Mvc\Collection\BehaviorInterface
-{
+class SoftDelete extends \Phalcon\Mvc\Collection\Behavior implements \Phalcon\Mvc\Collection\BehaviorInterface {
 
     /**
      * Listens for notifications from the models manager
      *
-     * @param string $type 
-     * @param mixed $model 
+     * @param string $type
+     * @param mixed $model
      */
-    public function notify($type, \Phalcon\Mvc\CollectionInterface $model) {}
+    public function notify($type, \Phalcon\Mvc\CollectionInterface $model) {
+    }
 
 }

@@ -6,8 +6,7 @@ namespace Phalcon\Annotations;
  * Phalcon\Annotations\Annotation
  * Represents a single annotation in an annotations collection
  */
-class Annotation
-{
+class Annotation {
     /**
      * Annotation Name
      *
@@ -33,76 +32,86 @@ class Annotation
     /**
      * Phalcon\Annotations\Annotation constructor
      *
-     * @param array $reflectionData 
+     * @param array $reflectionData
      */
-    public function __construct($reflectionData) {}
+    public function __construct($reflectionData) {
+    }
 
     /**
      * Returns the annotation's name
      *
-     * @return string 
+     * @return string
      */
-    public function getName() {}
+    public function getName() {
+    }
 
     /**
      * Resolves an annotation expression
      *
-     * @param array $expr 
-     * @return mixed 
+     * @param array $expr
+     * @return mixed
      */
-    public function getExpression($expr) {}
+    public function getExpression($expr) {
+    }
 
     /**
      * Returns the expression arguments without resolving
      *
-     * @return array 
+     * @return array
      */
-    public function getExprArguments() {}
+    public function getExprArguments() {
+    }
 
     /**
      * Returns the expression arguments
      *
-     * @return array 
+     * @return array
      */
-    public function getArguments() {}
+    public function getArguments() {
+    }
 
     /**
      * Returns the number of arguments that the annotation has
      *
-     * @return int 
+     * @return int
      */
-    public function numberArguments() {}
+    public function numberArguments() {
+    }
 
     /**
      * Returns an argument in a specific position
      *
-     * @param int|string $position 
-     * @return mixed 
+     * @param int|string $position
+     * @return mixed
      */
-    public function getArgument($position) {}
+    public function getArgument($position) {
+    }
 
     /**
      * Returns an argument in a specific position
      *
-     * @param int|string $position 
-     * @return boolean 
+     * @param int|string $position
+     * @return boolean
      */
-    public function hasArgument($position) {}
+    public function hasArgument($position) {
+    }
 
     /**
      * Returns a named argument
      *
-     * @param string $name 
-     * @return mixed 
+     * @param string $name
+     * @return mixed
      */
-    public function getNamedArgument($name) {}
+    public function getNamedArgument($name) {
+    }
 
     /**
      * Returns a named parameter
      *
-     * @param string $name 
-     * @return mixed 
+     * @param string $name
+     * @return mixed
      */
-    public function getNamedParameter($name) {}
+    public function getNamedParameter($name) {
+    }
 
 }

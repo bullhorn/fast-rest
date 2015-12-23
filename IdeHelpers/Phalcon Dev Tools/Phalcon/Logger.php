@@ -14,8 +14,7 @@ namespace Phalcon;
  * $logger->error("This is another error");
  * </code>
  */
-abstract class Logger
-{
+abstract class Logger {
 
     const SPECIAL = 9;
 

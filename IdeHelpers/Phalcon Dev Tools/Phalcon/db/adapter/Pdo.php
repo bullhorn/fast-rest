@@ -15,8 +15,7 @@ namespace Phalcon\Db\Adapter;
  * ));
  * </code>
  */
-abstract class Pdo extends \Phalcon\Db\Adapter
-{
+abstract class Pdo extends \Phalcon\Db\Adapter {
     /**
      * PDO Handler
      */
@@ -31,9 +30,10 @@ abstract class Pdo extends \Phalcon\Db\Adapter
     /**
      * Constructor for Phalcon\Db\Adapter\Pdo
      *
-     * @param array $descriptor 
+     * @param array $descriptor
      */
-    public function __construct($descriptor) {}
+    public function __construct($descriptor) {
+    }
 
     /**
      * This method is automatically called in Phalcon\Db\Adapter\Pdo constructor.
@@ -50,11 +50,12 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * $connection->connect();
      * </code>
      *
-     * @param mixed $descriptor 
+     * @param mixed $descriptor
      * @param  $array descriptor
-     * @return  
+     * @return
      */
-    public function connect($descriptor = null) {}
+    public function connect($descriptor = null) {
+    }
 
     /**
      * Returns a PDO prepared statement to be executed with 'executePrepared'
@@ -63,10 +64,11 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * $result = $connection->executePrepared($statement, array('name' => 'Voltron'));
      * </code>
      *
-     * @param string $sqlStatement 
-     * @return \PDOStatement 
+     * @param string $sqlStatement
+     * @return \PDOStatement
      */
-    public function prepare($sqlStatement) {}
+    public function prepare($sqlStatement) {
+    }
 
     /**
      * Executes a prepared statement binding. This function uses integer indexes starting from zero
@@ -75,12 +77,13 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * $result = $connection->executePrepared($statement, array('name' => 'Voltron'));
      * </code>
      *
-     * @param \PDOStatement $statement 
-     * @param array $placeholders 
-     * @param array $dataTypes 
-     * @return \PDOStatement 
+     * @param \PDOStatement $statement
+     * @param array $placeholders
+     * @param array $dataTypes
+     * @return \PDOStatement
      */
-    public function executePrepared(\PDOStatement $statement, $placeholders, $dataTypes) {}
+    public function executePrepared(\PDOStatement $statement, $placeholders, $dataTypes) {
+    }
 
     /**
      * Sends SQL statements to the database server returning the success state.
@@ -91,12 +94,13 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * $resultset = $connection->query("SELECTFROM robots WHERE type=?", array("mechanical"));
      * </code>
      *
-     * @param string $sqlStatement 
-     * @param mixed $bindParams 
-     * @param mixed $bindTypes 
-     * @return bool|\Phalcon\Db\ResultInterface 
+     * @param string $sqlStatement
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
+     * @return bool|\Phalcon\Db\ResultInterface
      */
-    public function query($sqlStatement, $bindParams = null, $bindTypes = null) {}
+    public function query($sqlStatement, $bindParams = null, $bindTypes = null) {
+    }
 
     /**
      * Sends SQL statements to the database server returning the success state.
@@ -107,12 +111,13 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * $success = $connection->execute("INSERT INTO robots VALUES (?, ?)", array(1, 'Astro Boy'));
      * </code>
      *
-     * @param string $sqlStatement 
-     * @param mixed $bindParams 
-     * @param mixed $bindTypes 
-     * @return bool 
+     * @param string $sqlStatement
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
+     * @return bool
      */
-    public function execute($sqlStatement, $bindParams = null, $bindTypes = null) {}
+    public function execute($sqlStatement, $bindParams = null, $bindTypes = null) {
+    }
 
     /**
      * Returns the number of affected rows by the lastest INSERT/UPDATE/DELETE executed in the database system
@@ -121,17 +126,19 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * echo $connection->affectedRows(), ' were deleted';
      * </code>
      *
-     * @return int 
+     * @return int
      */
-    public function affectedRows() {}
+    public function affectedRows() {
+    }
 
     /**
      * Closes the active connection returning success. Phalcon automatically closes and destroys
      * active connections when the request ends
      *
-     * @return bool 
+     * @return bool
      */
-    public function close() {}
+    public function close() {
+    }
 
     /**
      * Escapes a column/table/schema name
@@ -140,10 +147,11 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * $escapedTable = $connection->escapeIdentifier(array('store', 'robots'));
      * </code>
      *
-     * @param string $identifier 
-     * @return string 
+     * @param string $identifier
+     * @return string
      */
-    public function escapeIdentifier($identifier) {}
+    public function escapeIdentifier($identifier) {
+    }
 
     /**
      * Escapes a value to avoid SQL injections according to the active charset in the connection
@@ -151,10 +159,11 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * $escapedStr = $connection->escapeString('some dangerous value');
      * </code>
      *
-     * @param string $str 
-     * @return string 
+     * @param string $str
+     * @return string
      */
-    public function escapeString($str) {}
+    public function escapeString($str) {
+    }
 
     /**
      * Converts bound parameters such as :name: or ?1 into PDO bind params ?
@@ -162,11 +171,12 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * print_r($connection->convertBoundParams('SELECTFROM robots WHERE name = :name:', array('Bender')));
      * </code>
      *
-     * @param string $sql 
-     * @param array $params 
-     * @return array 
+     * @param string $sql
+     * @param array $params
+     * @return array
      */
-    public function convertBoundParams($sql, $params = array()) {}
+    public function convertBoundParams($sql, $params = array()) {
+    }
 
     /**
      * Returns the insert id for the auto_increment/serial column inserted in the lastest executed SQL statement
@@ -181,41 +191,46 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * $id = $connection->lastInsertId();
      * </code>
      *
-     * @param string $sequenceName 
-     * @return int|boolean 
+     * @param string $sequenceName
+     * @return int|boolean
      */
-    public function lastInsertId($sequenceName = null) {}
+    public function lastInsertId($sequenceName = null) {
+    }
 
     /**
      * Starts a transaction in the connection
      *
-     * @param bool $nesting 
-     * @return bool 
+     * @param bool $nesting
+     * @return bool
      */
-    public function begin($nesting = true) {}
+    public function begin($nesting = true) {
+    }
 
     /**
      * Rollbacks the active transaction in the connection
      *
-     * @param bool $nesting 
-     * @return bool 
+     * @param bool $nesting
+     * @return bool
      */
-    public function rollback($nesting = true) {}
+    public function rollback($nesting = true) {
+    }
 
     /**
      * Commits the active transaction in the connection
      *
-     * @param bool $nesting 
-     * @return bool 
+     * @param bool $nesting
+     * @return bool
      */
-    public function commit($nesting = true) {}
+    public function commit($nesting = true) {
+    }
 
     /**
      * Returns the current transaction nesting level
      *
-     * @return int 
+     * @return int
      */
-    public function getTransactionLevel() {}
+    public function getTransactionLevel() {
+    }
 
     /**
      * Checks whether the connection is under a transaction
@@ -224,22 +239,25 @@ abstract class Pdo extends \Phalcon\Db\Adapter
      * var_dump($connection->isUnderTransaction()); //true
      * </code>
      *
-     * @return bool 
+     * @return bool
      */
-    public function isUnderTransaction() {}
+    public function isUnderTransaction() {
+    }
 
     /**
      * Return internal PDO handler
      *
-     * @return \Pdo 
+     * @return \Pdo
      */
-    public function getInternalHandler() {}
+    public function getInternalHandler() {
+    }
 
     /**
      * Return the error info, if any
      *
-     * @return array 
+     * @return array
      */
-    public function getErrorInfo() {}
+    public function getErrorInfo() {
+    }
 
 }

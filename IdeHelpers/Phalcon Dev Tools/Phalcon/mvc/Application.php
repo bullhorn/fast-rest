@@ -37,8 +37,7 @@ namespace Phalcon\Mvc;
  * $application->main();
  * </code>
  */
-class Application extends \Phalcon\Di\Injectable
-{
+class Application extends \Phalcon\Di\Injectable {
 
     protected $_defaultModule;
 
@@ -52,18 +51,20 @@ class Application extends \Phalcon\Di\Injectable
     /**
      * Phalcon\Mvc\Application
      *
-     * @param mixed $dependencyInjector 
+     * @param mixed $dependencyInjector
      */
-    public function __construct(\Phalcon\DiInterface $dependencyInjector = null) {}
+    public function __construct(\Phalcon\DiInterface $dependencyInjector = null) {
+    }
 
     /**
      * By default. The view is implicitly buffering all the output
      * You can full disable the view component using this method
      *
-     * @param bool $implicitView 
-     * @return Application 
+     * @param bool $implicitView
+     * @return Application
      */
-    public function useImplicitView($implicitView) {}
+    public function useImplicitView($implicitView) {
+    }
 
     /**
      * Register an array of modules present in the application
@@ -80,48 +81,54 @@ class Application extends \Phalcon\Di\Injectable
      * ));
      * </code>
      *
-     * @param array $modules 
-     * @param bool $merge 
-     * @return Application 
+     * @param array $modules
+     * @param bool $merge
+     * @return Application
      */
-    public function registerModules($modules, $merge = false) {}
+    public function registerModules($modules, $merge = false) {
+    }
 
     /**
      * Return the modules registered in the application
      *
-     * @return array 
+     * @return array
      */
-    public function getModules() {}
+    public function getModules() {
+    }
 
     /**
      * Gets the module definition registered in the application via module name
      *
-     * @param string $name 
-     * @return array|object 
+     * @param string $name
+     * @return array|object
      */
-    public function getModule($name) {}
+    public function getModule($name) {
+    }
 
     /**
      * Sets the module name to be used if the router doesn't return a valid module
      *
-     * @param string $defaultModule 
-     * @return Application 
+     * @param string $defaultModule
+     * @return Application
      */
-    public function setDefaultModule($defaultModule) {}
+    public function setDefaultModule($defaultModule) {
+    }
 
     /**
      * Returns the default module name
      *
-     * @return string 
+     * @return string
      */
-    public function getDefaultModule() {}
+    public function getDefaultModule() {
+    }
 
     /**
      * Handles a MVC request
      *
-     * @param string $uri 
-     * @return \Phalcon\Http\ResponseInterface|boolean 
+     * @param string $uri
+     * @return \Phalcon\Http\ResponseInterface|boolean
      */
-    public function handle($uri = null) {}
+    public function handle($uri = null) {
+    }
 
 }

@@ -6,8 +6,7 @@ namespace Phalcon\Logger;
  * Phalcon\Logger\Adapter
  * Base class for Phalcon\Logger adapters
  */
-abstract class Adapter
-{
+abstract class Adapter {
     /**
      * Tells if there is an active transaction or not
      *
@@ -40,134 +39,150 @@ abstract class Adapter
     /**
      * Filters the logs sent to the handlers that are less or equal than a specific level
      *
-     * @param int $level 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param int $level
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function setLogLevel($level) {}
+    public function setLogLevel($level) {
+    }
 
     /**
      * Returns the current log level
      *
-     * @return int 
+     * @return int
      */
-    public function getLogLevel() {}
+    public function getLogLevel() {
+    }
 
     /**
      * Sets the message formatter
      *
-     * @param mixed $formatter 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param mixed $formatter
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function setFormatter(\Phalcon\Logger\FormatterInterface $formatter) {}
+    public function setFormatter(\Phalcon\Logger\FormatterInterface $formatter) {
+    }
 
     /**
      * Starts a transaction
      *
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function begin() {}
+    public function begin() {
+    }
 
     /**
      * Commits the internal transaction
      *
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function commit() {}
+    public function commit() {
+    }
 
     /**
      * Rollbacks the internal transaction
      *
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function rollback() {}
+    public function rollback() {
+    }
 
     /**
      * Returns the whether the logger is currently in an active transaction or not
      *
-     * @return bool 
+     * @return bool
      */
-    public function isTransaction() {}
+    public function isTransaction() {
+    }
 
     /**
      * Sends/Writes a critical message to the log
      *
-     * @param string $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param string $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function critical($message, $context = null) {}
+    public function critical($message, $context = null) {
+    }
 
     /**
      * Sends/Writes an emergency message to the log
      *
-     * @param string $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param string $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function emergency($message, $context = null) {}
+    public function emergency($message, $context = null) {
+    }
 
     /**
      * Sends/Writes a debug message to the log
      *
-     * @param string $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param string $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function debug($message, $context = null) {}
+    public function debug($message, $context = null) {
+    }
 
     /**
      * Sends/Writes an error message to the log
      *
-     * @param string $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param string $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function error($message, $context = null) {}
+    public function error($message, $context = null) {
+    }
 
     /**
      * Sends/Writes an info message to the log
      *
-     * @param string $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param string $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function info($message, $context = null) {}
+    public function info($message, $context = null) {
+    }
 
     /**
      * Sends/Writes a notice message to the log
      *
-     * @param string $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param string $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function notice($message, $context = null) {}
+    public function notice($message, $context = null) {
+    }
 
     /**
      * Sends/Writes a warning message to the log
      *
-     * @param string $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param string $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function warning($message, $context = null) {}
+    public function warning($message, $context = null) {
+    }
 
     /**
      * Sends/Writes an alert message to the log
      *
-     * @param string $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param string $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function alert($message, $context = null) {}
+    public function alert($message, $context = null) {
+    }
 
     /**
      * Logs messages to the internal logger. Appends logs to the logger
      *
-     * @param mixed $type 
-     * @param mixed $message 
-     * @param array $context 
-     * @return \Phalcon\Logger\AdapterInterface 
+     * @param mixed $type
+     * @param mixed $message
+     * @param array $context
+     * @return \Phalcon\Logger\AdapterInterface
      */
-    public function log($type, $message = null, $context = null) {}
+    public function log($type, $message = null, $context = null) {
+    }
 
 }

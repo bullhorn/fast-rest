@@ -1,0 +1,14 @@
+language: php
+php:
+    - 5.6
+before_install:
+    - phpenv config-add customPHP.ini
+    - git clone --depth=1 git://github.com/phalcon/cphalcon.git
+    - cd cphalcon/build
+    - ./install
+    - cd ../..
+    - rm -rf cphalcon
+before_script: composer install --dev
+script: phpunit --configuration tests/phpunit.xml --bootstrap tests/autoload.php  --coverage-clover build/logs/clover.xml
+after_script:
+    - ./vendor/bin/test-reporter

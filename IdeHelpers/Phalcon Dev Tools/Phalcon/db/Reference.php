@@ -14,8 +14,7 @@ namespace Phalcon\Db;
  * ));
  * </code>
  */
-class Reference implements \Phalcon\Db\ReferenceInterface
-{
+class Reference implements \Phalcon\Db\ReferenceInterface {
     /**
      * Constraint name
      *
@@ -68,65 +67,75 @@ class Reference implements \Phalcon\Db\ReferenceInterface
     /**
      * Constraint name
      *
-     * @return string 
+     * @return string
      */
-    public function getName() {}
+    public function getName() {
+    }
 
 
-    public function getSchemaName() {}
+    public function getSchemaName() {
+    }
 
 
-    public function getReferencedSchema() {}
+    public function getReferencedSchema() {
+    }
 
     /**
      * Referenced Table
      *
-     * @return string 
+     * @return string
      */
-    public function getReferencedTable() {}
+    public function getReferencedTable() {
+    }
 
     /**
      * Local reference columns
      *
-     * @return array 
+     * @return array
      */
-    public function getColumns() {}
+    public function getColumns() {
+    }
 
     /**
      * Referenced Columns
      *
-     * @return array 
+     * @return array
      */
-    public function getReferencedColumns() {}
+    public function getReferencedColumns() {
+    }
 
     /**
      * ON DELETE
      *
-     * @return array 
+     * @return array
      */
-    public function getOnDelete() {}
+    public function getOnDelete() {
+    }
 
     /**
      * ON UPDATE
      *
-     * @return array 
+     * @return array
      */
-    public function getOnUpdate() {}
+    public function getOnUpdate() {
+    }
 
     /**
      * Phalcon\Db\Reference constructor
      *
-     * @param string $name 
-     * @param array $definition 
+     * @param string $name
+     * @param array $definition
      */
-    public function __construct($name, $definition) {}
+    public function __construct($name, $definition) {
+    }
 
     /**
      * Restore a Phalcon\Db\Reference object from export
      *
-     * @param array $data 
-     * @return Reference 
+     * @param array $data
+     * @return Reference
      */
-    public static function __set_state($data) {}
+    public static function __set_state($data) {
+    }
 
 }

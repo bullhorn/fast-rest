@@ -20,8 +20,7 @@ namespace Phalcon\Db;
  * $connection->addColumn("robots", null, $column);
  * </code>
  */
-class Column implements \Phalcon\Db\ColumnInterface
-{
+class Column implements \Phalcon\Db\ColumnInterface {
     /**
      * Integer abstract type
      */
@@ -255,134 +254,153 @@ class Column implements \Phalcon\Db\ColumnInterface
     /**
      * Column's name
      *
-     * @return string 
+     * @return string
      */
-    public function getName() {}
+    public function getName() {
+    }
 
     /**
      * Schema which table related is
      *
-     * @return string 
+     * @return string
      */
-    public function getSchemaName() {}
+    public function getSchemaName() {
+    }
 
     /**
      * Column data type
      *
-     * @return int|string 
+     * @return int|string
      */
-    public function getType() {}
+    public function getType() {
+    }
 
     /**
      * Column data type reference
      *
-     * @return int 
+     * @return int
      */
-    public function getTypeReference() {}
+    public function getTypeReference() {
+    }
 
     /**
      * Column data type values
      *
-     * @return array|string 
+     * @return array|string
      */
-    public function getTypeValues() {}
+    public function getTypeValues() {
+    }
 
     /**
      * Integer column size
      *
-     * @return int 
+     * @return int
      */
-    public function getSize() {}
+    public function getSize() {
+    }
 
     /**
      * Integer column number scale
      *
-     * @return int 
+     * @return int
      */
-    public function getScale() {}
+    public function getScale() {
+    }
 
     /**
      * Default column value
      */
-    public function getDefault() {}
+    public function getDefault() {
+    }
 
     /**
      * Phalcon\Db\Column constructor
      *
-     * @param string $name 
-     * @param array $definition 
+     * @param string $name
+     * @param array $definition
      */
-    public function __construct($name, $definition) {}
+    public function __construct($name, $definition) {
+    }
 
     /**
      * Returns true if number column is unsigned
      *
-     * @return bool 
+     * @return bool
      */
-    public function isUnsigned() {}
+    public function isUnsigned() {
+    }
 
     /**
      * Not null
      *
-     * @return bool 
+     * @return bool
      */
-    public function isNotNull() {}
+    public function isNotNull() {
+    }
 
     /**
      * Column is part of the primary key?
      *
-     * @return bool 
+     * @return bool
      */
-    public function isPrimary() {}
+    public function isPrimary() {
+    }
 
     /**
      * Auto-Increment
      *
-     * @return bool 
+     * @return bool
      */
-    public function isAutoIncrement() {}
+    public function isAutoIncrement() {
+    }
 
     /**
      * Check whether column have an numeric type
      *
-     * @return bool 
+     * @return bool
      */
-    public function isNumeric() {}
+    public function isNumeric() {
+    }
 
     /**
      * Check whether column have first position in table
      *
-     * @return bool 
+     * @return bool
      */
-    public function isFirst() {}
+    public function isFirst() {
+    }
 
     /**
      * Check whether field absolute to position in table
      *
-     * @return string 
+     * @return string
      */
-    public function getAfterPosition() {}
+    public function getAfterPosition() {
+    }
 
     /**
      * Returns the type of bind handling
      *
-     * @return int 
+     * @return int
      */
-    public function getBindType() {}
+    public function getBindType() {
+    }
 
     /**
      * Restores the internal state of a Phalcon\Db\Column object
      *
-     * @param array $data 
-     * @return Column 
+     * @param array $data
+     * @return Column
      */
-    public static function __set_state($data) {}
+    public static function __set_state($data) {
+    }
 
     /**
      * Check whether column has default value
      *
-     * @return bool 
+     * @return bool
      */
-    public function hasDefault() {}
+    public function hasDefault() {
+    }
 
 }

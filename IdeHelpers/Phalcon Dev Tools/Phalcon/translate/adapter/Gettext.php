@@ -7,8 +7,7 @@ namespace Phalcon\Translate\Adapter;
  *
  * @package Phalcon\Translate\Adapter
  */
-class Gettext extends \Phalcon\Translate\Adapter implements \Phalcon\Translate\AdapterInterface, \ArrayAccess
-{
+class Gettext extends \Phalcon\Translate\Adapter implements \Phalcon\Translate\AdapterInterface, \ArrayAccess {
     /**
      * @var string|array
      */
@@ -33,122 +32,137 @@ class Gettext extends \Phalcon\Translate\Adapter implements \Phalcon\Translate\A
     /**
      * Phalcon\Translate\Adapter\Gettext constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function __construct($options) {}
+    public function __construct($options) {
+    }
 
     /**
      * Returns the translation related to the given key
      *
-     * @param string $index 
-     * @param array $placeholders 
-     * @param string $domain 
-     * @return string 
+     * @param string $index
+     * @param array $placeholders
+     * @param string $domain
+     * @return string
      */
-    public function query($index, $placeholders = null) {}
+    public function query($index, $placeholders = null) {
+    }
 
     /**
      * Check whether is defined a translation key in the internal array
      *
-     * @param string $index 
-     * @return bool 
+     * @param string $index
+     * @return bool
      */
-    public function exists($index) {}
+    public function exists($index) {
+    }
 
     /**
      * The plural version of gettext().
      * Some languages have more than one form for plural messages dependent on the count.
      *
-     * @param string $msgid1 
-     * @param string $msgid2 
-     * @param int $count 
-     * @param array $placeholders 
-     * @param string $domain 
-     * @return string 
+     * @param string $msgid1
+     * @param string $msgid2
+     * @param int $count
+     * @param array $placeholders
+     * @param string $domain
+     * @return string
      */
-    public function nquery($msgid1, $msgid2, $count, $placeholders = null, $domain = null) {}
+    public function nquery($msgid1, $msgid2, $count, $placeholders = null, $domain = null) {
+    }
 
     /**
      * Changes the current domain (i.e. the translation file). The passed domain must be one
      * of those passed to the constructor.
      *
      * @throws \InvalidArgumentException
-     * @param string $domain 
+     * @param string $domain
      * @return string the new current domain.
      */
-    public function setDomain($domain) {}
+    public function setDomain($domain) {
+    }
 
     /**
      * Sets the default domain
      *
      * @return string the new current domain.
      */
-    public function resetDomain() {}
+    public function resetDomain() {
+    }
 
     /**
      * Sets the domain default to search within when calls are made to gettext()
      *
-     * @param string $domain 
+     * @param string $domain
      */
-    public function setDefaultDomain($domain) {}
+    public function setDefaultDomain($domain) {
+    }
 
     /**
      * Gets the default domain
      *
-     * @return string 
+     * @return string
      */
-    public function getDefaultDomain() {}
+    public function getDefaultDomain() {
+    }
 
     /**
      * Sets the path for a domain
      *
-     * @param mixed $directory 
+     * @param mixed $directory
      */
-    public function setDirectory($directory) {}
+    public function setDirectory($directory) {
+    }
 
     /**
      * Gets the path for a domain
      *
-     * @param mixed $directory 
-     * @return string|array 
+     * @param mixed $directory
+     * @return string|array
      */
-    public function getDirectory($directory) {}
+    public function getDirectory($directory) {
+    }
 
     /**
      * Sets locale information
      *
-     * @param int $category 
-     * @param string $locale 
-     * @return string|bool 
+     * @param int $category
+     * @param string $locale
+     * @return string|bool
      */
-    public function setLocale($category, $locale) {}
+    public function setLocale($category, $locale) {
+    }
 
     /**
      * Gets locale
      *
-     * @return string 
+     * @return string
      */
-    public function getLocale() {}
+    public function getLocale() {
+    }
 
     /**
      * Gets locale category
      *
-     * @return int 
+     * @return int
      */
-    public function getCategory() {}
+    public function getCategory() {
+    }
 
     /**
      * Validator for constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    protected function prepareOptions($options) {}
+    protected function prepareOptions($options) {
+    }
 
     /**
      * Gets default options
      *
-     * @return array 
+     * @return array
      */
-    protected function getOptionsDefault() {}
+    protected function getOptionsDefault() {
+    }
 
 }

@@ -15,8 +15,7 @@ namespace Phalcon\Cache\Backend;
  * $data = $cache->get('my-data');
  * </code>
  */
-class Memory extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInterface, \Serializable
-{
+class Memory extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInterface, \Serializable {
 
     protected $_data;
 
@@ -24,86 +23,96 @@ class Memory extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInt
     /**
      * Returns a cached content
      *
-     * @param mixed $keyName 
-     * @param long $lifetime 
+     * @param mixed $keyName
+     * @param long $lifetime
      * @param  $string keyName
-     * @return mixed 
+     * @return mixed
      */
-    public function get($keyName, $lifetime = null) {}
+    public function get($keyName, $lifetime = null) {
+    }
 
     /**
      * Stores cached content into the backend and stops the frontend
      *
-     * @param string $keyName 
-     * @param string $content 
-     * @param long $lifetime 
-     * @param boolean $stopBuffer 
+     * @param string $keyName
+     * @param string $content
+     * @param long $lifetime
+     * @param boolean $stopBuffer
      */
-    public function save($keyName = null, $content = null, $lifetime = null, $stopBuffer = true) {}
+    public function save($keyName = null, $content = null, $lifetime = null, $stopBuffer = true) {
+    }
 
     /**
      * Deletes a value from the cache by its key
      *
-     * @param string $keyName 
-     * @return boolean 
+     * @param string $keyName
+     * @return boolean
      */
-    public function delete($keyName) {}
+    public function delete($keyName) {
+    }
 
     /**
      * Query the existing cached keys
      *
-     * @param string|int $prefix 
-     * @return array 
+     * @param string|int $prefix
+     * @return array
      */
-    public function queryKeys($prefix = null) {}
+    public function queryKeys($prefix = null) {
+    }
 
     /**
      * Checks if cache exists and it hasn't expired
      *
-     * @param string|int $keyName 
-     * @param long $lifetime 
-     * @return boolean 
+     * @param string|int $keyName
+     * @param long $lifetime
+     * @return boolean
      */
-    public function exists($keyName = null, $lifetime = null) {}
+    public function exists($keyName = null, $lifetime = null) {
+    }
 
     /**
      * Increment of given $keyName by $value
      *
-     * @param string $keyName 
-     * @param mixed $value 
-     * @param long $lifetime 
-     * @return long 
+     * @param string $keyName
+     * @param mixed $value
+     * @param long $lifetime
+     * @return long
      */
-    public function increment($keyName = null, $value = null) {}
+    public function increment($keyName = null, $value = null) {
+    }
 
     /**
      * Decrement of $keyName by given $value
      *
-     * @param string $keyName 
-     * @param long $value 
-     * @return long 
+     * @param string $keyName
+     * @param long $value
+     * @return long
      */
-    public function decrement($keyName = null, $value = null) {}
+    public function decrement($keyName = null, $value = null) {
+    }
 
     /**
      * Immediately invalidates all existing items.
      *
-     * @return bool 
+     * @return bool
      */
-    public function flush() {}
+    public function flush() {
+    }
 
     /**
      * Required for interface \Serializable
      *
-     * @return string 
+     * @return string
      */
-    public function serialize() {}
+    public function serialize() {
+    }
 
     /**
      * Required for interface \Serializable
      *
-     * @param mixed $data 
+     * @param mixed $data
      */
-    public function unserialize($data) {}
+    public function unserialize($data) {
+    }
 
 }

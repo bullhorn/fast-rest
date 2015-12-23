@@ -12,8 +12,7 @@ namespace Phalcon\Session;
  * $user->age  = 22;
  * </code>
  */
-class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagInterface, \IteratorAggregate, \ArrayAccess, \Countable
-{
+class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagInterface, \IteratorAggregate, \ArrayAccess, \Countable {
 
     protected $_dependencyInjector;
 
@@ -33,28 +32,32 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
     /**
      * Phalcon\Session\Bag constructor
      *
-     * @param string $name 
+     * @param string $name
      */
-    public function __construct($name) {}
+    public function __construct($name) {
+    }
 
     /**
      * Sets the DependencyInjector container
      *
-     * @param mixed $dependencyInjector 
+     * @param mixed $dependencyInjector
      */
-    public function setDI(\Phalcon\DiInterface $dependencyInjector) {}
+    public function setDI(\Phalcon\DiInterface $dependencyInjector) {
+    }
 
     /**
      * Returns the DependencyInjector container
      *
-     * @return \Phalcon\DiInterface 
+     * @return \Phalcon\DiInterface
      */
-    public function getDI() {}
+    public function getDI() {
+    }
 
     /**
      * Initializes the session bag. This method must not be called directly, the class calls it when its internal data is accesed
      */
-    public function initialize() {}
+    public function initialize() {
+    }
 
     /**
      * Destroyes the session bag
@@ -62,7 +65,8 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * $user->destroy();
      * </code>
      */
-    public function destroy() {}
+    public function destroy() {
+    }
 
     /**
      * Sets a value in the session bag
@@ -70,10 +74,11 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * $user->set('name', 'Kimbra');
      * </code>
      *
-     * @param string $property 
-     * @param mixed $value 
+     * @param string $property
+     * @param mixed $value
      */
-    public function set($property, $value) {}
+    public function set($property, $value) {
+    }
 
     /**
      * Magic setter to assign values to the session bag
@@ -81,10 +86,11 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * $user->name = "Kimbra";
      * </code>
      *
-     * @param string $property 
-     * @param mixed $value 
+     * @param string $property
+     * @param mixed $value
      */
-    public function __set($property, $value) {}
+    public function __set($property, $value) {
+    }
 
     /**
      * Obtains a value from the session bag optionally setting a default value
@@ -92,10 +98,11 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * echo $user->get('name', 'Kimbra');
      * </code>
      *
-     * @param string $property 
-     * @param mixed $defaultValue 
+     * @param string $property
+     * @param mixed $defaultValue
      */
-    public function get($property, $defaultValue = null) {}
+    public function get($property, $defaultValue = null) {
+    }
 
     /**
      * Magic getter to obtain values from the session bag
@@ -103,9 +110,10 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * echo $user->name;
      * </code>
      *
-     * @param string $property 
+     * @param string $property
      */
-    public function __get($property) {}
+    public function __get($property) {
+    }
 
     /**
      * Check whether a property is defined in the internal bag
@@ -113,10 +121,11 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * var_dump($user->has('name'));
      * </code>
      *
-     * @param string $property 
-     * @return bool 
+     * @param string $property
+     * @return bool
      */
-    public function has($property) {}
+    public function has($property) {
+    }
 
     /**
      * Magic isset to check whether a property is defined in the bag
@@ -124,10 +133,11 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * var_dump(isset($user['name']));
      * </code>
      *
-     * @param string $property 
-     * @return bool 
+     * @param string $property
+     * @return bool
      */
-    public function __isset($property) {}
+    public function __isset($property) {
+    }
 
     /**
      * Removes a property from the internal bag
@@ -135,10 +145,11 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * $user->remove('name');
      * </code>
      *
-     * @param string $property 
-     * @return bool 
+     * @param string $property
+     * @return bool
      */
-    public function remove($property) {}
+    public function remove($property) {
+    }
 
     /**
      * Magic unset to remove items using the array syntax
@@ -146,10 +157,11 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * unset($user['name']);
      * </code>
      *
-     * @param string $property 
-     * @return bool 
+     * @param string $property
+     * @return bool
      */
-    public function __unset($property) {}
+    public function __unset($property) {
+    }
 
     /**
      * Return length of bag
@@ -157,36 +169,42 @@ class Bag implements \Phalcon\Di\InjectionAwareInterface, \Phalcon\Session\BagIn
      * echo $user->count();
      * </code>
      *
-     * @return int 
+     * @return int
      */
-    public final function count() {}
+    public final function count() {
+    }
 
     /**
      *  Returns the bag iterator
      *
-     * @return \ArrayIterator 
+     * @return \ArrayIterator
      */
-    public final function getIterator() {}
+    public final function getIterator() {
+    }
 
     /**
-     * @param string $property 
-     * @param mixed $value 
+     * @param string $property
+     * @param mixed $value
      */
-    public final function offsetSet($property, $value) {}
+    public final function offsetSet($property, $value) {
+    }
 
     /**
-     * @param string $property 
+     * @param string $property
      */
-    public final function offsetExists($property) {}
+    public final function offsetExists($property) {
+    }
 
     /**
-     * @param string $property 
+     * @param string $property
      */
-    public final function offsetUnset($property) {}
+    public final function offsetUnset($property) {
+    }
 
     /**
-     * @param string $property 
+     * @param string $property
      */
-    public final function offsetGet($property) {}
+    public final function offsetGet($property) {
+    }
 
 }
