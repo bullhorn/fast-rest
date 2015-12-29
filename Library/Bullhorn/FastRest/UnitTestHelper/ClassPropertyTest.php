@@ -170,6 +170,10 @@ class ClassPropertyTest {
                 return $this->findEnumOptionsForField($field);
                 break;
             default:
+
+                if(strpos($rawType, '|') !== false) {
+                    $rawType = substr($rawType, 0, strpos($rawType, '|'));
+                }
                 if(preg_match('/^(?P<arrayType>.*)\[\]$/', $rawType, $matches)) {
                     $values = $this->findDefaultsForType($matches['arrayType'], $field);
                     $returnVar = [];
