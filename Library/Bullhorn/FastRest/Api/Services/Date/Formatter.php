@@ -145,9 +145,6 @@ class Formatter implements InjectionAwareInterface {
         if(!in_array($currentFormat, $allowedFormats)) {
             throw new InvalidArgumentException('Invalid Date Format: ' . $currentFormat . ', expected: ' . implode(', ', $allowedFormats));
         }
-        if($currentFormat == $this->getCurrentFormat()) {
-            return; //No Changes
-        }
 
         $allFormats = $this->getPreviousFormats();
         $allFormats[] = $this->getCurrentFormat();
