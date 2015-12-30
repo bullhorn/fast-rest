@@ -26,8 +26,17 @@ class Formatter implements InjectionAwareInterface {
      * Constructor
      */
     public function __construct() {
-        $this->setCurrentFormat(self::DATE_FORMAT_US);
+        $this->reset();
+    }
 
+    /**
+     * reset
+     * @return void
+     */
+    public function reset() {
+        $this->currentFormat = self::DATE_FORMAT_US;
+        $this->setPreviousFormats([]);
+        $this->setWeekOffset(0);
     }
 
 	/**

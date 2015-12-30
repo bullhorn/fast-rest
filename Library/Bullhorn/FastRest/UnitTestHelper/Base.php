@@ -1,6 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\UnitTestHelper;
 
+use Bullhorn\FastRest\Api\Services\Date\Formatter;
 use Bullhorn\FastRest\DependencyInjection;
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
@@ -93,6 +94,7 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
         }
         $_POST = [];
         $_GET = [];
+        Formatter::getDefault()->reset();
         $this->setStartingServices($this->getDi()->getServices());
         $dbMock = new MockDbAdapter([]);
         $dbMock->setPhalconHelperNamespace($this->getPhalconHelperNamespace());
