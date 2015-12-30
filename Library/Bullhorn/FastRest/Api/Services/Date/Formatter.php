@@ -26,8 +26,17 @@ class Formatter implements InjectionAwareInterface {
      * Constructor
      */
     public function __construct() {
-        $this->setCurrentFormat(self::DATE_FORMAT_US);
+        $this->reset();
+    }
 
+    /**
+     * reset
+     * @return void
+     */
+    public function reset() {
+        $this->currentFormat = self::DATE_FORMAT_US;
+        $this->setPreviousFormats([]);
+        $this->setWeekOffset(0);
     }
 
 	/**
@@ -144,9 +153,6 @@ class Formatter implements InjectionAwareInterface {
         $allowedFormats = $this->getAllowedFormats();
         if(!in_array($currentFormat, $allowedFormats)) {
             throw new InvalidArgumentException('Invalid Date Format: ' . $currentFormat . ', expected: ' . implode(', ', $allowedFormats));
-        }
-        if($currentFormat == $this->getCurrentFormat()) {
-            return; //No Changes
         }
 
         $allFormats = $this->getPreviousFormats();
