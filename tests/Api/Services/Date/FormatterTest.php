@@ -9,6 +9,10 @@ use InvalidArgumentException;
 
 class FormatterTest extends Base {
 
+    /**
+     * testGetDefault_returnsCachedSelf
+     * @return void
+     */
 	public function testGetDefault_returnsCachedSelf() {
 		//arrange
 		$originalFormatter = Formatter::getDefault();
@@ -21,10 +25,31 @@ class FormatterTest extends Base {
 	}
 
     /**
+     * testReset
+     * @return void
+     */
+    public function testReset() {
+        //Arrange
+        $formatter = Formatter::getDefault();
+        $formatter->setCurrentFormat(Formatter::DATE_FORMAT_UK);
+        $formatter->setCurrentFormat(Formatter::DATE_FORMAT_EURO);
+        $formatter->setWeekOffset(2);
+
+        //Act
+        $formatter->reset();
+
+        //Assert
+        $this->assertEquals(Formatter::DATE_FORMAT_US, $formatter->getCurrentFormat());
+        $this->assertEquals(0, $formatter->getWeekOffset());
+        $formatter->revertFormat();
+        $this->assertEquals(Formatter::DATE_FORMAT_US, $formatter->getCurrentFormat());
+    }
+
+    /**
      * testCurrentFormat_setAndRevertDuplicateNonDefaultFormats
      *
-     * @param $formats
-     * @param $expectedEndFormat
+     * @param string[] $formats
+     * @param string   $expectedEndFormat
      *
      * @dataProvider duplicateFormats
      *
@@ -60,7 +85,11 @@ class FormatterTest extends Base {
         $dateFormatter->setCurrentFormat("some non sense");
     }
 
-    public function duplicateFormats(){
+    /**
+     * duplicateFormats
+     * @return array
+     */
+    public function duplicateFormats() {
         return [
             [[Formatter::DATE_FORMAT_UK, Formatter::DATE_FORMAT_UK], Formatter::DATE_FORMAT_UK],
             [[Formatter::DATE_FORMAT_EURO, Formatter::DATE_FORMAT_EURO], Formatter::DATE_FORMAT_EURO],
