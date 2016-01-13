@@ -2,8 +2,9 @@
 namespace Tests\Api\Services\Database;
 use Bullhorn\FastRest\Api\Services\Database\DbAdapter;
 use PDOException;
+use Bullhorn\FastRest\UnitTestHelper\Base as UnitTestHelperBase;
 
-class DbAdapterTest extends \General_BaseTest {
+class DbAdapterTest extends UnitTestHelperBase {
 	const MYSQL_HAS_GONE_AWAY_ERROR_MESSAGE = 'SQLSTATE[HY000]: General error: 2006 MySQL server has gone away';
 
 	private $mockSqlStatement = "mock sql";
