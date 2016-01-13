@@ -60,7 +60,7 @@ abstract class Base extends Controller {
      * @throws \Exception
      */
     private function validateServicesDefined() {
-        if(!$this->getDi()->has(self::DI_NAME_ACL)) {
+        if(!$this->getDi()->has(AclInterface::DI_NAME)) {
             throw new \Exception('Service ' . self::class . '::DI_NAME_ACL must be defined with a type of: ' . AclInterface::class);
         }
         if(!$this->getDi()->has(self::DI_NAME_OUTPUT)) {
@@ -474,7 +474,7 @@ abstract class Base extends Controller {
      * @throws \Exception
      */
     public function getAcl() {
-        $returnVar = $this->getDi()->get(self::DI_NAME_ACL);
+        $returnVar = $this->getDi()->get(AclInterface::DI_NAME);
         if(!($returnVar instanceof AclInterface)) {
             throw new \Exception('The Acl must implement: ' . AclInterface::class);
         }
