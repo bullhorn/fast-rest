@@ -20,8 +20,7 @@ namespace Phalcon\Session\Adapter;
  * echo $session->get('var');
  * </code>
  */
-class Redis extends \Phalcon\Session\Adapter implements \Phalcon\Session\AdapterInterface
-{
+class Redis extends \Phalcon\Session\Adapter implements \Phalcon\Session\AdapterInterface {
 
     protected $_redis = null;
 
@@ -29,52 +28,60 @@ class Redis extends \Phalcon\Session\Adapter implements \Phalcon\Session\Adapter
     protected $_lifetime = 8600;
 
 
+    public function getRedis() {
+    }
 
-    public function getRedis() {}
 
-
-    public function getLifetime() {}
+    public function getLifetime() {
+    }
 
     /**
      * Phalcon\Session\Adapter\Redis constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function __construct($options = array()) {}
+    public function __construct($options = array()) {
+    }
 
 
-    public function open() {}
+    public function open() {
+    }
 
 
-    public function close() {}
+    public function close() {
+    }
 
     /**
      * {@inheritdoc}
      *
-     * @param string $sessionId 
-     * @return mixed 
+     * @param string $sessionId
+     * @return mixed
      */
-    public function read($sessionId) {}
+    public function read($sessionId) {
+    }
 
     /**
      * {@inheritdoc}
      *
-     * @param string $sessionId 
-     * @param string $data 
+     * @param string $sessionId
+     * @param string $data
      */
-    public function write($sessionId, $data) {}
+    public function write($sessionId, $data) {
+    }
 
     /**
      * {@inheritdoc}
      *
-     * @param string $sessionId 
-     * @return boolean 
+     * @param string $sessionId
+     * @return boolean
      */
-    public function destroy($sessionId = null) {}
+    public function destroy($sessionId = null) {
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function gc() {}
+    public function gc() {
+    }
 
 }

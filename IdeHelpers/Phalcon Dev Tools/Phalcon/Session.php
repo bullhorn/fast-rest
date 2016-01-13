@@ -17,7 +17,6 @@ namespace Phalcon;
  * echo $session->get('var');
  * </code>
  */
-abstract class Session
-{
+abstract class Session {
 
 }

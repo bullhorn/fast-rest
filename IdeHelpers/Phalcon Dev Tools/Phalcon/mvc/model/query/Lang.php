@@ -16,15 +16,15 @@ namespace Phalcon\Mvc\Model\Query;
  * $intermediate = Phalcon\Mvc\Model\Query\Lang::parsePHQL("SELECT r.* FROM Robots r LIMIT 10");
  * </code>
  */
-abstract class Lang
-{
+abstract class Lang {
 
     /**
      * Parses a PHQL statement returning an intermediate representation (IR)
      *
-     * @param string $phql 
-     * @return string 
+     * @param string $phql
+     * @return string
      */
-    public static function parsePHQL($phql) {}
+    public static function parsePHQL($phql) {
+    }
 
 }

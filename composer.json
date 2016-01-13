@@ -23,7 +23,8 @@
   "require-dev": {
     "phalcon/incubator": "dev-master",
 	"phpunit/phpunit": "5.0.*",
-	"phpunit/php-code-coverage": "dev-master#b8436b000263f6d72fbad1d36890e247ce84857e"
+	"phpunit/php-code-coverage": "dev-master#b8436b000263f6d72fbad1d36890e247ce84857e",
+    "codeclimate/php-test-reporter": "dev-master"
   },
   "autoload": {
     "psr-0": {

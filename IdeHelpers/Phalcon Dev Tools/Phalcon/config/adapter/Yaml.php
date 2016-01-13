@@ -26,16 +26,16 @@ namespace Phalcon\Config\Adapter;
  * echo $config->models->metadata;
  * </code>
  */
-class Yaml extends \Phalcon\Config
-{
+class Yaml extends \Phalcon\Config {
 
     /**
      * Phalcon\Config\Adapter\Yaml constructor
      *
      * @throws \Phalcon\Config\Exception
-     * @param string $filePath 
-     * @param array $callbacks 
+     * @param string $filePath
+     * @param array $callbacks
      */
-    public function __construct($filePath, $callbacks = null) {}
+    public function __construct($filePath, $callbacks = null) {
+    }
 
 }

@@ -18,8 +18,7 @@ namespace Phalcon\Cli;
  * echo $router->getTaskName();
  * </code>
  */
-class Router implements \Phalcon\Di\InjectionAwareInterface
-{
+class Router implements \Phalcon\Di\InjectionAwareInterface {
 
     protected $_dependencyInjector;
 
@@ -63,44 +62,50 @@ class Router implements \Phalcon\Di\InjectionAwareInterface
     /**
      * Phalcon\Cli\Router constructor
      *
-     * @param bool $defaultRoutes 
+     * @param bool $defaultRoutes
      */
-    public function __construct($defaultRoutes = true) {}
+    public function __construct($defaultRoutes = true) {
+    }
 
     /**
      * Sets the dependency injector
      *
-     * @param mixed $dependencyInjector 
+     * @param mixed $dependencyInjector
      */
-    public function setDI(\Phalcon\DiInterface $dependencyInjector) {}
+    public function setDI(\Phalcon\DiInterface $dependencyInjector) {
+    }
 
     /**
      * Returns the internal dependency injector
      *
-     * @return \Phalcon\DiInterface 
+     * @return \Phalcon\DiInterface
      */
-    public function getDI() {}
+    public function getDI() {
+    }
 
     /**
      * Sets the name of the default module
      *
-     * @param string $moduleName 
+     * @param string $moduleName
      */
-    public function setDefaultModule($moduleName) {}
+    public function setDefaultModule($moduleName) {
+    }
 
     /**
      * Sets the default controller name
      *
-     * @param string $taskName 
+     * @param string $taskName
      */
-    public function setDefaultTask($taskName) {}
+    public function setDefaultTask($taskName) {
+    }
 
     /**
      * Sets the default action name
      *
-     * @param string $actionName 
+     * @param string $actionName
      */
-    public function setDefaultAction($actionName) {}
+    public function setDefaultAction($actionName) {
+    }
 
     /**
      * Sets an array of default paths. If a route is missing a path the router will use the defined here
@@ -112,17 +117,19 @@ class Router implements \Phalcon\Di\InjectionAwareInterface
      * ));
      * </code>
      *
-     * @param array $defaults 
-     * @return Router 
+     * @param array $defaults
+     * @return Router
      */
-    public function setDefaults($defaults) {}
+    public function setDefaults($defaults) {
+    }
 
     /**
      * Handles routing information received from command-line arguments
      *
-     * @param array $arguments 
+     * @param array $arguments
      */
-    public function handle($arguments = null) {}
+    public function handle($arguments = null) {
+    }
 
     /**
      * Adds a route to the router
@@ -130,82 +137,93 @@ class Router implements \Phalcon\Di\InjectionAwareInterface
      * $router->add('/about', 'About::main');
      * </code>
      *
-     * @param string $pattern 
-     * @param string/array $paths 
-     * @return \Phalcon\Cli\Router\Route 
+     * @param string $pattern
+     * @param string /array $paths
+     * @return \Phalcon\Cli\Router\Route
      */
-    public function add($pattern, $paths = null) {}
+    public function add($pattern, $paths = null) {
+    }
 
     /**
      * Returns proccesed module name
      *
-     * @return string 
+     * @return string
      */
-    public function getModuleName() {}
+    public function getModuleName() {
+    }
 
     /**
      * Returns proccesed task name
      *
-     * @return string 
+     * @return string
      */
-    public function getTaskName() {}
+    public function getTaskName() {
+    }
 
     /**
      * Returns proccesed action name
      *
-     * @return string 
+     * @return string
      */
-    public function getActionName() {}
+    public function getActionName() {
+    }
 
     /**
      * Returns proccesed extra params
      *
-     * @return array 
+     * @return array
      */
-    public function getParams() {}
+    public function getParams() {
+    }
 
     /**
      * Returns the route that matchs the handled URI
      *
-     * @return \Phalcon\Cli\Router\Route 
+     * @return \Phalcon\Cli\Router\Route
      */
-    public function getMatchedRoute() {}
+    public function getMatchedRoute() {
+    }
 
     /**
      * Returns the sub expressions in the regular expression matched
      *
-     * @return array 
+     * @return array
      */
-    public function getMatches() {}
+    public function getMatches() {
+    }
 
     /**
      * Checks if the router macthes any of the defined routes
      *
-     * @return bool 
+     * @return bool
      */
-    public function wasMatched() {}
+    public function wasMatched() {
+    }
 
     /**
      * Returns all the routes defined in the router
      *
-     * @return \Phalcon\Cli\Router\Route 
+     * @return \Phalcon\Cli\Router\Route
      */
-    public function getRoutes() {}
+    public function getRoutes() {
+    }
 
     /**
      * Returns a route object by its id
      *
-     * @param int $id 
-     * @return \Phalcon\Cli\Router\Route 
+     * @param int $id
+     * @return \Phalcon\Cli\Router\Route
      */
-    public function getRouteById($id) {}
+    public function getRouteById($id) {
+    }
 
     /**
      * Returns a route object by its name
      *
-     * @param string $name 
-     * @return bool|\Phalcon\Cli\Router\Route 
+     * @param string $name
+     * @return bool|\Phalcon\Cli\Router\Route
      */
-    public function getRouteByName($name) {}
+    public function getRouteByName($name) {
+    }
 
 }

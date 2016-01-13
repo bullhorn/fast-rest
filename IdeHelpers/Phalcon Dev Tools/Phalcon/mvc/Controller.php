@@ -27,12 +27,12 @@ namespace Phalcon\Mvc;
  * }
  * </code>
  */
-abstract class Controller extends \Phalcon\Di\Injectable implements \Phalcon\Mvc\ControllerInterface
-{
+abstract class Controller extends \Phalcon\Di\Injectable implements \Phalcon\Mvc\ControllerInterface {
 
     /**
      * Phalcon\Mvc\Controller constructor
      */
-    public final function __construct() {}
+    public final function __construct() {
+    }
 
 }

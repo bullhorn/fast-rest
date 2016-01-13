@@ -12,24 +12,25 @@ namespace Phalcon\Validation\Validator;
  * )));
  * </code>
  */
-class CreditCard extends \Phalcon\Validation\Validator
-{
+class CreditCard extends \Phalcon\Validation\Validator {
 
     /**
      * Executes the validation
      *
-     * @param mixed $validation 
-     * @param string $field 
-     * @return bool 
+     * @param mixed $validation
+     * @param string $field
+     * @return bool
      */
-    public function validate(\Phalcon\Validation $validation, $field) {}
+    public function validate(\Phalcon\Validation $validation, $field) {
+    }
 
     /**
      * is a simple checksum formula used to validate a variety of identification numbers
      *
-     * @param string $number 
-     * @return boolean 
+     * @param string $number
+     * @return boolean
      */
-    private function verifyByLuhnAlgorithm($number) {}
+    private function verifyByLuhnAlgorithm($number) {
+    }
 
 }

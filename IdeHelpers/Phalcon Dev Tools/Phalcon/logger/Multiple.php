@@ -6,8 +6,7 @@ namespace Phalcon\Logger;
  * Phalcon\Logger\Multiple
  * Handles multiples logger handlers
  */
-class Multiple
-{
+class Multiple {
 
     protected $_loggers;
 
@@ -15,97 +14,109 @@ class Multiple
     protected $_formatter;
 
 
+    public function getLoggers() {
+    }
 
-    public function getLoggers() {}
 
-
-    public function getFormatter() {}
+    public function getFormatter() {
+    }
 
     /**
      * Pushes a logger to the logger tail
      *
-     * @param mixed $logger 
+     * @param mixed $logger
      */
-    public function push(\Phalcon\Logger\AdapterInterface $logger) {}
+    public function push(\Phalcon\Logger\AdapterInterface $logger) {
+    }
 
     /**
      * Sets a global formatter
      *
-     * @param mixed $formatter 
+     * @param mixed $formatter
      */
-    public function setFormatter(\Phalcon\Logger\FormatterInterface $formatter) {}
+    public function setFormatter(\Phalcon\Logger\FormatterInterface $formatter) {
+    }
 
     /**
      * Sends a message to each registered logger
      *
-     * @param mixed $type 
-     * @param mixed $message 
-     * @param array $context 
+     * @param mixed $type
+     * @param mixed $message
+     * @param array $context
      */
-    public function log($type, $message = null, $context = null) {}
+    public function log($type, $message = null, $context = null) {
+    }
 
     /**
      * Sends/Writes an critical message to the log
      *
-     * @param string $message 
-     * @param array $context 
+     * @param string $message
+     * @param array $context
      */
-    public function critical($message, $context = null) {}
+    public function critical($message, $context = null) {
+    }
 
     /**
      * Sends/Writes an emergency message to the log
      *
-     * @param string $message 
-     * @param array $context 
+     * @param string $message
+     * @param array $context
      */
-    public function emergency($message, $context = null) {}
+    public function emergency($message, $context = null) {
+    }
 
     /**
      * Sends/Writes a debug message to the log
      *
-     * @param string $message 
-     * @param array $context 
+     * @param string $message
+     * @param array $context
      */
-    public function debug($message, $context = null) {}
+    public function debug($message, $context = null) {
+    }
 
     /**
      * Sends/Writes an error message to the log
      *
-     * @param string $message 
-     * @param array $context 
+     * @param string $message
+     * @param array $context
      */
-    public function error($message, $context = null) {}
+    public function error($message, $context = null) {
+    }
 
     /**
      * Sends/Writes an info message to the log
      *
-     * @param string $message 
-     * @param array $context 
+     * @param string $message
+     * @param array $context
      */
-    public function info($message, $context = null) {}
+    public function info($message, $context = null) {
+    }
 
     /**
      * Sends/Writes a notice message to the log
      *
-     * @param string $message 
-     * @param array $context 
+     * @param string $message
+     * @param array $context
      */
-    public function notice($message, $context = null) {}
+    public function notice($message, $context = null) {
+    }
 
     /**
      * Sends/Writes a warning message to the log
      *
-     * @param string $message 
-     * @param array $context 
+     * @param string $message
+     * @param array $context
      */
-    public function warning($message, $context = null) {}
+    public function warning($message, $context = null) {
+    }
 
     /**
      * Sends/Writes an alert message to the log
      *
-     * @param string $message 
-     * @param array $context 
+     * @param string $message
+     * @param array $context
      */
-    public function alert($message, $context = null) {}
+    public function alert($message, $context = null) {
+    }
 
 }

@@ -7,7 +7,6 @@ namespace Phalcon\Mvc\User;
  * This class can be used to provide user modules easy access to services
  * in the application
  */
-class Module extends \Phalcon\Di\Injectable
-{
+class Module extends \Phalcon\Di\Injectable {
 
 }

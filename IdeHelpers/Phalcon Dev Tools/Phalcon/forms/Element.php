@@ -6,8 +6,7 @@ namespace Phalcon\Forms;
  * Phalcon\Forms\Element
  * This is a base class for form elements
  */
-abstract class Element implements \Phalcon\Forms\ElementInterface
-{
+abstract class Element implements \Phalcon\Forms\ElementInterface {
 
     protected $_form;
 
@@ -39,254 +38,286 @@ abstract class Element implements \Phalcon\Forms\ElementInterface
     /**
      * Phalcon\Forms\Element constructor
      *
-     * @param string $name 
-     * @param array $attributes 
+     * @param string $name
+     * @param array $attributes
      */
-    public function __construct($name, $attributes = null) {}
+    public function __construct($name, $attributes = null) {
+    }
 
     /**
      * Sets the parent form to the element
      *
-     * @param mixed $form 
-     * @return ElementInterface 
+     * @param mixed $form
+     * @return ElementInterface
      */
-    public function setForm(Form $form) {}
+    public function setForm(Form $form) {
+    }
 
     /**
      * Returns the parent form to the element
      *
-     * @return ElementInterface 
+     * @return ElementInterface
      */
-    public function getForm() {}
+    public function getForm() {
+    }
 
     /**
      * Sets the element name
      *
-     * @param string $name 
-     * @return ElementInterface 
+     * @param string $name
+     * @return ElementInterface
      */
-    public function setName($name) {}
+    public function setName($name) {
+    }
 
     /**
      * Returns the element name
      *
-     * @return string 
+     * @return string
      */
-    public function getName() {}
+    public function getName() {
+    }
 
     /**
      * Sets the element filters
      *
-     * @param array|string $filters 
-     * @return \Phalcon\Forms\ElementInterface 
+     * @param array|string $filters
+     * @return \Phalcon\Forms\ElementInterface
      */
-    public function setFilters($filters) {}
+    public function setFilters($filters) {
+    }
 
     /**
      * Adds a filter to current list of filters
      *
-     * @param string $filter 
-     * @return ElementInterface 
+     * @param string $filter
+     * @return ElementInterface
      */
-    public function addFilter($filter) {}
+    public function addFilter($filter) {
+    }
 
     /**
      * Returns the element filters
      *
-     * @return mixed 
+     * @return mixed
      */
-    public function getFilters() {}
+    public function getFilters() {
+    }
 
     /**
      * Adds a group of validators
      *
-     * @param array $validators 
-     * @param bool $merge 
-     * @param \Phalcon\Validation\ValidatorInterface[]  
-     * @return \Phalcon\Forms\ElementInterface 
+     * @param array $validators
+     * @param bool $merge
+     * @param \Phalcon\Validation\ValidatorInterface[]
+     * @return \Phalcon\Forms\ElementInterface
      */
-    public function addValidators($validators, $merge = true) {}
+    public function addValidators($validators, $merge = true) {
+    }
 
     /**
      * Adds a validator to the element
      *
-     * @param mixed $validator 
-     * @return ElementInterface 
+     * @param mixed $validator
+     * @return ElementInterface
      */
-    public function addValidator(\Phalcon\Validation\ValidatorInterface $validator) {}
+    public function addValidator(\Phalcon\Validation\ValidatorInterface $validator) {
+    }
 
     /**
      * Returns the validators registered for the element
      *
-     * @return \Phalcon\Validation\ValidatorInterface 
+     * @return \Phalcon\Validation\ValidatorInterface
      */
-    public function getValidators() {}
+    public function getValidators() {
+    }
 
     /**
      * Returns an array of prepared attributes for Phalcon\Tag helpers
      * according to the element parameters
      *
-     * @param array $attributes 
-     * @param boolean $useChecked 
-     * @return array 
+     * @param array $attributes
+     * @param boolean $useChecked
+     * @return array
      */
-    public function prepareAttributes($attributes = null, $useChecked = false) {}
+    public function prepareAttributes($attributes = null, $useChecked = false) {
+    }
 
     /**
      * Sets a default attribute for the element
      *
-     * @param string $attribute 
-     * @param mixed $value 
-     * @return \Phalcon\Forms\ElementInterface 
+     * @param string $attribute
+     * @param mixed $value
+     * @return \Phalcon\Forms\ElementInterface
      */
-    public function setAttribute($attribute, $value) {}
+    public function setAttribute($attribute, $value) {
+    }
 
     /**
      * Returns the value of an attribute if present
      *
-     * @param string $attribute 
-     * @param mixed $defaultValue 
-     * @return mixed 
+     * @param string $attribute
+     * @param mixed $defaultValue
+     * @return mixed
      */
-    public function getAttribute($attribute, $defaultValue = null) {}
+    public function getAttribute($attribute, $defaultValue = null) {
+    }
 
     /**
      * Sets default attributes for the element
      *
-     * @param array $attributes 
-     * @return ElementInterface 
+     * @param array $attributes
+     * @return ElementInterface
      */
-    public function setAttributes($attributes) {}
+    public function setAttributes($attributes) {
+    }
 
     /**
      * Returns the default attributes for the element
      *
-     * @return array 
+     * @return array
      */
-    public function getAttributes() {}
+    public function getAttributes() {
+    }
 
     /**
      * Sets an option for the element
      *
-     * @param string $option 
-     * @param mixed $value 
-     * @return \Phalcon\Forms\ElementInterface 
+     * @param string $option
+     * @param mixed $value
+     * @return \Phalcon\Forms\ElementInterface
      */
-    public function setUserOption($option, $value) {}
+    public function setUserOption($option, $value) {
+    }
 
     /**
      * Returns the value of an option if present
      *
-     * @param string $option 
-     * @param mixed $defaultValue 
-     * @return mixed 
+     * @param string $option
+     * @param mixed $defaultValue
+     * @return mixed
      */
-    public function getUserOption($option, $defaultValue = null) {}
+    public function getUserOption($option, $defaultValue = null) {
+    }
 
     /**
      * Sets options for the element
      *
-     * @param array $options 
-     * @return \Phalcon\Forms\ElementInterface 
+     * @param array $options
+     * @return \Phalcon\Forms\ElementInterface
      */
-    public function setUserOptions($options) {}
+    public function setUserOptions($options) {
+    }
 
     /**
      * Returns the options for the element
      *
-     * @return array 
+     * @return array
      */
-    public function getUserOptions() {}
+    public function getUserOptions() {
+    }
 
     /**
      * Sets the element label
      *
-     * @param string $label 
-     * @return ElementInterface 
+     * @param string $label
+     * @return ElementInterface
      */
-    public function setLabel($label) {}
+    public function setLabel($label) {
+    }
 
     /**
      * Returns the element label
      *
-     * @return string 
+     * @return string
      */
-    public function getLabel() {}
+    public function getLabel() {
+    }
 
     /**
      * Generate the HTML to label the element
      *
-     * @param array $attributes 
-     * @return string 
+     * @param array $attributes
+     * @return string
      */
-    public function label($attributes = null) {}
+    public function label($attributes = null) {
+    }
 
     /**
      * Sets a default value in case the form does not use an entity
      * or there is no value available for the element in _POST
      *
-     * @param mixed $value 
-     * @return \Phalcon\Forms\ElementInterface 
+     * @param mixed $value
+     * @return \Phalcon\Forms\ElementInterface
      */
-    public function setDefault($value) {}
+    public function setDefault($value) {
+    }
 
     /**
      * Returns the default value assigned to the element
      *
-     * @return mixed 
+     * @return mixed
      */
-    public function getDefault() {}
+    public function getDefault() {
+    }
 
     /**
      * Returns the element value
      *
-     * @return mixed 
+     * @return mixed
      */
-    public function getValue() {}
+    public function getValue() {
+    }
 
     /**
      * Returns the messages that belongs to the element
      * The element needs to be attached to a form
      *
-     * @return \Phalcon\Validation\Message\Group 
+     * @return \Phalcon\Validation\Message\Group
      */
-    public function getMessages() {}
+    public function getMessages() {
+    }
 
     /**
      * Checks whether there are messages attached to the element
      *
-     * @return bool 
+     * @return bool
      */
-    public function hasMessages() {}
+    public function hasMessages() {
+    }
 
     /**
      * Sets the validation messages related to the element
      *
-     * @param mixed $group 
-     * @return ElementInterface 
+     * @param mixed $group
+     * @return ElementInterface
      */
-    public function setMessages(\Phalcon\Validation\Message\Group $group) {}
+    public function setMessages(\Phalcon\Validation\Message\Group $group) {
+    }
 
     /**
      * Appends a message to the internal message list
      *
-     * @param mixed $message 
-     * @return ElementInterface 
+     * @param mixed $message
+     * @return ElementInterface
      */
-    public function appendMessage(\Phalcon\Validation\MessageInterface $message) {}
+    public function appendMessage(\Phalcon\Validation\MessageInterface $message) {
+    }
 
     /**
      * Clears every element in the form to its default value
      *
-     * @return Element 
+     * @return Element
      */
-    public function clear() {}
+    public function clear() {
+    }
 
     /**
      * Magic method __toString renders the widget without atttributes
      *
-     * @return string 
+     * @return string
      */
-    public function __toString() {}
+    public function __toString() {
+    }
 
 }

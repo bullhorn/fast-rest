@@ -8,15 +8,15 @@ namespace Phalcon\Assets\Filters;
  * removes newlines and line feeds keeping
  * removes last semicolon from last property
  */
-class Cssmin implements \Phalcon\Assets\FilterInterface
-{
+class Cssmin implements \Phalcon\Assets\FilterInterface {
 
     /**
      * Filters the content using CSSMIN
      *
-     * @param string $content 
-     * @return string 
+     * @param string $content
+     * @return string
      */
-    public function filter($content) {}
+    public function filter($content) {
+    }
 
 }

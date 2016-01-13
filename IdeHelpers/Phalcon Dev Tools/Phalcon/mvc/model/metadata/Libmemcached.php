@@ -20,8 +20,7 @@ namespace Phalcon\Mvc\Model\MetaData;
  * ));
  * </code>
  */
-class Libmemcached extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\Model\MetaDataInterface
-{
+class Libmemcached extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\Model\MetaDataInterface {
 
     protected $_ttl = 172800;
 
@@ -32,29 +31,33 @@ class Libmemcached extends \Phalcon\Mvc\Model\MetaData implements \Phalcon\Mvc\M
     /**
      * Phalcon\Mvc\Model\MetaData\Libmemcached constructor
      *
-     * @param array $options 
+     * @param array $options
      */
-    public function __construct($options = null) {}
+    public function __construct($options = null) {
+    }
 
     /**
      * Reads metadata from Memcache
      *
-     * @param string $key 
-     * @return array|null 
+     * @param string $key
+     * @return array|null
      */
-    public function read($key) {}
+    public function read($key) {
+    }
 
     /**
      * Writes the metadata to Memcache
      *
-     * @param string $key 
-     * @param mixed $data 
+     * @param string $key
+     * @param mixed $data
      */
-    public function write($key, $data) {}
+    public function write($key, $data) {
+    }
 
     /**
      * Flush Memcache data and resets internal meta-data in order to regenerate it
      */
-    public function reset() {}
+    public function reset() {
+    }
 
 }

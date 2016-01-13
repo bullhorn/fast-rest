@@ -23,8 +23,7 @@ namespace Phalcon\Cache\Backend;
  * $data = $cache->get('my-data');
  * </code>
  */
-class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInterface
-{
+class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendInterface {
 
     protected $_memcache = null;
 
@@ -32,17 +31,19 @@ class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendI
     /**
      * Phalcon\Cache\Backend\Memcache constructor
      *
-     * @param	\Phalcon\Cache\FrontendInterface frontend
-     * @param	array options
+     * @param    \Phalcon\Cache\FrontendInterface frontend
+     * @param    array options
      * @param mixed $frontend
      * @param mixed $options
      */
-    public function __construct(\Phalcon\Cache\FrontendInterface $frontend, $options = null) {}
+    public function __construct(\Phalcon\Cache\FrontendInterface $frontend, $options = null) {
+    }
 
     /**
      * Create internal connection to memcached
      */
-    public function _connect() {}
+    public function _connect() {
+    }
 
     /**
      * Returns a cached content
@@ -51,7 +52,8 @@ class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendI
      * @param long $lifetime
      * @return mixed
      */
-    public function get($keyName, $lifetime = null) {}
+    public function get($keyName, $lifetime = null) {
+    }
 
     /**
      * Stores cached content into the file backend and stops the frontend
@@ -61,7 +63,8 @@ class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendI
      * @param long $lifetime
      * @param boolean $stopBuffer
      */
-    public function save($keyName = null, $content = null, $lifetime = null, $stopBuffer = true) {}
+    public function save($keyName = null, $content = null, $lifetime = null, $stopBuffer = true) {
+    }
 
     /**
      * Deletes a value from the cache by its key
@@ -69,7 +72,8 @@ class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendI
      * @param int|string $keyName
      * @return boolean
      */
-    public function delete($keyName) {}
+    public function delete($keyName) {
+    }
 
     /**
      * Query the existing cached keys
@@ -77,7 +81,8 @@ class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendI
      * @param string $prefix
      * @return array
      */
-    public function queryKeys($prefix = null) {}
+    public function queryKeys($prefix = null) {
+    }
 
     /**
      * Checks if cache exists and it isn't expired
@@ -86,7 +91,8 @@ class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendI
      * @param long $lifetime
      * @return boolean
      */
-    public function exists($keyName = null, $lifetime = null) {}
+    public function exists($keyName = null, $lifetime = null) {
+    }
 
     /**
      * Increment of given $keyName by $value
@@ -96,7 +102,8 @@ class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendI
      * @param long $lifetime
      * @return long
      */
-    public function increment($keyName = null, $value = null) {}
+    public function increment($keyName = null, $value = null) {
+    }
 
     /**
      * Decrement of $keyName by given $value
@@ -105,13 +112,15 @@ class Memcache extends \Phalcon\Cache\Backend implements \Phalcon\Cache\BackendI
      * @param long $value
      * @return long
      */
-    public function decrement($keyName = null, $value = null) {}
+    public function decrement($keyName = null, $value = null) {
+    }
 
     /**
      * Immediately invalidates all existing items.
      *
      * @return bool
      */
-    public function flush() {}
+    public function flush() {
+    }
 
 }

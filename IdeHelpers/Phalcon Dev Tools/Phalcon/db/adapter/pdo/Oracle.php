@@ -14,8 +14,7 @@ namespace Phalcon\Db\Adapter\Pdo;
  * $connection = new \Phalcon\Db\Adapter\Pdo\Oracle($config);
  * </code>
  */
-class Oracle extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInterface
-{
+class Oracle extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInterface {
 
     protected $_type = "oci";
 
@@ -27,20 +26,22 @@ class Oracle extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInter
      * This method is automatically called in Phalcon\Db\Adapter\Pdo constructor.
      * Call it when you need to restore a database connection.
      *
-     * @param array $descriptor 
-     * @return boolean 
+     * @param array $descriptor
+     * @return boolean
      */
-    public function connect($descriptor = null) {}
+    public function connect($descriptor = null) {
+    }
 
     /**
      * Returns an array of Phalcon\Db\Column objects describing a table
      * <code>print_r($connection->describeColumns("posts")); ?></code>
      *
-     * @param string $table 
-     * @param string $schema 
-     * @return \Phalcon\Db\Column 
+     * @param string $table
+     * @param string $schema
+     * @return \Phalcon\Db\Column
      */
-    public function describeColumns($table, $schema = null) {}
+    public function describeColumns($table, $schema = null) {
+    }
 
     /**
      * Returns the insert id for the auto_increment/serial column inserted in the lastest executed SQL statement
@@ -55,30 +56,34 @@ class Oracle extends \Phalcon\Db\Adapter\Pdo implements \Phalcon\Db\AdapterInter
      * $id = $connection->lastInsertId();
      * </code>
      *
-     * @param string $sequenceName 
-     * @return int 
+     * @param string $sequenceName
+     * @return int
      */
-    public function lastInsertId($sequenceName = null) {}
+    public function lastInsertId($sequenceName = null) {
+    }
 
     /**
      * Check whether the database system requires an explicit value for identity columns
      *
-     * @return bool 
+     * @return bool
      */
-    public function useExplicitIdValue() {}
+    public function useExplicitIdValue() {
+    }
 
     /**
      * Return the default identity value to insert in an identity column
      *
-     * @return \Phalcon\Db\RawValue 
+     * @return \Phalcon\Db\RawValue
      */
-    public function getDefaultIdValue() {}
+    public function getDefaultIdValue() {
+    }
 
     /**
      * Check whether the database system requires a sequence to produce auto-numeric values
      *
-     * @return bool 
+     * @return bool
      */
-    public function supportSequences() {}
+    public function supportSequences() {
+    }
 
 }

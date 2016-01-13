@@ -24,8 +24,7 @@ namespace Phalcon\Mvc\Model;
  * }
  * </code>
  */
-abstract class Resultset implements \Phalcon\Mvc\Model\ResultsetInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess, \Serializable
-{
+abstract class Resultset implements \Phalcon\Mvc\Model\ResultsetInterface, \Iterator, \SeekableIterator, \Countable, \ArrayAccess, \Serializable {
 
     const TYPE_RESULT_FULL = 0;
 
@@ -77,163 +76,185 @@ abstract class Resultset implements \Phalcon\Mvc\Model\ResultsetInterface, \Iter
     /**
      * Phalcon\Mvc\Model\Resultset constructor
      *
-     * @param \Phalcon\Db\ResultInterface|false $result 
-     * @param \Phalcon\Cache\BackendInterface $cache 
-     * @param array $columnTypes 
+     * @param \Phalcon\Db\ResultInterface|false $result
+     * @param \Phalcon\Cache\BackendInterface $cache
+     * @param array $columnTypes
      */
-    public function __construct($result, \Phalcon\Cache\BackendInterface $cache = null) {}
+    public function __construct($result, \Phalcon\Cache\BackendInterface $cache = null) {
+    }
 
     /**
      * Moves cursor to next row in the resultset
      */
-    public function next() {}
+    public function next() {
+    }
 
     /**
      * Check whether internal resource has rows to fetch
      *
-     * @return bool 
+     * @return bool
      */
-    public function valid() {}
+    public function valid() {
+    }
 
     /**
      * Gets pointer number of active row in the resultset
      *
-     * @return int|null 
+     * @return int|null
      */
-    public function key() {}
+    public function key() {
+    }
 
     /**
      * Rewinds resultset to its beginning
      */
-    public final function rewind() {}
+    public final function rewind() {
+    }
 
     /**
      * Changes internal pointer to a specific position in the resultset
      * Set new position if required and set this->_row
      *
-     * @param int $position 
+     * @param int $position
      */
-    public final function seek($position) {}
+    public final function seek($position) {
+    }
 
     /**
      * Counts how many rows are in the resultset
      *
-     * @return int 
+     * @return int
      */
-    public final function count() {}
+    public final function count() {
+    }
 
     /**
      * Checks whether offset exists in the resultset
      *
-     * @param int $index 
-     * @return bool 
+     * @param int $index
+     * @return bool
      */
-    public function offsetExists($index) {}
+    public function offsetExists($index) {
+    }
 
     /**
      * Gets row in a specific position of the resultset
      *
-     * @param int $index 
-     * @return bool|\Phalcon\Mvc\ModelInterface 
+     * @param int $index
+     * @return bool|\Phalcon\Mvc\ModelInterface
      */
-    public function offsetGet($index) {}
+    public function offsetGet($index) {
+    }
 
     /**
      * Resultsets cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
      *
-     * @param int $index 
-     * @param \Phalcon\Mvc\ModelInterface $value 
+     * @param int $index
+     * @param \Phalcon\Mvc\ModelInterface $value
      */
-    public function offsetSet($index, $value) {}
+    public function offsetSet($index, $value) {
+    }
 
     /**
      * Resultsets cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
      *
-     * @param int $offset 
+     * @param int $offset
      */
-    public function offsetUnset($offset) {}
+    public function offsetUnset($offset) {
+    }
 
     /**
      * Returns the internal type of data retrieval that the resultset is using
      *
-     * @return int 
+     * @return int
      */
-    public function getType() {}
+    public function getType() {
+    }
 
     /**
      * Get first row in the resultset
      *
-     * @return bool|\Phalcon\Mvc\ModelInterface 
+     * @return bool|\Phalcon\Mvc\ModelInterface
      */
-    public function getFirst() {}
+    public function getFirst() {
+    }
 
     /**
      * Get last row in the resultset
      *
-     * @return bool|\Phalcon\Mvc\ModelInterface 
+     * @return bool|\Phalcon\Mvc\ModelInterface
      */
-    public function getLast() {}
+    public function getLast() {
+    }
 
     /**
      * Set if the resultset is fresh or an old one cached
      *
-     * @param bool $isFresh 
-     * @return Resultset 
+     * @param bool $isFresh
+     * @return Resultset
      */
-    public function setIsFresh($isFresh) {}
+    public function setIsFresh($isFresh) {
+    }
 
     /**
      * Tell if the resultset if fresh or an old one cached
      *
-     * @return bool 
+     * @return bool
      */
-    public function isFresh() {}
+    public function isFresh() {
+    }
 
     /**
      * Sets the hydration mode in the resultset
      *
-     * @param int $hydrateMode 
-     * @return Resultset 
+     * @param int $hydrateMode
+     * @return Resultset
      */
-    public function setHydrateMode($hydrateMode) {}
+    public function setHydrateMode($hydrateMode) {
+    }
 
     /**
      * Returns the current hydration mode
      *
-     * @return int 
+     * @return int
      */
-    public function getHydrateMode() {}
+    public function getHydrateMode() {
+    }
 
     /**
      * Returns the associated cache for the resultset
      *
-     * @return \Phalcon\Cache\BackendInterface 
+     * @return \Phalcon\Cache\BackendInterface
      */
-    public function getCache() {}
+    public function getCache() {
+    }
 
     /**
      * Returns the error messages produced by a batch operation
      *
-     * @return \Phalcon\Mvc\Model\MessageInterface 
+     * @return \Phalcon\Mvc\Model\MessageInterface
      */
-    public function getMessages() {}
+    public function getMessages() {
+    }
 
     /**
      * Updates every record in the resultset
      *
-     * @param array $data 
-     * @param \Closure $conditionCallback 
-     * @return boolean 
+     * @param array $data
+     * @param \Closure $conditionCallback
+     * @return boolean
      */
-    public function update($data, \Closure $conditionCallback = null) {}
+    public function update($data, \Closure $conditionCallback = null) {
+    }
 
     /**
      * Deletes every record in the resultset
      *
-     * @param mixed $conditionCallback 
-     * @return bool 
+     * @param mixed $conditionCallback
+     * @return bool
      */
-    public function delete(\Closure $conditionCallback = null) {}
+    public function delete(\Closure $conditionCallback = null) {
+    }
 
     /**
      * Filters a resultset returning only those the developer requires
@@ -245,9 +266,10 @@ abstract class Resultset implements \Phalcon\Mvc\Model\ResultsetInterface, \Iter
      * });
      * </code>
      *
-     * @param callback $filter 
-     * @return \Phalcon\Mvc\Model[] 
+     * @param callback $filter
+     * @return \Phalcon\Mvc\Model[]
      */
-    public function filter($filter) {}
+    public function filter($filter) {
+    }
 
 }

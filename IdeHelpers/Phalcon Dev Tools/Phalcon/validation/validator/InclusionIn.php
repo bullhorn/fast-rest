@@ -13,16 +13,16 @@ namespace Phalcon\Validation\Validator;
  * )));
  * </code>
  */
-class InclusionIn extends \Phalcon\Validation\Validator
-{
+class InclusionIn extends \Phalcon\Validation\Validator {
 
     /**
      * Executes the validation
      *
-     * @param mixed $validation 
-     * @param string $field 
-     * @return bool 
+     * @param mixed $validation
+     * @param string $field
+     * @return bool
      */
-    public function validate(\Phalcon\Validation $validation, $field) {}
+    public function validate(\Phalcon\Validation $validation, $field) {
+    }
 
 }
