@@ -10,6 +10,7 @@ use Bullhorn\FastRest\Api\Services\ControllerHelper\Delete;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Show;
 use Bullhorn\FastRest\Api\Services\Acl\AclException;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\ShowCriteria;
+use Phalcon\Cache\Frontend\Output;
 use Phalcon\Http\Request\Exception;
 use Phalcon\Mvc\Controller;
 use Phalcon\DI;
@@ -23,8 +24,6 @@ use Bullhorn\FastRest\Api\Services\DataTransform\Base as DataTransformer;
  * Class ControllerBase
  */
 abstract class Base extends Controller {
-    const DI_NAME_OUTPUT = 'Output';
-    const DI_NAME_ACL = 'Acl';
     /** @var  \stdClass */
     private $outputObject;
     /** @var Exception[] */
@@ -61,10 +60,10 @@ abstract class Base extends Controller {
      */
     private function validateServicesDefined() {
         if(!$this->getDi()->has(AclInterface::DI_NAME)) {
-            throw new \Exception('Service ' . self::class . '::DI_NAME_ACL must be defined with a type of: ' . AclInterface::class);
+            throw new \Exception('Service ' . AclInterface::class . '::DI_NAME must be defined with a type of: ' . AclInterface::class);
         }
-        if(!$this->getDi()->has(self::DI_NAME_OUTPUT)) {
-            throw new \Exception('Service ' . self::class . '::DI_NAME_OUTPUT must be defined with a type of: ' . OutputInterface::class);
+        if(!$this->getDi()->has(OutputInterface::DI_NAME)) {
+            throw new \Exception('Service ' . OutputInterface::class . '::DI_NAME must be defined with a type of: ' . OutputInterface::class);
         }
     }
 
@@ -536,7 +535,7 @@ abstract class Base extends Controller {
      */
     public function afterExecuteRoute() {
         /** @var \Bullhorn\FastRest\Api\Services\Output\OutputInterface $output */
-        $output = $this->getDI()->get(self::DI_NAME_OUTPUT);
+        $output = $this->getDI()->get(OutputInterface::DI_NAME);
         if(!($output instanceof OutputInterface)) {
             throw new \Exception('The Output must implement: ' . OutputInterface::class);
         }
