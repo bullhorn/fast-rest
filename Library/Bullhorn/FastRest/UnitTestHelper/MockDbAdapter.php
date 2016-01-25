@@ -17,13 +17,16 @@ class MockDbAdapter extends DbAdapter {
      * @return void
      * @throws \NickLewis\PhalconDbMock\Models\DbException
      */
-    private function checkAddTable($tableName) {
+    public function loadTable($tableName) {
+        if(parent::tableExists($tableName)) {
+            return; //Already added
+        }
         $className = $this->getPhalconHelperNamespace() . '\\Database\\Tables\\' . $this->getModelSubNamespace() . '\\' . ucfirst($tableName) . 'Test';
         if(class_exists($className)) {
             /** @var MockTable $mockTable */
             $mockTable = new $className();
 
-            $table = new Table($this->getDatabase(), $mockTable->getName());
+            $table = new Table($this->getDatabase(), $tableName);
             foreach($mockTable->getColumns() as $column) {
                 $table->addColumn($column);
             }
@@ -38,9 +41,7 @@ class MockDbAdapter extends DbAdapter {
      * @return bool
      */
     public function tableExists($tableName, $schemaName = null) {
-        if(!parent::tableExists($tableName, $schemaName)) {
-            $this->checkAddTable($tableName);
-        }
+        $this->loadTable($tableName);
         return parent::tableExists($tableName, $schemaName);
     }
 
@@ -51,7 +52,7 @@ class MockDbAdapter extends DbAdapter {
      * @return ColumnInterface
      */
     public function describeColumns($table, $schema = null) {
-        $this->tableExists($table, $schema);
+        $this->loadTable($table);
         return parent::describeColumns($table, $schema);
     }
 
