@@ -4,6 +4,7 @@ namespace Tests\Api\Controllers;
 use Bullhorn\FastRest\Api\Controllers\Base;
 use Bullhorn\FastRest\Api\Services\Output\OutputInterface;
 use Bullhorn\FastRest\UnitTestHelper\Base as UnitTestHelperBase;
+use Phalcon\Cache\Frontend\Output;
 use Phalcon\Http\ResponseInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use stdClass;
@@ -31,7 +32,7 @@ class BaseTest extends UnitTestHelperBase {
      */
     public function testAfterExecuteRoute_invalidOutput() {
         //Arrange
-        $this->getDi()->set(Base::DI_NAME_OUTPUT, new stdClass());
+        $this->getDi()->set(OutputInterface::DI_NAME, new stdClass());
         /** @type PHPUnit_Framework_MockObject_MockObject|Base $base */
         $base = $this->getBase();
         //Act
@@ -66,7 +67,7 @@ class BaseTest extends UnitTestHelperBase {
         $output->expects($this->once())
             ->method('output')
             ->with($object, $response);
-        $this->getDi()->set(Base::DI_NAME_OUTPUT, $output);
+        $this->getDi()->set(OutputInterface::DI_NAME, $output);
         /** @type PHPUnit_Framework_MockObject_MockObject|Base $base */
         $base = $this->getBase(['getOutputObject', 'getErrors', 'getStatusCode']);
 
