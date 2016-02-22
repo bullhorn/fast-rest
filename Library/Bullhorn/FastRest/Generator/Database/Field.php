@@ -1,6 +1,8 @@
 <?php
 namespace Bullhorn\FastRest\Generator\Database;
 
+use Phalcon\Db\Column;
+
 class Field {
     /** @var  string */
     private $name;
@@ -84,6 +86,33 @@ class Field {
         }
         $this->setDescription($description);
         $this->setTableName($tableName);
+    }
+
+    /**
+     * getPhalconColumnType
+     * @return string
+     */
+    public function getPhalconColumnType() {
+        switch($this->getType()) {
+            case 'bool':
+                return 'TYPE_BOOLEAN';
+                break;
+            case 'int':
+                return 'TYPE_INTEGER';
+                break;
+            case 'double':
+                return 'TYPE_DOUBLE';
+                break;
+            case 'DateTime':
+                return 'TYPE_DATETIME';
+                break;
+            case 'Date':
+                return 'TYPE_DATE';
+                break;
+            default:
+                return 'TYPE_VARCHAR';
+                break;
+        }
     }
 
     /**
