@@ -99,6 +99,9 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
         $dbMock = new MockDbAdapter([]);
         $dbMock->setPhalconHelperNamespace($this->getPhalconHelperNamespace());
         $dbMock->setModelSubNamespace($this->getModelSubNamespace());
+        if($this->getDi()->has($this->getConnectionService())) {
+            $this->getDi()->remove($this->getConnectionService());
+        }
         $this->getDI()->set($this->getConnectionService(), $dbMock);
     }
 
