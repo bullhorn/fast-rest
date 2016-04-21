@@ -1,6 +1,13 @@
 language: php
+
 php:
     - 5.6
+
+notifications:
+    slack:
+        rooms:
+            - secure: "ELsvW1u55FaURHVLIXvH5QLFpRdsxa8X380lRa+ne7gg5MXu7sNF2rndYd5HrwX9sY5OAdtrx3IbDOrNROFhW2dQJzrFnI6uZUGU4YLfk41HrvB9fRzo+wPrNg6AW+/7+vdTPDZuyEOzcONr8VosOH2R0zdvwFO+fW9Q+/p4ptesTQ94v+unT7jsjXfdWY6vOG0CKyygXft+Sc9ds6CUTWQFtDjzgnPOli/0WohXmPYYL/P7ZaboPZU0BXDwu3g2fOsOsmPKmfXGmbBbAmvUpRVP5LirPLPuF+vZamoc6YJoB+ORZrFv8tPe9PzGQa5QJ3s7ncmXy0wi8UgYof+8WxnKHW6ryLJZAGgoYoWITWMGz3Z7Q6puGyDaTZeRoPdCLWXK3jQ6/16AB1NwoYALKU6BA3wcNyS9b8w+V/ZtVXQFiQSRAM9PVnncxN8ORqO8vgd3vNKHk34BKR0f75VkNNJpxxQCD4KuBDziqxR8+pjth2Nz8F4OrAk/cWbC5Cb9UksPz1p0p9E7qqBOOOs/Ti/f5fhfkre4bXAPhkaOogcYjHIKX4S7qKoWJdxoQJM7FqKJJXBib8ZgYq+0oZjYutYL8+jx9gBv+qrvTwO4VQmVpHHkHrAbZ2v2wfCZ365bDYUqnJ/0sXn8rDWe4HLFnKw+fRJY7xC2sgHEBF7zIuo="
+
 before_install:
     - phpenv config-add customPHP.ini
     - git clone --depth=1 git://github.com/phalcon/cphalcon.git
@@ -8,7 +15,12 @@ before_install:
     - ./install
     - cd ../..
     - rm -rf cphalcon
-before_script: composer install --dev
-script: phpunit --configuration tests/phpunit.xml --bootstrap tests/autoload.php  --coverage-clover build/logs/clover.xml
+
+before_script:
+    - composer install --dev
+
+script:
+    - phpunit --configuration tests/phpunit.xml --bootstrap tests/autoload.php  --coverage-clover build/logs/clover.xml
+
 after_script:
     - ./vendor/bin/test-reporter

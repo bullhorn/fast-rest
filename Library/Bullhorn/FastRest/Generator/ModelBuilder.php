@@ -1710,8 +1710,9 @@ class ModelBuilder {
                 '		$columns[] = new Column(
 			\'' . $field->getName() . '\',
 			[
-				\'type\' => Column::TYPE_TEXT,
-				\'primary\' => ' . ($field->isPrimary() ? 'TRUE' : 'FALSE') . '
+				\'type\' => Column::'.$field->getPhalconColumnType().',
+				\'primary\' => ' . ($field->isPrimary() ? 'TRUE' : 'FALSE') . ',
+                \'autoIncrement\' => '.($field->isAutoIncrementing() ? 'TRUE' : 'FALSE').'
 			]
 		);
 ';

@@ -1,3 +1,7 @@
+# Bullhorn FastREST
+
+[![Build Status](https://travis-ci.org/bullhorn/fast-rest.svg)](https://travis-ci.org/bullhorn/fast-rest)
+
 ## Contribute
 
 There are many ways to **[contribute](https://github.com/bullhorn/career-portal/blob/master/CONTRIBUTING.md)** to Bullhorn FastREST.
@@ -5,23 +9,17 @@ There are many ways to **[contribute](https://github.com/bullhorn/career-portal/
 * Review **[source code changes](https://github.com/bullhorn/fast-rest/pulls)**.
 * **[Contribute bug fixes](https://github.com/bullhorn/fast-rest/master/CONTRIBUTING.MD)**.
 
-
-# Contributing
-Coming soon...
-
 ## (Internal) Before Committing
 * Make sure to write unit tests for any new code.
 * Run all unit tests, fix any errors.
 * Push
 * Submit Pull Request
 
-
-
 ## Documentation
 #### Requirements
 Prerequisite packages are:
  * Phalcon >2.0
- 
+
 
 ## Examples
 

@@ -1,7 +1,7 @@
 {
   "name": "bullhorn/fast-rest",
   "type": "library",
-  "description": "This is meant to be a generator to read a mysql database's structure, including foreign keys, table/column comments, and indexes to generate the models and controllers",
+  "description": "FastREST generates REST-ready models and controllers dynamically from a MySQL database schema, including foreign keys, table and column comments, and indexes.",
   "keywords": [
     "framework",
     "phalcon",
@@ -18,7 +18,8 @@
   "require": {
     "php": ">=5.5.0",
     "ext-phalcon": ">=2.0.4 <3.0",
-    "zircote/swagger-php": "*"
+    "zircote/swagger-php": "*",
+    "nicklewis/phalcon-db-mock": "dev-master"
   },
   "require-dev": {
     "phalcon/incubator": "dev-master",

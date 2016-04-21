@@ -95,6 +95,7 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
         $_POST = [];
         $_GET = [];
         Formatter::getDefault()->reset();
+        $this->hasToBeHereForStupidReasons = $this->getDi()->getServices(); //If you edit this line, all the unit tests will break...who knows why
         $this->setStartingServices($this->getDi()->getServices());
         $dbMock = new MockDbAdapter([]);
         $dbMock->setPhalconHelperNamespace($this->getPhalconHelperNamespace());
