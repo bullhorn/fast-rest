@@ -208,7 +208,7 @@ class Index extends Base {
         foreach($search->getChildren() as $child) {
             if(in_array($child->getAlias(), $entity->getParentRelationships())) {
                 $subEntity = $this->addJoin($entity, $child->getAlias(), false);
-                $this->buildSearchFieldsRecursive($child, $subEntity, $child->getAlias());
+                $this->buildSearchFieldsRecursive($child, $subEntity);
             } elseif(in_array($child->getAlias(), $entity->getChildrenRelationships())) {
                 throw new Exception('Cannot search on children: ' . ($isRoot ? '' : $alias . '.') . $child->getAlias(), 400);
             } else {
