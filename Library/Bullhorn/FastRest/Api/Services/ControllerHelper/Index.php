@@ -273,8 +273,16 @@ class Index extends Base {
         $entity->writeAttribute($name, $value);
         $params = array();
         $paramCount = $this->getCriteriaHelper()->getParamId();
-        $sql .= $operator . '?' . $paramCount;
-        $params[$paramCount] = $entity->readAttribute($name) . ''; //Make sure to convert to string, for Date and DateTime
+
+        $attribute = $entity->readAttribute($name);
+        if(is_null($attribute)) {
+            $sql .= " IS NULL";
+        }else{
+            $attribute .= '';
+            $sql .= $operator . '?' . $paramCount;
+            $params[$paramCount] = $attribute; //Make sure to convert to string, for Date and DateTime
+        }
+
         $this->getCriteria()->andWhere($sql, $params);
     }
 
