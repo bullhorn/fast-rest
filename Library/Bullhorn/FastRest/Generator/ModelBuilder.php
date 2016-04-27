@@ -955,7 +955,7 @@ class ModelBuilder {
      */
     private function buildGettersAndSetters() {
         foreach($this->getFields() as $field) {
-
+            $this->getAbstractClass()->addConstant('DB_COLUMN_'.strtoupper(preg_replace('@[A-Z]@', '_\\0', $field->getShortName())), $field->getShortName());
             switch($field->getType()) {
                 case 'bool':
                     $rawTypes = array('TRUE', 'FALSE', 'NULL');
