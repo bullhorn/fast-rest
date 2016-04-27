@@ -187,12 +187,24 @@ abstract class Base extends Controller {
     }
 
     /**
+     * getExtraAllowedHeaders
+     * @return string[]
+     */
+    public function getExtraAllowedHeaders() {
+        return [];
+    }
+
+    /**
      * Needed for CORs
      * @return void
      */
     public function optionsAction() {
         $this->response->setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
-        $this->response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+        $allowedHeaders = array_merge(
+            ['X-Requested-With', 'X-HTTP-Method-Override', 'Content-Type', 'Accept'],
+            $this->getExtraAllowedHeaders()
+        );
+        $this->response->setHeader('Access-Control-Allow-Headers', implode(', ', $allowedHeaders));
         $this->setStatusCode(200);
     }
 

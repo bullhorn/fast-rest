@@ -277,10 +277,13 @@ class Index extends Base {
         $attribute = $entity->readAttribute($name);
         if(is_null($attribute)) {
             $sql .= " IS NULL";
-        }else{
-            $attribute .= '';
+        } else {
+            $attribute .= ''; //Make sure to convert to string, for Date and DateTime
+            if(preg_match('@(^|[^\\\])%@', $attribute)) {
+                $operator = 'LIKE ';
+            }
             $sql .= $operator . '?' . $paramCount;
-            $params[$paramCount] = $attribute; //Make sure to convert to string, for Date and DateTime
+            $params[$paramCount] = $attribute;
         }
 
         $this->getCriteria()->andWhere($sql, $params);
