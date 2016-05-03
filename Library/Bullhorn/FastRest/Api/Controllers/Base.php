@@ -201,7 +201,7 @@ abstract class Base extends Controller {
     public function optionsAction() {
         $this->response->setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
         $allowedHeaders = array_merge(
-            ['X-Requested-With', 'X-HTTP-Method-Override', 'Content-Type', 'Accept'],
+            ['X-Requested-With', 'X-HTTP-Method-Override', 'Content-Type', 'Accept', 'Cache-Control'],
             $this->getExtraAllowedHeaders()
         );
         $this->response->setHeader('Access-Control-Allow-Headers', implode(', ', $allowedHeaders));
