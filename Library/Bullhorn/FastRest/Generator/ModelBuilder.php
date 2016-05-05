@@ -803,6 +803,9 @@ class ModelBuilder {
             $dbCompareTable = new Table($this->getConfiguration()->getConnection(), $tableName);
             foreach($dbCompareTable->getConstraints() as $constraint) {
                 if($constraint->getRemoteTable() == $this->getTableName()) {
+                    if(implode(', ', $constraint->getRemoteColumns())==='venueId`, `userID') {
+                        exit;
+                    }
                     $relationship = new Relationship(
                         $this->getConfiguration(),
                         $this->getTableName(),
@@ -865,6 +868,7 @@ class ModelBuilder {
                 return $field;
             }
         }
+        echo 'Could Not Find Field '.$this->getTableName().'.'.$columnName."\n";
         return false;
     }
 

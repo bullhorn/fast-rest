@@ -77,6 +77,7 @@ class Constraint extends Base {
      * @throws \Exception
      */
     private function build($rawString) {
+        $rawString = str_replace('`, `','`,`', $rawString);
         $onDelete = '( ON DELETE (?P<onDelete>NO ACTION|RESTRICT|CASCADE|SET NULL))?';
         $onUpdate = '( ON UPDATE (?P<onUpdate>NO ACTION|RESTRICT|CASCADE|SET NULL))?';
         if(preg_match(

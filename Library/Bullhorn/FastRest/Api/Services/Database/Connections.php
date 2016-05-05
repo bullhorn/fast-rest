@@ -1,9 +1,11 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\Database;
-use Api\v1_0\Services\Base;
+use Bullhorn\FastRest\DependencyInjection;
 use Phalcon\Db\AdapterInterface;
+use Phalcon\Di\InjectionAwareInterface;
 
-class Connections extends Base {
+class Connections implements InjectionAwareInterface {
+    use DependencyInjection;
 	const DI_NAME = 'DbConnections';
 	/** @type  AdapterInterface[] */
 	private $dbAdapters = [];
