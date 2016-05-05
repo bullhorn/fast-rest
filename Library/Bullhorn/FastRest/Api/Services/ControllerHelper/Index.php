@@ -208,7 +208,7 @@ class Index extends Base {
         foreach($search->getChildren() as $child) {
             if(in_array($child->getAlias(), $entity->getParentRelationships())) {
                 $subEntity = $this->addJoin($entity, $child->getAlias(), false);
-                $this->buildSearchFieldsRecursive($child, $subEntity, $child->getAlias());
+                $this->buildSearchFieldsRecursive($child, $subEntity);
             } elseif(in_array($child->getAlias(), $entity->getChildrenRelationships())) {
                 throw new Exception('Cannot search on children: ' . ($isRoot ? '' : $alias . '.') . $child->getAlias(), 400);
             } else {
@@ -277,10 +277,13 @@ class Index extends Base {
         $attribute = $entity->readAttribute($name);
         if(is_null($attribute)) {
             $sql .= " IS NULL";
-        }else{
-            $attribute .= '';
+        } else {
+            $attribute .= ''; //Make sure to convert to string, for Date and DateTime
+            if(preg_match('@(^|[^\\\])%@', $attribute)) {
+                $operator = 'LIKE ';
+            }
             $sql .= $operator . '?' . $paramCount;
-            $params[$paramCount] = $attribute; //Make sure to convert to string, for Date and DateTime
+            $params[$paramCount] = $attribute;
         }
 
         $this->getCriteria()->andWhere($sql, $params);
