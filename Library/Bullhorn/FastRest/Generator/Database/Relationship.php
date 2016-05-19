@@ -156,7 +156,7 @@ class Relationship {
             $pluralHelper = new PluralHelper();
             $returnVar = $pluralHelper->pluralize($returnVar);
         }
-        return $returnVar;
+        return ucfirst($returnVar);
     }
 
     /**

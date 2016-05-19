@@ -64,7 +64,7 @@ class Assert {
             return $value;
         } elseif(is_int($value)) {
             return (float)$value;
-        } elseif(is_scalar($value) && preg_match('@^-?[0-9]+(\.[0-9]+)?$@', $value)) {
+        } elseif(is_scalar($value) && (preg_match('@^-?[0-9]+(\.[0-9]+)?$@', $value) || trim($value)=='')) {
             return (float)$value;
         } else {
             throw new \InvalidArgumentException('Must be Float: ' . print_r($value, true));
