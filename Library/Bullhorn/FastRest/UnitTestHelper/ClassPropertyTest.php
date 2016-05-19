@@ -181,7 +181,7 @@ class ClassPropertyTest {
                         $returnVar[] = [$value];
                     }
                     return $returnVar;
-                } else if(class_exists($this->getFullClassName($rawType))) {
+                } else if(class_exists($this->getFullClassName($rawType)) || interface_exists($this->getFullClassName($rawType))) {
                     $className = $this->getFullClassName($rawType);
                     return [$this->tester->getMockBuilder($className)
                         ->disableOriginalConstructor()
@@ -208,10 +208,10 @@ class ClassPropertyTest {
         $class = $this->getReflectionClass();
         if($class->getNamespaceName() != '') {
             $className = $class->getNamespaceName() . '\\' . $shortClassName;
-            if(class_exists($className)) {
+            if(class_exists($className) || interface_exists($className)) {
                 return $className;
             }
-        } elseif(class_exists($shortClassName)) {
+        } elseif(class_exists($shortClassName) || interface_exists($shortClassName)) {
             return $shortClassName;
         }
         //Else look at uses
