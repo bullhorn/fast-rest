@@ -25,7 +25,7 @@
     "phalcon/incubator": "dev-master",
     "phpunit/phpunit": "dev-master#9104a4e2f6a3ebdc4eb036624949a1a2849373dd",
     "phpunit/php-code-coverage": "dev-master#b8436b000263f6d72fbad1d36890e247ce84857e",
-    "phpunit/phpunit-mock-objects": "dev-master#7b18bbdad9880e09740959e90eec4b91c35a4aa9"
+    "phpunit/phpunit-mock-objects": "dev-master#7b18bbdad9880e09740959e90eec4b91c35a4aa9",
     "codeclimate/php-test-reporter": "dev-master"
   },
   "autoload": {
