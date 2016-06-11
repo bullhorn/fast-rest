@@ -422,6 +422,20 @@ class ModelBuilder {
         $validation->addMethod($method);
 
         $method = new Object\Method();
+        $method->setDescription('This is used to handle custom events');
+        $method->setAccess('protected');
+        $method->setName('notifyOther');
+        $method->setReturnType('void');
+        $parameter = new Object\Parameter();
+        $parameter->setName('eventType');
+        $parameter->setType('string');
+        $method->addParameter($parameter);
+        $method->setContent(
+            'return;'
+        );
+        $validation->addMethod($method);
+
+        $method = new Object\Method();
         $method->setFinal(true);
         $method->setAccess('public');
         $method->setDescription('Receives notifications from the Models Manager');
@@ -497,6 +511,9 @@ class ModelBuilder {
 			case DeleteService::EVENT_DATA_PROPAGATION_DELETE:
 				$this->dataPropagationDelete($entity);
 				break;
+            default:
+                $this->notifyOther($eventType);
+                break;
 		}
 		if($entity->validationHasFailed()==true) {
 			$exception = new ValidationException();
