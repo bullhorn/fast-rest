@@ -382,6 +382,28 @@ class ModelBuilder {
         $variable->setType('Model');
         $validation->addVariable($variable);
 
+        $validation->addUse('Phalcon\Mvc\Model\Manager as ModelsManager');
+        $method = new Object\Method();
+        $method->setAccess('private');
+        $method->setName('clearReusableObjects');
+        $method->setReturnType('void');
+        $method->setContent(
+            '/** @var ModelsManager $modelsManager */
+        $modelsManager = $this->getEntity()->getModelsManager();
+        $reflectionClass = new \ReflectionClass($modelsManager);
+        $reflectionProperty = $reflectionClass->getProperty(\'_reusable\');
+        $reflectionProperty->setAccessible(true);
+        $values = $reflectionProperty->getValue($modelsManager);
+        $className = get_class($this->getEntity());
+        foreach($values as $key=>$value) {
+            if(strpos($key, $className)===0) {
+                unset($values[$key]);
+            }
+        }
+        $reflectionProperty->setValue($modelsManager, $values);'
+        );
+        $validation->addMethod($method);
+
         $method = new Object\Method();
         $method->setAccess('public');
         $method->setName('getEntity');
@@ -459,6 +481,7 @@ class ModelBuilder {
 				$this->beforeDelete($entity);
 				break;
 			case \'afterSave\':
+			    $this->clearReusableObjects();
 				$this->afterSave($entity);
 				break;
 			case \'afterUpdate\':
@@ -468,6 +491,7 @@ class ModelBuilder {
 				$this->afterCreate($entity);
 				break;
 			case \'afterDelete\':
+			    $this->clearReusableObjects();
 				$this->afterDelete($entity);
 				break;
 			case \'validation\':
