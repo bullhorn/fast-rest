@@ -70,7 +70,7 @@ class IndexCriteria implements InjectionAwareInterface {
      * @return void
      */
     private function buildLimit() {
-        $limit = $this->getRequest()->getQuery('count', 'int', 50);
+        $limit = $this->getRequest()->getQuery('count', 'int', $this->getApiConfig()->getIndexDefaultLimit());
         if($limit < 1) {
             $limit = 1;
         }

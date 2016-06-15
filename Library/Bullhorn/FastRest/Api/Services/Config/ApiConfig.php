@@ -9,6 +9,9 @@ class ApiConfig {
     /** @var int  */
     private $indexMaxLimit = 500;
 
+    /** @var int  */
+    private $indexDefaultLimit = 50;
+
     /**
      * Getter
      * @return int
@@ -26,6 +29,26 @@ class ApiConfig {
         $this->indexMaxLimit = $indexMaxLimit;
         return $this;
     }
+
+    /**
+     * Getter
+     * @return int
+     */
+    public function getIndexDefaultLimit() {
+        return $this->indexDefaultLimit;
+    }
+
+    /**
+     * Setter
+     * @param int $indexDefaultLimit
+     * @return ApiConfig
+     */
+    public function setIndexDefaultLimit($indexDefaultLimit) {
+        $this->indexDefaultLimit = $indexDefaultLimit;
+        return $this;
+    }
+
+
 
 
 }
