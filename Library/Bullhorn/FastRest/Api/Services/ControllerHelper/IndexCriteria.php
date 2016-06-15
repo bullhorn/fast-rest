@@ -1,9 +1,13 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\ControllerHelper;
 
+use Bullhorn\FastRest\Api\Services\Config\ApiConfig;
+use Bullhorn\FastRest\DependencyInjection;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Http\Request;
 
-class IndexCriteria {
+class IndexCriteria implements InjectionAwareInterface {
+    use DependencyInjection
     /** @var  Request */
     private $request;
     /** @var  Sort[] */
@@ -66,14 +70,23 @@ class IndexCriteria {
      * @return void
      */
     private function buildLimit() {
-        $limit = $this->getRequest()->getQuery('count', 'int', 50);
+        $limit = $this->getRequest()->getQuery('count', 'int', $this->getApiConfig()->getIndexDefaultLimit());
         if($limit < 1) {
             $limit = 1;
         }
-        if($limit > 500) {
-            $limit = 500;
+        $maxLimit = $this->getApiConfig()->getIndexMaxLimit();
+        if($limit > $maxLimit) {
+            $limit = $maxLimit;
         }
         $this->setLimit($limit);
+    }
+
+    /**
+     * getApiConfig
+     * @return ApiConfig
+     */
+    private function getApiConfig() {
+        return $this->getDi()->get(ApiConfig::DI_NAME);
     }
 
     /**
