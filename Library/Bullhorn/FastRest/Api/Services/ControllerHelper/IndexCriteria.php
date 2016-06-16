@@ -7,7 +7,7 @@ use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Http\Request;
 
 class IndexCriteria implements InjectionAwareInterface {
-    use DependencyInjection
+    use DependencyInjection;
     /** @var  Request */
     private $request;
     /** @var  Sort[] */
