@@ -1117,16 +1117,7 @@ class ModelBuilder {
 ';
                     break;
                 case 'bool':
-                    $content .= '		$preFilterValue = $' . $field->getShortName() . ';
-        if(!is_null($preFilterValue)) {
-            $' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'boolean\');
-            if(is_null($' . $field->getShortName() . ')) {
-                throw new \InvalidArgumentException(\'Expected Type of boolean (1, true, on, yes, 0, false, off, no, ""), Invalid Value: \'.$preFilterValue);
-            }
-        } else {
-            $' . $field->getShortName() . ' = $preFilterValue;
-        }
-';
+                    $content = $this->buildSetterBoolContent($field, $content);
                     break;
                 case 'double':
                     $content .= '		$' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'float\');
@@ -1926,5 +1917,25 @@ class ModelBuilder {
         $method->setContent('return;');
 
         return $method;
+    }
+
+    /**
+     * buildSetterBoolContent
+     * @param Field  $field
+     * @param string $content
+     * @return string
+     */
+    protected function buildSetterBoolContent(Field $field, $content) {
+        $content .= '		$preFilterValue = $' . $field->getShortName() . ';
+        if(!is_null($preFilterValue)) {
+            $' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'boolean\');
+            if(is_null($' . $field->getShortName() . ')) {
+                throw new \InvalidArgumentException(\'Expected Type of boolean (1, true, on, yes, 0, false, off, no, ""), Invalid Value: \'.$preFilterValue);
+            }
+        } else {
+            $' . $field->getShortName() . ' = $preFilterValue;
+        }
+';
+        return $content;
     }
 }
