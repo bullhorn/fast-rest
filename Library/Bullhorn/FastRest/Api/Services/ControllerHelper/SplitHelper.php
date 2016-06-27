@@ -61,6 +61,7 @@ class SplitHelper {
                 if($key + 1 == $count) {
                     $currentPart->{$part} = $value;
                 } else {
+                    $part = ucfirst($part);
                     if(!isset($currentPart->{$part})) {
                         $item = new \stdClass();
                         $currentPart->{$part} = $item;
