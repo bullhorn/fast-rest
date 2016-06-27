@@ -427,9 +427,10 @@ abstract class Base extends Controller {
      *
      * @return bool if anything was changed
      */
-    private function saveEntity(\stdClass $postParams, ModelInterface $entity, $isCreating) {
+    protected function saveEntity(\stdClass $postParams, ModelInterface $entity, $isCreating) {
         $postParams = $this->findPostParams($postParams, $entity);
-        $save = new Save($this->request, $entity, $isCreating);
+        /** @var Save $save */
+        $save = $this->getDI()->get(Save::class, [$this->request, $entity, $isCreating]);
         return $save->process($postParams);
     }
 
@@ -439,7 +440,7 @@ abstract class Base extends Controller {
      * @param ModelInterface $entity
      * @return \stdClass
      */
-    protected function findPostParams(\stdClass $postParams, ModelInterface $entity) {
+    private function findPostParams(\stdClass $postParams, ModelInterface $entity) {
         //Entity is passed in so children can access it
         $dataTransformer = $this->getDataTransformer($postParams);
         if(!is_null($dataTransformer)) {
