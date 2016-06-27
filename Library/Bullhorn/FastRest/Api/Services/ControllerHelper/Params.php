@@ -48,11 +48,11 @@ class Params extends Base {
      * setParam
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return void
      */
-    public function setParam($name, $value) {
+    protected function setParam($name, $value) {
         $params = $this->getParams();
         $params->$name = $value;
         $this->setParams($params);
@@ -61,13 +61,13 @@ class Params extends Base {
     /**
      * getParam
      *
-     * @param string $name
+     * @param string       $name
      * @param string|array $filters
      *
      * @return mixed
      * @throws ParamNotFoundException
      */
-    public function getParam($name, $filters = null) {
+    protected function getParam($name, $filters = null) {
         $params = $this->getParams();
         if(property_exists($params, $name)) {
             $value = $params->$name;

@@ -19,6 +19,8 @@ There are many ways to **[contribute](https://github.com/bullhorn/career-portal/
 #### Requirements
 Prerequisite packages are:
  * Phalcon >2.0
+ * Database must by MySQL
+ * All table column names must adhere to ```/^[a-zA-Z0-9\_]+$/```
 
 
 ## Examples
