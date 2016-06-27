@@ -1,6 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Api\Controllers;
 
+use Api\v1_0\Services\CatchableException;
 use Bullhorn\FastRest\Api\Models\ControllerModelInterface as ModelInterface;
 use Bullhorn\FastRest\Api\Models\CreateObject;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Index;
@@ -183,6 +184,8 @@ abstract class Base extends Controller {
             $this->handleValidationError($e);
         } catch(AclException $e) {
             $this->handleAclError($e);
+        } catch(CatchableException $e) {
+            $this->handleCatchableError($e);
         }
     }
 
@@ -231,6 +234,8 @@ abstract class Base extends Controller {
                     $this->handleValidationError($e);
                 } catch(AclException $e) {
                     $this->handleAclError($e);
+                } catch(CatchableException $e) {
+                    $this->handleCatchableError($e);
                 }
             }
         } else {
@@ -251,6 +256,8 @@ abstract class Base extends Controller {
                     $this->handleValidationError($e);
                 } catch(AclException $e) {
                     $this->handleAclError($e);
+                } catch(CatchableException $e) {
+                    $this->handleCatchableError($e);
                 }
                 $objects[] = $object;
             }
@@ -295,6 +302,8 @@ abstract class Base extends Controller {
                 $this->handleValidationError($e);
             } catch(AclException $e) {
                 $this->handleAclError($e);
+            } catch(CatchableException $e) {
+                $this->handleCatchableError($e);
             }
             $createObject->setStatusCode($this->getStatusCode());
             $createObject->setErrors($this->getErrors());
@@ -395,46 +404,49 @@ abstract class Base extends Controller {
             $this->handleValidationError($e);
         } catch(AclException $e) {
             $this->handleAclError($e);
+        } catch(CatchableException $e) {
+            $this->handleCatchableError($e);
         }
     }
 
     /**
      * Gets the data transformer, if there is one
-     * @param Params $params
+     * @param \stdClass $postParams
      * @return null|DataTransformer
      */
-    protected function getDataTransformer(Params $params) {
+    protected function getDataTransformer(\stdClass $postParams) {
         return null;
     }
 
     /**
      * Saves an entity (either creating or updating)
      *
-     * @param \stdClass $postParams
+     * @param \stdClass      $postParams
      * @param ModelInterface $entity
-     * @param bool $isCreating
+     * @param bool           $isCreating
      *
      * @return bool if anything was changed
      */
     private function saveEntity(\stdClass $postParams, ModelInterface $entity, $isCreating) {
+        $postParams = $this->findPostParams($postParams, $entity);
         $save = new Save($this->request, $entity, $isCreating);
         return $save->process($postParams);
     }
 
     /**
      * Finds the post parameters
+     * @param \stdClass      $postParams
      * @param ModelInterface $entity
-     * @return Params
+     * @return \stdClass
      */
-    protected function findPostParams(ModelInterface $entity) {
+    protected function findPostParams(\stdClass $postParams, ModelInterface $entity) {
         //Entity is passed in so children can access it
-        $params = new Params($this->request);
-        $dataTransformer = $this->getDataTransformer($params);
+        $dataTransformer = $this->getDataTransformer($postParams);
         if(!is_null($dataTransformer)) {
             $dataTransformer->transform($entity);
-            $params = $dataTransformer->getParams();
+            $postParams = $dataTransformer->getParams();
         }
-        return $params;
+        return $postParams;
     }
 
     /**
@@ -592,6 +604,15 @@ abstract class Base extends Controller {
      */
     protected function handleError(Exception $e) {
         $this->addError($e);
+    }
+
+    /**
+     * handleCatchableError
+     * @param CatchableException $e
+     * @return void
+     */
+    protected function handleCatchableError(CatchableException $e) {
+        $this->addError(new Exception($e->getMessage(), 400));
     }
 
     /**
