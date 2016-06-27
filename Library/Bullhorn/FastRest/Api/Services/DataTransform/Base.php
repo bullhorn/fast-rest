@@ -29,7 +29,7 @@ abstract class Base extends ServiceBase {
      * @throws ParamNotFoundException
      */
     public function getParam($name, $filters = null) {
-        $parts = explode(',', $name);
+        $parts = explode('.', $name);
         $currentObject = $this->getParams();
         foreach($parts as $key=>$part) {
             if(!property_exists($currentObject, $part)) {
