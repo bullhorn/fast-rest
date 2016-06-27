@@ -1118,10 +1118,14 @@ class ModelBuilder {
                     break;
                 case 'bool':
                     $content .= '		$preFilterValue = $' . $field->getShortName() . ';
-		$' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'boolean\');
-		if(is_null($' . $field->getShortName() . ')) {
-			throw new \InvalidArgumentException(\'Expected Type of boolean (1, true, on, yes, 0, false, off, no, ""), Invalid Value: \'.$preFilterValue);
-		}
+        if(!is_null($preFilterValue)) {
+            $' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'boolean\');
+            if(is_null($' . $field->getShortName() . ')) {
+                throw new \InvalidArgumentException(\'Expected Type of boolean (1, true, on, yes, 0, false, off, no, ""), Invalid Value: \'.$preFilterValue);
+            }
+        } else {
+            $' . $field->getShortName() . ' = $preFilterValue;
+        }
 ';
                     break;
                 case 'double':
