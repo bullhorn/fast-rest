@@ -382,6 +382,28 @@ class ModelBuilder {
         $variable->setType('Model');
         $validation->addVariable($variable);
 
+        $validation->addUse('Phalcon\Mvc\Model\Manager as ModelsManager');
+        $method = new Object\Method();
+        $method->setAccess('private');
+        $method->setName('clearReusableObjects');
+        $method->setReturnType('void');
+        $method->setContent(
+            '/** @var ModelsManager $modelsManager */
+        $modelsManager = $this->getEntity()->getModelsManager();
+        $reflectionClass = new \ReflectionClass($modelsManager);
+        $reflectionProperty = $reflectionClass->getProperty(\'_reusable\');
+        $reflectionProperty->setAccessible(true);
+        $values = $reflectionProperty->getValue($modelsManager);
+        $className = get_class($this->getEntity());
+        foreach($values as $key=>$value) {
+            if(strpos($key, $className)===0) {
+                unset($values[$key]);
+            }
+        }
+        $reflectionProperty->setValue($modelsManager, $values);'
+        );
+        $validation->addMethod($method);
+
         $method = new Object\Method();
         $method->setAccess('public');
         $method->setName('getEntity');
@@ -422,6 +444,20 @@ class ModelBuilder {
         $validation->addMethod($method);
 
         $method = new Object\Method();
+        $method->setDescription('This is used to handle custom events');
+        $method->setAccess('protected');
+        $method->setName('notifyOther');
+        $method->setReturnType('void');
+        $parameter = new Object\Parameter();
+        $parameter->setName('eventType');
+        $parameter->setType('string');
+        $method->addParameter($parameter);
+        $method->setContent(
+            'return;'
+        );
+        $validation->addMethod($method);
+
+        $method = new Object\Method();
         $method->setFinal(true);
         $method->setAccess('public');
         $method->setDescription('Receives notifications from the Models Manager');
@@ -445,6 +481,7 @@ class ModelBuilder {
 				$this->beforeDelete($entity);
 				break;
 			case \'afterSave\':
+			    $this->clearReusableObjects();
 				$this->afterSave($entity);
 				break;
 			case \'afterUpdate\':
@@ -454,6 +491,7 @@ class ModelBuilder {
 				$this->afterCreate($entity);
 				break;
 			case \'afterDelete\':
+			    $this->clearReusableObjects();
 				$this->afterDelete($entity);
 				break;
 			case \'validation\':
@@ -497,6 +535,9 @@ class ModelBuilder {
 			case DeleteService::EVENT_DATA_PROPAGATION_DELETE:
 				$this->dataPropagationDelete($entity);
 				break;
+            default:
+                $this->notifyOther($eventType);
+                break;
 		}
 		if($entity->validationHasFailed()==true) {
 			$exception = new ValidationException();
@@ -1076,12 +1117,7 @@ class ModelBuilder {
 ';
                     break;
                 case 'bool':
-                    $content .= '		$preFilterValue = $' . $field->getShortName() . ';
-		$' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'boolean\');
-		if(is_null($' . $field->getShortName() . ')) {
-			throw new \InvalidArgumentException(\'Expected Type of boolean (1, true, on, yes, 0, false, off, no, ""), Invalid Value: \'.$preFilterValue);
-		}
-';
+                    $content = $this->buildSetterBoolContent($field, $content);
                     break;
                 case 'double':
                     $content .= '		$' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'float\');
@@ -1881,5 +1917,25 @@ class ModelBuilder {
         $method->setContent('return;');
 
         return $method;
+    }
+
+    /**
+     * buildSetterBoolContent
+     * @param Field  $field
+     * @param string $content
+     * @return string
+     */
+    protected function buildSetterBoolContent(Field $field, $content) {
+        $content .= '		$preFilterValue = $' . $field->getShortName() . ';
+        if(!is_null($preFilterValue)) {
+            $' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'boolean\');
+            if(is_null($' . $field->getShortName() . ')) {
+                throw new \InvalidArgumentException(\'Expected Type of boolean (1, true, on, yes, 0, false, off, no, ""), Invalid Value: \'.$preFilterValue);
+            }
+        } else {
+            $' . $field->getShortName() . ' = $preFilterValue;
+        }
+';
+        return $content;
     }
 }

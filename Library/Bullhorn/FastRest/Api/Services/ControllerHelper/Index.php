@@ -270,23 +270,32 @@ class Index extends Base {
         }
 
         $sql = $alias . '.' . $name;
-        $entity->writeAttribute($name, $value);
-        $params = array();
-        $paramCount = $this->getCriteriaHelper()->getParamId();
-
-        $attribute = $entity->readAttribute($name);
-        if(is_null($attribute)) {
-            $sql .= " IS NULL";
-        } else {
-            $attribute .= ''; //Make sure to convert to string, for Date and DateTime
-            if(preg_match('@(^|[^\\\])%@', $attribute)) {
-                $operator = 'LIKE ';
+        if(is_array($value)) {
+            $attributes = [];
+            foreach($value as $subValue) {
+                $entity->writeAttribute($name, $subValue);
+                $attributes[] = $entity->readAttribute($name);
             }
-            $sql .= $operator . '?' . $paramCount;
-            $params[$paramCount] = $attribute;
-        }
+            $this->getCriteria()->inWhere($sql, $attributes);
+        } else {
+            $entity->writeAttribute($name, $value);
+            $attribute = $entity->readAttribute($name);
+            $params = [];
 
-        $this->getCriteria()->andWhere($sql, $params);
+
+            if (is_null($attribute)) {
+                $sql .= " IS NULL";
+            } else {
+                $attribute .= ''; //Make sure to convert to string, for Date and DateTime
+                if (preg_match('@(^|[^\\\])%@', $attribute)) {
+                    $operator = ' LIKE ';
+                }
+                $sql .= $operator . '?0';
+                $params[] = $attribute;
+            }
+
+            $this->getCriteriaHelper()->andWhere($sql, $params);
+        }
     }
 
     /**

@@ -22,5 +22,15 @@ class Services implements InjectionAwareInterface {
                 return new Connections();
             }
         );
+
+        $this->addApiConfig();
+    }
+
+    /**
+     * addApiConfig
+     * @return void
+     */
+    private function addApiConfig() {
+        $this->getDi()->setShared(ApiConfig::DI_NAME, new ApiConfig());
     }
 }

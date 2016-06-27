@@ -53,9 +53,7 @@ class Search {
         $children = array();
         $fields = array();
         foreach($params as $subAlias => $value) {
-            if(is_array($value)) {
-                throw new Exception('Search Value cannot be an array', 400);
-            } elseif(is_object($value) && get_class($value) == 'stdClass') {
+            if(is_object($value) && get_class($value) == 'stdClass') {
                 $children[] = new Search($value, $whiteList, ucfirst($subAlias));
             } else { //For current object
                 if(!$isRoot || !in_array($subAlias, $whiteList)) {

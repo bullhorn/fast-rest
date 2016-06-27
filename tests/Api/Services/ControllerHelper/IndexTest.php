@@ -13,6 +13,8 @@ use Phalcon\Mvc\Model\Criteria;
 class IndexTest extends Base {
     /** @var  \PHPUnit_Framework_MockObject_MockObject|Criteria */
     private $criteriaMock;
+    /** @var  PHPUnit_Framework_MockObject_MockObject|CriteriaHelper */
+    private $criteriaHelperMock = null;
 
     /**
      * {REPLACE_ME!}
@@ -45,18 +47,20 @@ class IndexTest extends Base {
     /**
      * {REPLACE_ME!}
      *
-     * @return \PHPUnit_Framework_MockObject_MockBuilder|CriteriaHelper
+     * @return \PHPUnit_Framework_MockObject_MockObject|CriteriaHelper
      */
     public function getMockCriteriaHelper() {
-        $criteriaHelperMock = $this->getMockBuilder(CriteriaHelper::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getParamId', 'andWhere'])
-            ->getMock();
-        $criteriaHelperMock->expects($this->any())
-            ->method('getParamId')
-            ->willReturn(1);
-
-        return $criteriaHelperMock;
+        if(is_null($this->criteriaHelperMock)) {
+            $criteriaHelperMock = $this->getMockBuilder(CriteriaHelper::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['getParamId', 'andWhere'])
+                ->getMock();
+            $criteriaHelperMock->expects($this->any())
+                ->method('getParamId')
+                ->willReturn(1);
+            $this->criteriaHelperMock = $criteriaHelperMock;
+        }
+        return $this->criteriaHelperMock;
     }
 
     /**
@@ -100,9 +104,9 @@ class IndexTest extends Base {
         $mockApiInterface->expects($this->once())
             ->method('readAttribute')
             ->willReturn('value');
-        $this->getMockCriteria()->expects($this->once())
+        $this->getMockCriteriaHelper()->expects($this->once())
             ->method('andWhere')
-            ->with('alias.name=?1', [1 => 'value']);
+            ->with('alias.name=?0', [0 => 'value']);
 
         //ACT
         $reflectionMethod->invoke($mockIndex, "name", "value", $mockApiInterface, "alias");
@@ -132,9 +136,9 @@ class IndexTest extends Base {
         $mockApiInterface->expects($this->once())
             ->method('readAttribute')
             ->willReturn('value');
-        $this->getMockCriteria()->expects($this->once())
+        $this->getMockCriteriaHelper()->expects($this->once())
             ->method('andWhere')
-            ->with('alias.name>=?1', [1 => 'value']);
+            ->with('alias.name>=?0', [0 => 'value']);
 
         //ACT
         $reflectionMethod->invoke($mockIndex, "name>", "value", $mockApiInterface, "alias");
@@ -163,9 +167,9 @@ class IndexTest extends Base {
         $mockApiInterface->expects($this->once())
             ->method('readAttribute')
             ->willReturn('value');
-        $this->getMockCriteria()->expects($this->once())
+        $this->getMockCriteriaHelper()->expects($this->once())
             ->method('andWhere')
-            ->with('alias.name>=?1', [1 => 'value']);
+            ->with('alias.name>=?0', [0 => 'value']);
 
         //ACT
         $reflectionMethod->invoke($mockIndex, "name>", "value", $mockApiInterface, "alias");
@@ -194,9 +198,9 @@ class IndexTest extends Base {
         $mockApiInterface->expects($this->once())
             ->method('readAttribute')
             ->willReturn('value');
-        $this->getMockCriteria()->expects($this->once())
+        $this->getMockCriteriaHelper()->expects($this->once())
             ->method('andWhere')
-            ->with('alias.name<=?1', [1 => 'value']);
+            ->with('alias.name<=?0', [0 => 'value']);
 
         //ACT
         $reflectionMethod->invoke($mockIndex, "name<", "value", $mockApiInterface, "alias");
@@ -225,9 +229,9 @@ class IndexTest extends Base {
         $mockApiInterface->expects($this->once())
             ->method('readAttribute')
             ->willReturn('value');
-        $this->getMockCriteria()->expects($this->once())
+        $this->getMockCriteriaHelper()->expects($this->once())
             ->method('andWhere')
-            ->with('alias.name<=?1', [1 => 'value']);
+            ->with('alias.name<=?0', [0 => 'value']);
 
         //ACT
         $reflectionMethod->invoke($mockIndex, "name<", "value", $mockApiInterface, "alias");
