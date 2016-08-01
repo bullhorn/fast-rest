@@ -447,13 +447,13 @@ class ModelBuilder {
         $method->setDescription('This is used to handle custom events');
         $method->setAccess('protected');
         $method->setName('notifyOther');
-        $method->setReturnType('void');
+        $method->setReturnType('bool');
         $parameter = new Object\Parameter();
         $parameter->setName('eventType');
         $parameter->setType('string');
         $method->addParameter($parameter);
         $method->setContent(
-            'return;'
+            'return true;'
         );
         $validation->addMethod($method);
 
@@ -476,6 +476,7 @@ class ModelBuilder {
         $method->setThrows(['ValidationException']);
         $method->setContent(
             '$this->setEntity($entity);
+        $returnVar = true;
 		switch($eventType) {
 			case \'beforeDelete\':
 				$this->beforeDelete($entity);
@@ -536,7 +537,7 @@ class ModelBuilder {
 				$this->dataPropagationDelete($entity);
 				break;
             default:
-                $this->notifyOther($eventType);
+                $returnVar = $this->notifyOther($eventType);
                 break;
 		}
 		if($entity->validationHasFailed()==true) {
@@ -544,7 +545,7 @@ class ModelBuilder {
 			$exception->setEntity($entity);
 			throw $exception;
 		} else {
-			return;
+			return $returnVar;
 		}'
         );
         $validation->addMethod($method);
