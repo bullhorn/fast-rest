@@ -150,8 +150,13 @@ class Save extends Base {
         foreach($params as $key => $value) {
             if(!(is_object($value) && get_class($value) == 'stdClass')) {
                 if(in_array($key, $entity->getModelsMetaData()->getColumnMap($entity)) || in_array($key, $customParentRelationshipFields)) {
-                    if(array_key_exists($key, $automaticFields) && $entity->readAttribute($key) != $value) {
-                        throw new Exception('The field of: ' . $key . ' cannot be manually updated', 409);
+                    if(array_key_exists($key, $automaticFields)) {
+                        //Create a clone and write to the attribute to check if it is a boolean and clean any values
+                        $copy = clone $this->getEntity();
+                        $copy->writeAttribute($key, $value);
+                        if($entity->readAttribute($key) != $copy->readAttribute($key)) {
+                            throw new Exception('The field of: ' . $key . ' cannot be manually updated', 409);
+                        }
                     }
                     $fields[$key] = $value;
                 } else {
