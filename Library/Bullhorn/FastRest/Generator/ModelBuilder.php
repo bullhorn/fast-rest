@@ -544,9 +544,8 @@ class ModelBuilder {
 			$exception = new ValidationException();
 			$exception->setEntity($entity);
 			throw $exception;
-		} else {
-			return $returnVar;
-		}'
+		}
+        return $returnVar;'
         );
         $validation->addMethod($method);
 
