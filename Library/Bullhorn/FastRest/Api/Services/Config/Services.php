@@ -1,5 +1,6 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\Config;
+use Bullhorn\FastRest\Api\Services\Model\Manager as ModelsManager;
 use Bullhorn\FastRest\Api\Services\Database\Connections;
 use Bullhorn\FastRest\DependencyInjection;
 use Phalcon\Config;
@@ -20,6 +21,14 @@ class Services implements InjectionAwareInterface {
             Connections::DI_NAME,
             function() {
                 return new Connections();
+            }
+        );
+
+
+        $this->getDi()->setShared(
+            'modelsManager',
+            function() {
+                return new ModelsManager();
             }
         );
 

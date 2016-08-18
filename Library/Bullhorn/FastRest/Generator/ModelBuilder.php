@@ -382,7 +382,7 @@ class ModelBuilder {
         $variable->setType('Model');
         $validation->addVariable($variable);
 
-        $validation->addUse('Phalcon\Mvc\Model\Manager as ModelsManager');
+        $validation->addUse('Bullhorn\FastRest\Api\Services\Model\Manager as ModelsManager');
         $method = new Object\Method();
         $method->setAccess('private');
         $method->setName('clearReusableObjects');
@@ -390,17 +390,7 @@ class ModelBuilder {
         $method->setContent(
             '/** @var ModelsManager $modelsManager */
         $modelsManager = $this->getEntity()->getModelsManager();
-        $reflectionClass = new \ReflectionClass($modelsManager);
-        $reflectionProperty = $reflectionClass->getProperty(\'_reusable\');
-        $reflectionProperty->setAccessible(true);
-        $values = $reflectionProperty->getValue($modelsManager);
-        $className = get_class($this->getEntity());
-        foreach($values as $key=>$value) {
-            if(strpos($key, $className)===0) {
-                unset($values[$key]);
-            }
-        }
-        $reflectionProperty->setValue($modelsManager, $values);'
+        $modelsManager->clearReusableForModel($this->getEntity());'
         );
         $validation->addMethod($method);
 
