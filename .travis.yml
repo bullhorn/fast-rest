@@ -12,7 +12,7 @@ notifications:
 
 before_install:
     - phpenv config-add customPHP.ini
-    - git clone --depth=1 git://github.com/phalcon/cphalcon.git
+    - git clone git://github.com/phalcon/cphalcon.git
     - cd cphalcon
     - git checkout tags/phalcon-v2.0.13
     - cd build
