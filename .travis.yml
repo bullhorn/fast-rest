@@ -5,8 +5,6 @@ php:
 
 sudo: required
 
-dist: trusty
-
 notifications:
     slack:
         rooms:
