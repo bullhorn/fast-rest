@@ -158,6 +158,15 @@ abstract class Base extends Controller {
     abstract protected function getQueryWhiteList();
 
     /**
+     * This is used if you want to filter the list of entities, or append to the list
+     * @param array $entities
+     * @return array
+     */
+    protected function filterEntities(array $entities) {
+        return $entities;
+    }
+
+    /**
      * This provides a list of the entities
      * @return void
      */
@@ -169,7 +178,7 @@ abstract class Base extends Controller {
             $this->response->setHeader('link', $query->generateLinks());
             /** @var ResultSet|ModelInterface[] $entities */
             $entities = $query->getResultSet();
-
+            $entities = $this->filterEntities($entities);
             $objects = array();
             foreach($entities as $entity) {
                 $objects[] = $this->generateEntityAction($entity);

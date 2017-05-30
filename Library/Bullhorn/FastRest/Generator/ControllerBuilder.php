@@ -259,12 +259,13 @@ class ControllerBuilder {
      * @return void
      */
     private function buildFactory() {
+        $this->getObject()->addUse(get_class($this->getModel()).' as Model');
         $method = new Object\Method();
         $method->setDescription('When called, this should return a new entity');
-        $method->setReturnType('ModelInterface');
+        $method->setReturnType('Model');
         $method->setAccess('public');
         $method->setName('generateEntity');
-        $method->setContent('return $this->getDI()->get(\'' . get_class($this->getModel()) . '\');');
+        $method->setContent('return $this->getDI()->get(Model::class);');
         $this->getObject()->addMethod($method);
     }
 
