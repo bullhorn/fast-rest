@@ -217,11 +217,11 @@ class ModelBuilder {
      * Writes all of the models
      *
      * @param Configuration $configuration
-     * @param string[] $ignoredTables
+     * @param string $ignoredTablesRegex
      *
      * @return void
      */
-    public static function writeAll(Configuration $configuration, array $ignoredTables = []) {
+    public static function writeAll(Configuration $configuration, $ignoredTablesRegex = null) {
         $results = $configuration->getConnection()->query('SHOW FULL TABLES WHERE Table_Type!="VIEW"');
         while($result = $results->fetch()) {
             $result = (object)$result;
@@ -230,9 +230,10 @@ class ModelBuilder {
                 $table = $column;
                 break;
             }
-            if(in_array($table, $ignoredTables)) {
+            if(!is_null($ignoredTablesRegex) && preg_match($ignoredTablesRegex, $table)) {
                 continue;
             }
+            echo 'Writing: '.$table."\n";
             $index = new self($configuration, $table);
             $index->write();
         }
@@ -1173,12 +1174,12 @@ class ModelBuilder {
      * @return void
      */
     private function buildColumnMap() {
-        $content = '		return array(' . "\n";
+        $content = '		return $this->columnMapMissingColumnsFix(array(' . "\n";
         foreach($this->getFields() as $field) {
             $content .= '			\'' . $field->getName() . '\' => \'' . $field->getShortName() . '\',' . "\n";
         }
         $content = substr($content, 0, -2) . "\n"; //Remove trailing comma
-        $content .= '		);';
+        $content .= '		));';
         $method = new Object\Method();
         $method->setAccess('public');
         $method->setDescription('Updates so we can use the shortened names, without changing the database');

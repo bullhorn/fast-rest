@@ -435,4 +435,17 @@ abstract class Base extends Model {
 
         return $returnVar;
     }
+
+    /**
+     * @param array $map
+     * @return array
+     */
+    protected function columnMapMissingColumnsFix(array $map) {
+        $data = $this->getDi()->get('modelsMetadata');
+        $attributes = $data->getAttributes($this);
+        foreach(array_diff($attributes, array_keys($map)) as $missingKeys) {
+            $map[$missingKeys] = $missingKeys;
+        }
+        return $map;
+    }
 }

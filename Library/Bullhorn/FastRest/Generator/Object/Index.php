@@ -388,7 +388,7 @@ namespace ' . $this->getNamespace() . ';
             $rootDirectory = $this->getConfiguration()->getRootDirectory();
         }
         if(substr($this->getNamespace(), 0, strlen($this->getConfiguration()->getRootNamespace())) != $this->getConfiguration()->getRootNamespace()) {
-            throw new \Exception('The Root namespace does not match this classes namespace, could not get the file name');
+            throw new \Exception('The Root namespace does not match this classes namespace, could not get the file name'."\n".$this->getNamespace()."\n".$this->getConfiguration()->getRootNamespace());
         }
         if($isTestClass) {
             $namespace = $this->getNamespace();
