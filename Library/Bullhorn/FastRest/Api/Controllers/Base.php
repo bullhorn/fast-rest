@@ -1,7 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Api\Controllers;
 
-use Api\v1_0\Services\CatchableException;
+use Bullhorn\FastRest\Api\Services\Exception\CatchableException;
 use Bullhorn\FastRest\Api\Models\ControllerModelInterface as ModelInterface;
 use Bullhorn\FastRest\Api\Models\CreateObject;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Index;
@@ -11,10 +11,8 @@ use Bullhorn\FastRest\Api\Services\ControllerHelper\Delete;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Show;
 use Bullhorn\FastRest\Api\Services\Acl\AclException;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\ShowCriteria;
-use Phalcon\Cache\Frontend\Output;
 use Phalcon\Http\Request\Exception;
 use Phalcon\Mvc\Controller;
-use Phalcon\DI;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSet;
 use Bullhorn\FastRest\Api\Services\Behavior\ValidationException;
 use Bullhorn\FastRest\Api\Services\Output\OutputInterface;

@@ -158,12 +158,13 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
             ->setMethods(['createBuilder'])
             ->getMock();
 
+        $host = $this;
         $modelsManager->expects($this->once())
             ->method('createBuilder')
             ->will(
                 $this->returnCallback(
-                    function ($params) {
-                        return $this->validatePhqlGenerateBuilder($params);
+                    function ($params) use ($host) {
+                        return $host->validatePhqlGenerateBuilder($params);
                     }
                 )
             );
@@ -183,12 +184,13 @@ abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAware
             ->setMethods(['getQuery'])
             ->getMock();
 
+        $host = $this;
         $builder->expects($this->once())
             ->method('getQuery')
             ->will(
                 $this->returnCallback(
-                    function () use ($builder) {
-                        return $this->validatePhqlGenerateQuery($builder);
+                    function () use ($builder, $host) {
+                        return $host->validatePhqlGenerateQuery($builder);
                     }
                 )
             );
