@@ -157,10 +157,10 @@ abstract class Base extends Controller {
 
     /**
      * This is used if you want to filter the list of entities, or append to the list
-     * @param array $entities
+     * @param ResultSet|ModelInterface[] $entities
      * @return array
      */
-    protected function filterEntities(array $entities) {
+    protected function filterEntities($entities) {
         return $entities;
     }
 
