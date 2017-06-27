@@ -92,4 +92,12 @@ class File implements InjectionAwareInterface {
     public function isDir() {
         return is_dir($this->getPath());
     }
+
+    /**
+     * unlink
+     * @return void
+     */
+    public function unlink() {
+        unlink($this->getPath());
+    }
 }
