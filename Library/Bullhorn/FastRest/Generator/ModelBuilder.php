@@ -489,9 +489,11 @@ class ModelBuilder {
 				$this->validation($entity);
 				break;
 			case \'beforeValidationOnCreate\':
+			    $this->beforeValidation($entity);
 				$this->beforeValidationOnCreate($entity);
 				break;
 			case \'beforeValidationOnUpdate\':
+			    $this->beforeValidation($entity);
 				$this->beforeValidationOnUpdate($entity);
 				break;
 			case AclEvents::EVENT_READ:
@@ -571,6 +573,20 @@ class ModelBuilder {
         $method->setDescription('Ran before validation on update');
         $method->setReturnType('void');
         $method->setName('beforeValidationOnUpdate');
+        $parameter = new Object\Parameter();
+        $parameter->setName('entity');
+        $parameter->setType('Model');
+        $parameter->setStrictType(true);
+        $method->addParameter($parameter);
+        $method->setContent('return null;');
+        $validation->addMethod($method);
+
+
+        $method = new Object\Method();
+        $method->setAccess('protected');
+        $method->setDescription('Ran before validation');
+        $method->setReturnType('void');
+        $method->setName('beforeValidation');
         $parameter = new Object\Parameter();
         $parameter->setName('entity');
         $parameter->setType('Model');
