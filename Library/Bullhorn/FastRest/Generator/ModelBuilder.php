@@ -1127,6 +1127,10 @@ class ModelBuilder {
                     $content = $this->buildSetterBoolContent($field, $content);
                     break;
                 case 'double':
+                    if($field->isNullable()) {
+                        $content .= '		$' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'nullify\');
+';
+                    }
                     $content .= '		$' . $field->getShortName() . ' = $this->getFilter()->sanitize($' . $field->getShortName() . ', \'float\');
 ';
                     break;
@@ -1145,7 +1149,7 @@ class ModelBuilder {
 ';
                     break;
             }
-            if($field->getType() == 'int' && $field->isNullable()) {
+            if(in_array($field->getType(), ['int', 'double']) && $field->isNullable()) {
                 $content .= '		if($' . $field->getShortName() . '==\'\' || strtolower($' . $field->getShortName() . ')==\'null\') {
 			$' . $field->getShortName() . ' = null;
 		}
