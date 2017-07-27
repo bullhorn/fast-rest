@@ -215,15 +215,15 @@ class Index {
     /**
      * Adds a new method
      *
-     * @param Method $method
-     *
+     * @param Method  $method
+     * @param boolean $override
      * @return void
      * @throws \Exception
      */
-    public function addMethod(Method $method) {
+    public function addMethod(Method $method, $override = false) {
         $methods = $this->getMethods();
         $key = $method->getName();
-        if(array_key_exists($key, $methods)) {
+        if(array_key_exists($key, $methods) && !$override) {
             throw new \Exception('A Method with the name of: ' . $method->getName() . ' already exists');
         }
         $methods[$key] = $method;
