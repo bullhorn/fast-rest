@@ -1,6 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\Database;
 
+use Phalcon\Db;
 use \Phalcon\Db\Adapter\Pdo\Mysql as ParentDbAdapter;
 
 class DbAdapter extends ParentDbAdapter {
@@ -39,7 +40,9 @@ class DbAdapter extends ParentDbAdapter {
 	 */
 	public function query($sqlStatement, $bindParams=null, $bindTypes=null) {
 		try {
-			return $this->callParentQuery($sqlStatement, $bindParams, $bindTypes);
+			$results = $this->callParentQuery($sqlStatement, $bindParams, $bindTypes);
+            $results->setFetchMode(Db::FETCH_ASSOC);
+            return $results;
 		} catch(\PDOException $e) {
 			if($e->getCode() === self::MYSQL_WENT_AWAY_CODE || $e->getMessage() === 'SQLSTATE[HY000]: General error: 2006 MySQL server has gone away') {
 				$this->connect($this->_descriptor);
