@@ -1,6 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Generator\Object;
 
+use Bullhorn\FastRest\Api\Services\Exception\CatchableException;
 use Bullhorn\FastRest\Generator\Configuration;
 
 class Index {
@@ -407,6 +408,9 @@ namespace ' . $this->getNamespace() . ';
      */
     public function write() {
         $filename = $this->getFileName();
+        if(basename($filename) == '.php') {
+            throw new CatchableException('Invalid Filename: '.$filename);
+        }
         if(!is_dir(dirname($filename))) {
             mkdir(dirname($filename), 0777, true);
         }

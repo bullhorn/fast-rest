@@ -362,266 +362,28 @@ class ModelBuilder {
         );
         $validation->setName($this->getAbstractClass()->getName());
         $validation->setAbstract(true);
-        $validation->setExtends('Behavior');
-        $validation->setImplements(['BehaviorInterface', 'InjectionAwareInterface']);
-        $validation->setTraits(['DependencyInjection']);
-        $validation->addUse('Phalcon\Mvc\Model\Behavior');
-        $validation->addUse('Phalcon\Mvc\Model\BehaviorInterface');
+        $validation->setExtends('BehaviorBase');
         $validation->addUse(str_replace('\Generated', '', $this->getAbstractClass()->getNamespace()) . '\\' . $this->getAbstractClass()->getName() . ' as Model');
-        $validation->addUse('Bullhorn\FastRest\DependencyInjection');
-        $validation->addUse('Phalcon\DI\InjectionAwareInterface');
-        $validation->addUse('Bullhorn\FastRest\Api\Services\Behavior\ValidationException');
         $validation->addUse('Phalcon\Mvc\Model\Message');
-        $validation->addUse('Phalcon\Mvc\Model\ValidatorInterface');
-        $validation->addUse('Bullhorn\FastRest\Api\Services\Acl\Events as AclEvents');
-        $validation->addUse('Bullhorn\FastRest\Api\Services\ControllerHelper\Save as SaveService');
-        $validation->addUse('Bullhorn\FastRest\Api\Services\ControllerHelper\Delete as DeleteService');
-
-        $variable = new Object\Variable();
-        $variable->setName('entity');
-        $variable->setAccess('private');
-        $variable->setType('Model');
-        $validation->addVariable($variable);
-
-        $validation->addUse('Bullhorn\FastRest\Api\Services\Model\Manager as ModelsManager');
-        $method = new Object\Method();
-        $method->setAccess('private');
-        $method->setName('clearReusableObjects');
-        $method->setReturnType('void');
-        $method->setContent(
-            '/** @var ModelsManager $modelsManager */
-        $modelsManager = $this->getEntity()->getModelsManager();
-        $modelsManager->clearReusableForModel($this->getEntity());'
-        );
-        $validation->addMethod($method);
+        $validation->addUse('Bullhorn\FastRest\Api\Services\Behavior\BehaviorBase');
 
         $method = new Object\Method();
         $method->setAccess('public');
         $method->setName('getEntity');
         $method->setReturnType('Model');
-        $method->setContent('return $this->entity;');
+        $method->setContent('return parent::getEntity();');
         $validation->addMethod($method);
 
-        $method = new Object\Method();
-        $method->setAccess('public');
-        $method->setName('setEntity');
-        $method->setReturnType('Model');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('$this->entity = $entity;');
-        $validation->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setAccess('public');
-        $method->setName('validate');
-        $method->setReturnType('void');
-        $parameter = new Object\Parameter();
-        $parameter->setName('validator');
-        $parameter->setType('ValidatorInterface');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent(
-            '$validator->validate($this->getEntity());
-		$messages = $validator->getMessages();
-		if(is_array($messages)) {
-			foreach($messages as $message) {
-				$this->getEntity()->appendMessage($message);
-			}
-		}'
-        );
-        $validation->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setDescription('This is used to handle custom events');
-        $method->setAccess('protected');
-        $method->setName('notifyOther');
-        $method->setReturnType('void');
-        $parameter = new Object\Parameter();
-        $parameter->setName('eventType');
-        $parameter->setType('string');
-        $method->addParameter($parameter);
-        $method->setContent(
-            'return;'
-        );
-        $validation->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setFinal(true);
-        $method->setAccess('public');
-        $method->setDescription('Receives notifications from the Models Manager');
-        $method->setReturnType('bool');
-        $method->setName('notify');
-        $parameter = new Object\Parameter();
-        $parameter->setName('eventType');
-        $parameter->setType('string');
-        $method->addParameter($parameter);
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('MvcInterface|Model');
-        $parameter->setStrictClass('MvcInterface');
-        $validation->addUse('Phalcon\Mvc\ModelInterface as MvcInterface');
-        $method->addParameter($parameter);
-        $method->setThrows(['ValidationException']);
-        $method->setContent(
-            '$this->setEntity($entity);
-		switch($eventType) {
-			case \'beforeDelete\':
-				$this->beforeDelete($entity);
-				break;
-			case \'afterSave\':
-			    $this->clearReusableObjects();
-				$this->afterSave($entity);
-				break;
-			case \'afterUpdate\':
-				$this->afterUpdate($entity);
-				break;
-			case \'afterCreate\':
-				$this->afterCreate($entity);
-				break;
-			case \'afterDelete\':
-			    $this->clearReusableObjects();
-				$this->afterDelete($entity);
-				break;
-			case \'validation\':
-				$this->validation($entity);
-				break;
-			case \'beforeValidationOnCreate\':
-			    $this->beforeValidation($entity);
-				$this->beforeValidationOnCreate($entity);
-				break;
-			case \'beforeValidationOnUpdate\':
-			    $this->beforeValidation($entity);
-				$this->beforeValidationOnUpdate($entity);
-				break;
-			case AclEvents::EVENT_READ:
-				$canRead = $this->canRead($entity);
-				if($canRead===false) {
-					if(empty($entity->getMessages())) {
-						$entity->appendMessage(new Message("You do not have read permission to: ".$entity->getSource()));
-					}
-				}else if($canRead!==true) {
-					throw new \InvalidArgumentException("Can read must return a boolean.");
-				}
-				break;
-			case AclEvents::EVENT_WRITE:
-				$canWrite = $this->canWrite($entity);
-				if($canWrite===false) {
-					if(empty($entity->getMessages())) {
-						$entity->appendMessage(new Message("You do not have write permission to: ".$entity->getSource()));
-					}
-				}else if($canWrite!==true) {
-					throw new \InvalidArgumentException("Can write must return a boolean.");
-				}
-				break;
-			case SaveService::EVENT_DATA_FINAL_CLEANUP:
-				$this->finalCleanup($entity);
-				break;
-			case SaveService::EVENT_DATA_PROPAGATION_CREATE:
-				$this->dataPropagationCreate($entity);
-				break;
-			case SaveService::EVENT_DATA_PROPAGATION_UPDATE:
-				$this->dataPropagationUpdate($entity);
-				break;
-			case DeleteService::EVENT_DATA_PROPAGATION_DELETE:
-				$this->dataPropagationDelete($entity);
-				break;
-            default:
-                $this->notifyOther($eventType);
-                break;
-		}
-		if($entity->validationHasFailed()==true) {
-			$exception = new ValidationException();
-			$exception->setEntity($entity);
-			throw $exception;
-		} else {
-			return;
-		}'
-        );
-        $validation->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Validates if the entity can be read');
-        $method->setReturnType('bool');
-        $method->setName('canRead');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return true;');
-        $validation->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Ran before validation on creation');
-        $method->setReturnType('void');
-        $method->setName('beforeValidationOnCreate');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return null;');
-        $validation->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Ran before validation on update');
-        $method->setReturnType('void');
-        $method->setName('beforeValidationOnUpdate');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return null;');
-        $validation->addMethod($method);
-
-
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Ran before validation');
-        $method->setReturnType('void');
-        $method->setName('beforeValidation');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return null;');
-        $validation->addMethod($method);
-
-        $validation->addMethod($this->buildFinalCleanupMethod());
-        $validation->addMethod($this->buildDataPropagationCreateMethod());
-        $validation->addMethod($this->buildDataPropagationUpdateMethod());
-        $validation->addMethod($this->buildDataPropagationDeleteMethod());
-
-
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Validates if the entity can be written to');
-        $method->setReturnType('bool');
-        $method->setName('canWrite');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return true;');
-        $validation->addMethod($method);
 
         //Before Delete Method
         $content = '';
         foreach($this->getRelationships() as $relationship) {
             if($relationship->isPlural() && !$relationship->isNullable() && $relationship->getAction() != 'ACTION_CASCADE') {
-                $content .= '		if ($entity->count' . ucfirst($relationship->getAlias()) . '()>0) {
+                $content .= 'parent::beforeDelete();
+        $entity = $this->getEntity();
+        if ($entity->count' . ucfirst($relationship->getAlias()) . '()>0) {
 			$entity->appendMessage(new Message(\'Multiple ' . ucfirst($relationship->getAlias()) . ' found\'));
-		}
-';
+		}';
             }
         }
         $method = new Object\Method();
@@ -629,22 +391,14 @@ class ModelBuilder {
         $method->setDescription('Validates if the entity can be deleted');
         $method->setReturnType('void');
         $method->setName('beforeDelete');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
         $method->setContent($content);
         $validation->addMethod($method);
         //End Before Delete Method
 
-        $validation->addMethod($this->buildAfterDeleteMethod());
-        $validation->addMethod($this->buildAfterUpdateMethod());
-        $validation->addMethod($this->buildAfterSaveMethod());
-        $validation->addMethod($this->buildAfterCreateMethod());
 
         //Validation Method
-        $content = '//Check to see if it is automatically updated
+        $content = '$entity = $this->getEntity();
+        //Check to see if it is automatically updated
 		$automaticAttributes = $entity->getModelsMetaData()->getAutomaticCreateAttributes($entity);
 		$columnMap = $entity->getModelsMetaData()->getColumnMap($entity);
 		$automaticFields = array_fill_keys($entity->getAutomaticallyUpdatedFields(), null);
@@ -764,11 +518,6 @@ class ModelBuilder {
         $method->setDescription('Validates if the entity can be updated or inserted');
         $method->setReturnType('void');
         $method->setName('validation');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
         $method->setContent($content);
         $validation->addMethod($method);
         //End Validation Method
@@ -783,32 +532,6 @@ class ModelBuilder {
         $childValidation->setName($this->getAbstractClass()->getName());
         $childValidation->setExtends('Generated\\' . $this->getAbstractClass()->getName());
         $childValidation->addUse(str_replace('\Generated', '', $this->getAbstractClass()->getNamespace()) . '\\' . $this->getAbstractClass()->getName() . ' as Model');
-
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Validates if the entity can be deleted');
-        $method->setReturnType('void');
-        $method->setName('beforeDelete');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('parent::beforeDelete($entity);');
-        $childValidation->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Validates if the entity can be updated or inserted');
-        $method->setReturnType('void');
-        $method->setName('validation');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('parent::validation($entity);');
-        $childValidation->addMethod($method);
 
         $this->setValidationChildClass($childValidation);
         $this->getAbstractClass()->addUse($childValidation->getNamespace() . '\\' . $childValidation->getName() . ' as ModelValidator');
@@ -1792,142 +1515,6 @@ class ModelBuilder {
         if(!file_exists($this->getValidationChildClass()->getFileName())) {
             $this->getValidationChildClass()->write();
         }
-    }
-
-    /**
-     * No.
-     * @return Object\Method
-     */
-    private function buildDataPropagationCreateMethod() {
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Does any data manipulation that is needed before saving but after validation');
-        $method->setReturnType('void');
-        $method->setName('dataPropagationCreate');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return;');
-
-        return $method;
-    }
-
-    /**
-     * No.
-     * @return Object\Method
-     */
-    private function buildFinalCleanupMethod() {
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('One time cleanup after save/update/delete are done. Helps avoid some recursion nightmares.');
-        $method->setReturnType('void');
-        $method->setName('finalCleanup');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return;');
-
-        return $method;
-    }
-
-    /**
-     * No.
-     * @return Object\Method
-     */
-    private function buildDataPropagationUpdateMethod() {
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Does any data manipulation that is needed before updating the database row but after validation');
-        $method->setReturnType('void');
-        $method->setName('dataPropagationUpdate');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return;');
-
-        return $method;
-    }
-
-    /**
-     * No.
-     * @return Object\Method
-     */
-    private function buildDataPropagationDeleteMethod() {
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription('Does any data manipulation that is needed before deleting the row from the database but after validation');
-        $method->setReturnType('void');
-        $method->setName('dataPropagationDelete');
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return;');
-
-        return $method;
-    }
-
-    /**
-     * No.
-     * @return Object\Method
-     */
-    private function buildAfterDeleteMethod() {
-        return $this->afterCrudMethod("afterDelete", 'Provides a way of doing additional manipulation after deletion.');
-    }
-
-    /**
-     * No.
-     * @return Object\Method
-     */
-    private function buildAfterSaveMethod() {
-        return $this->afterCrudMethod("afterSave", 'Provides a way of doing additional manipulation after creating/updating.');
-    }
-
-    /**
-     * No.
-     * @return Object\Method
-     */
-    private function buildAfterUpdateMethod() {
-        return $this->afterCrudMethod("afterUpdate", 'Provides a way of doing additional manipulation after updating.');
-    }
-
-    /**
-     * No.
-     * @return Object\Method
-     */
-    private function buildAfterCreateMethod() {
-        return $this->afterCrudMethod("afterCreate", 'Provides a way of doing additional manipulation after creating.');
-    }
-
-    /**
-     * Generates after events since they are so similar.
-     *
-     * @param String $methodName
-     * @param String $methodDescription
-     *
-     * @return Object\Method
-     */
-    private function afterCrudMethod($methodName, $methodDescription) {
-        $method = new Object\Method();
-        $method->setAccess('protected');
-        $method->setDescription($methodDescription);
-        $method->setReturnType('void');
-        $method->setName($methodName);
-        $parameter = new Object\Parameter();
-        $parameter->setName('entity');
-        $parameter->setType('Model');
-        $parameter->setStrictType(true);
-        $method->addParameter($parameter);
-        $method->setContent('return;');
-
-        return $method;
     }
 
     /**
