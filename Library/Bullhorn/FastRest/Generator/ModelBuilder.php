@@ -367,6 +367,7 @@ class ModelBuilder {
         $validation->addUse('Phalcon\Mvc\Model\Message');
         $validation->addUse('Bullhorn\FastRest\Api\Services\Behavior\BehaviorBase');
 
+
         $method = new Object\Method();
         $method->setAccess('public');
         $method->setName('getEntity');
@@ -380,6 +381,9 @@ class ModelBuilder {
         foreach($this->getRelationships() as $relationship) {
             if($relationship->isPlural() && !$relationship->isNullable() && $relationship->getAction() != 'ACTION_CASCADE') {
                 $content .= 'parent::beforeDelete();
+        if($this->isUnitTestingChildren()) {
+            return;
+        }
         $entity = $this->getEntity();
         if ($entity->count' . ucfirst($relationship->getAlias()) . '()>0) {
 			$entity->appendMessage(new Message(\'Multiple ' . ucfirst($relationship->getAlias()) . ' found\'));
@@ -397,7 +401,11 @@ class ModelBuilder {
 
 
         //Validation Method
-        $content = '$entity = $this->getEntity();
+        $content = 'parent::validation();
+        if($this->isUnitTestingChildren()) {
+            return;
+        }
+        $entity = $this->getEntity();
         //Check to see if it is automatically updated
 		$automaticAttributes = $entity->getModelsMetaData()->getAutomaticCreateAttributes($entity);
 		$columnMap = $entity->getModelsMetaData()->getColumnMap($entity);

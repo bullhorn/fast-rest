@@ -19,11 +19,54 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
     /** @var  Model */
     private $entity;
 
+    /** @var bool  */
+    private $unitTestingChildren = false;
+    /** @var bool  */
+    private $unitTestParentCalled = false;
+
+    /**
+     * isUnitTestingChildren
+     * @return bool
+     */
+    protected function isUnitTestingChildren() {
+        return $this->unitTestingChildren;
+    }
+
+    /**
+     * setUnitTestingChildren
+     * @param bool $unitTestingChildren
+     * @return BehaviorBase
+     */
+    public function setUnitTestingChildren($unitTestingChildren) {
+        $this->unitTestingChildren = $unitTestingChildren;
+        $this->setUnitTestParentCalled(false);
+        return $this;
+    }
+
+    /**
+     * isUnitTestParentCalled
+     * @return bool
+     */
+    public function isUnitTestParentCalled() {
+        return $this->unitTestParentCalled;
+    }
+
+    /**
+     * setUnitTestParentCalled
+     * @param bool $unitTestParentCalled
+     * @return BehaviorBase
+     */
+    protected function setUnitTestParentCalled($unitTestParentCalled) {
+        $this->unitTestParentCalled = $unitTestParentCalled;
+        return $this;
+    }
+
     /**
      * Provides a way of doing additional manipulation after creating.
      * @return void
      */
     protected function afterCreate() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -32,6 +75,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function afterDelete() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -40,6 +84,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function afterSave() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -48,6 +93,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function afterUpdate() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -56,6 +102,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function beforeDelete() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -64,6 +111,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function beforeValidation() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -72,6 +120,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function beforeValidationOnCreate() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -80,6 +129,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function beforeValidationOnUpdate() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -88,6 +138,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return bool
      */
     protected function canRead() {
+        $this->setUnitTestParentCalled(true);
         return true;
     }
 
@@ -96,6 +147,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return bool
      */
     protected function canWrite() {
+        $this->setUnitTestParentCalled(true);
         return true;
     }
 
@@ -104,6 +156,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function dataPropagationCreate() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -113,6 +166,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function dataPropagationDelete() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -122,6 +176,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function dataPropagationUpdate() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -131,6 +186,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function finalCleanup() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -139,6 +195,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function validation() {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
@@ -148,6 +205,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return void
      */
     protected function notifyOther($eventType) {
+        $this->setUnitTestParentCalled(true);
         return;
     }
 
