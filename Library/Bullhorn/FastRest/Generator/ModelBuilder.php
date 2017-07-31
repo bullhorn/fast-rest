@@ -980,6 +980,49 @@ class ModelBuilder {
     }
 
     /**
+     * filterConstant
+     * @param string $name
+     * @return string
+     */
+    private function filterConstant($name) {
+        $name = str_replace(' ', '_', $name);
+        $name = preg_replace_callback(
+            '@[A-Z][a-z]@',
+            function ($matches) {
+                return '_' . $matches[0];
+            },
+            $name
+        );
+
+
+        $name = str_replace(
+            array(
+                '/',
+                '-',
+                ',',
+                '|',
+                "\t"
+            ),
+            array(
+                '_SLASH_',
+                '_DASH_',
+                '_COMMA_',
+                '_PIPE_',
+                '_TAB_'
+            ),
+            $name
+        );
+        $name = trim($name, '_');
+        $name = preg_replace('@_+@', '_', $name);
+        $name = preg_replace('@[^a-zA-Z0-9_]@', '', $name); //Strip out bad characters
+        $name = strtoupper($name);
+        if(is_numeric($name)) {
+            $name = 'VALUE_'.$name;
+        }
+        return $name;
+    }
+
+    /**
      * Builds the enum constants
      * @return void
      * @throws \Exception
@@ -987,42 +1030,19 @@ class ModelBuilder {
     private function buildEnumConstants() {
         foreach($this->getFields() as $field) {
             $options = $field->getEnumOptions();
+
+
             if(!is_null($options)) {
+                $enumClass = new Object\Index($this->getConfiguration());
+                $enumClass->setNamespace($this->getAbstractClass()->getNamespace().'\\'.$this->getAbstractClass()->getName());
+                $enumClass->setName(ucfirst($field->getShortName()));
+                $enumClass->addUse('Bullhorn\FastRest\Api\Services\SplEnum');
+                $enumClass->setExtends('SplEnum');
                 foreach($options as $option) {
-                    $name = $field->getShortName() . '_' . lcfirst($option);
-                    $name = str_replace(' ', '_', $name);
-                    $name = preg_replace_callback(
-                        '@[A-Z][a-z]@',
-                        function ($matches) {
-                            return '_' . $matches[0];
-                        },
-                        $name
-                    );
-
-
-                    $name = str_replace(
-                        array(
-                            '/',
-                            '-',
-                            ',',
-                            '|',
-                            "\t"
-                        ),
-                        array(
-                            '_SLASH_',
-                            '_DASH_',
-                            '_COMMA_',
-                            '_PIPE_',
-                            '_TAB_'
-                        ),
-                        $name
-                    );
-                    $name = trim($name, '_');
-                    $name = preg_replace('@_+@', '_', $name);
-                    $name = preg_replace('@[^a-zA-Z0-9_]@', '', $name); //Strip out bad characters
-                    $name = strtoupper($name);
-                    $this->getAbstractClass()->addConstant($name, $option);
+                    $this->getAbstractClass()->addConstant($this->filterConstant($field->getShortName() . '_' . lcfirst($option)), $option);
+                    $enumClass->addConstant($this->filterConstant(lcfirst($option)), $option);
                 }
+                $enumClass->write();
             }
         }
     }
