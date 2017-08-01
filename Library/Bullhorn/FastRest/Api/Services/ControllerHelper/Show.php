@@ -2,22 +2,17 @@
 namespace Bullhorn\FastRest\Api\Services\ControllerHelper;
 
 use Bullhorn\FastRest\Api\Models\ApiInterface;
-use Phalcon\Http\Request;
 use Phalcon\Http\Request\Exception;
 
 class Show extends Base {
-    /** @var  Request */
-    private $request;
     /** @var  ApiInterface */
     private $entity;
 
     /**
      * Constructor
-     * @param Request $request
      * @param ApiInterface $entity
      */
-    public function __construct(Request $request, ApiInterface $entity) {
-        $this->setRequest($request);
+    public function __construct(ApiInterface $entity) {
         $this->setEntity($entity);
     }
 
@@ -140,22 +135,6 @@ class Show extends Base {
      */
     private function setEntity(ApiInterface $entity) {
         $this->entity = $entity;
-    }
-
-    /**
-     * Getter
-     * @return Request
-     */
-    private function getRequest() {
-        return $this->request;
-    }
-
-    /**
-     * Setter
-     * @param Request $request
-     */
-    private function setRequest(Request $request) {
-        $this->request = $request;
     }
 
 }

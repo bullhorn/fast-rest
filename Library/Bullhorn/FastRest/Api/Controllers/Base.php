@@ -382,7 +382,7 @@ abstract class Base extends Controller {
      * @return \stdClass
      */
     private function generateEntityAction(ModelInterface $entity) {
-        $show = new Show($this->request, $entity);
+        $show = new Show($entity);
         $showCriteria = new ShowCriteria($this->request);
         return $show->generate($showCriteria->getField());
     }
