@@ -18,6 +18,8 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
 
     /** @var  Model */
     private $entity;
+    /** @var bool  */
+    private $isAfterSave = false;
 
     /** @var bool  */
     private $unitTestingChildren = false;
@@ -252,6 +254,30 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
     }
 
     /**
+     * getUpdatedFields
+     * @return array
+     */
+    public function getChangedFields() {
+        if($this->isAfterSave() && method_exists($this->getEntity(), 'getUpdatedFields')) {
+            return $this->getEntity()->getUpdatedFields();
+        } else { //Legacy
+            return $this->getEntity()->getChangedFields();
+        }
+    }
+
+    /**
+     * getOldSnapshotData
+     * @return array
+     */
+    public function getSnapshotData() {
+        if($this->isAfterSave() && method_exists($this->getEntity(), 'getOldSnapshotData')) {
+            return $this->getEntity()->getOldSnapshotData();
+        } else { //Legacy
+            return $this->getEntity()->getSnapshotData();
+        }
+    }
+
+    /**
      * Receives notifications from the Models Manager
      * @param string             $eventType
      * @param MvcInterface $entity
@@ -263,34 +289,43 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
         $instance->setEntity($entity);
         switch($eventType) {
             case 'beforeDelete':
+                $instance->setIsAfterSave(false);
                 $instance->beforeDelete();
                 break;
             case 'afterSave':
+                $instance->setIsAfterSave(true);
                 $instance->clearReusableObjects();
                 $instance->afterSave();
                 break;
             case 'afterUpdate':
+                $instance->setIsAfterSave(true);
                 $instance->afterUpdate();
                 break;
             case 'afterCreate':
+                $instance->setIsAfterSave(true);
                 $instance->afterCreate();
                 break;
             case 'afterDelete':
+                $instance->setIsAfterSave(true);
                 $instance->clearReusableObjects();
                 $instance->afterDelete();
                 break;
             case 'validation':
+                $instance->setIsAfterSave(false);
                 $instance->validation();
                 break;
             case 'beforeValidationOnCreate':
+                $instance->setIsAfterSave(false);
                 $instance->beforeValidation();
                 $instance->beforeValidationOnCreate();
                 break;
             case 'beforeValidationOnUpdate':
+                $instance->setIsAfterSave(false);
                 $instance->beforeValidation();
                 $instance->beforeValidationOnUpdate();
                 break;
             case AclEvents::EVENT_READ:
+                $instance->setIsAfterSave(false);
                 $canRead = $instance->canRead();
                 if($canRead===false) {
                     if(empty($entity->getMessages())) {
@@ -301,6 +336,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
                 }
                 break;
             case AclEvents::EVENT_WRITE:
+                $instance->setIsAfterSave(false);
                 $canWrite = $instance->canWrite();
                 if($canWrite===false) {
                     if(empty($entity->getMessages())) {
@@ -311,18 +347,23 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
                 }
                 break;
             case SaveService::EVENT_DATA_FINAL_CLEANUP:
+                $instance->setIsAfterSave(true);
                 $instance->finalCleanup();
                 break;
             case SaveService::EVENT_DATA_PROPAGATION_CREATE:
+                $instance->setIsAfterSave(false);
                 $instance->dataPropagationCreate();
                 break;
             case SaveService::EVENT_DATA_PROPAGATION_UPDATE:
+                $instance->setIsAfterSave(false);
                 $instance->dataPropagationUpdate();
                 break;
             case DeleteService::EVENT_DATA_PROPAGATION_DELETE:
+                $instance->setIsAfterSave(false);
                 $instance->dataPropagationDelete();
                 break;
             default:
+                $instance->setIsAfterSave(true);
                 $instance->notifyOther($eventType);
                 break;
         }
@@ -333,6 +374,24 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
         } else {
             return;
         }
+    }
+
+    /**
+     * isAfterSave
+     * @return bool
+     */
+    private function isAfterSave() {
+        return $this->isAfterSave;
+    }
+
+    /**
+     * setIsAfterSave
+     * @param bool $isAfterSave
+     * @return BehaviorBase
+     */
+    private function setIsAfterSave($isAfterSave) {
+        $this->isAfterSave = $isAfterSave;
+        return $this;
     }
 
 }
