@@ -833,7 +833,7 @@ class ModelBuilder {
             $method->addParameter($parameter);
             $method->setAccess('public');
             $method->setName('set' . ucfirst($field->getShortName()));
-            $method->setReturnType('$this');
+            $method->setReturnType('ChildModel');
             $content = 'if(is_object($' . $field->getShortName() . ')) {
 			if(method_exists($' . $field->getShortName() . ', \'__toString\')) {
 				$' . $field->getShortName() . ' = $' . $field->getShortName() . '->__toString();

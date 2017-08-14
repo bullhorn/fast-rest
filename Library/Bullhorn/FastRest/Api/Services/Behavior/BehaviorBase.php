@@ -278,6 +278,15 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
     }
 
     /**
+     * beforeSave
+     * @return void
+     */
+    protected function beforeSave() {
+        $this->setUnitTestParentCalled(true);
+        return;
+    }
+
+    /**
      * Receives notifications from the Models Manager
      * @param string             $eventType
      * @param MvcInterface $entity
@@ -288,6 +297,10 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
         $instance = new static();
         $instance->setEntity($entity);
         switch($eventType) {
+            case 'beforeSave':
+                $instance->setIsAfterSave(false);
+                $instance->beforeSave();
+                break;
             case 'beforeDelete':
                 $instance->setIsAfterSave(false);
                 $instance->beforeDelete();
@@ -362,11 +375,9 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
                 $instance->setIsAfterSave(false);
                 $instance->dataPropagationDelete();
                 break;
-            default:
-                $instance->setIsAfterSave(true);
-                $instance->notifyOther($eventType);
-                break;
         }
+        $instance->setIsAfterSave(true);
+        $instance->notifyOther($eventType);
         if($entity->validationHasFailed()==true) {
             $exception = new ValidationException();
             $exception->setEntity($entity);
