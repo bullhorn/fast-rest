@@ -42,4 +42,11 @@ interface GeneratedInterface extends InjectionAwareInterface, ModelInterface {
      * @return string - The name of the model we just joined on
      */
     public function addJoin(CriteriaHelper $criteriaHelper, $alias, $currentModelAlias = null);
+
+    /**
+     * This calls the findFirst method and is used for unit testing so that it is not a static method
+     * @param array|int $parameters Array of conditions or primary key.
+     * @return GeneratedInterface|false
+     */
+    public function findFirstInstance($parameters=null);
 }
