@@ -32,6 +32,15 @@ abstract class Base extends Model {
     }
 
     /**
+     * resetField
+     * @param string $name
+     * @return void
+     */
+    public function resetField($name) {
+        $this->{$name} = null;
+    }
+
+    /**
      * Getter
      * @return CustomRelationship[]
      */
