@@ -67,6 +67,26 @@ abstract class Base extends ServiceBase {
     }
 
     /**
+     * removeParam
+     * @param string $name
+     * @return void
+     */
+    public function removeParam($name) {
+        $parts = explode('.', $name);
+        $currentObject = $this->getParams();
+        foreach($parts as $key=>$part) {
+            if (!property_exists($currentObject, $part)) {
+                return; //Property already does not exist
+            }
+            if($key+1==count($parts)) {
+                unset($currentObject->$part);
+            } else {
+                $currentObject = $currentObject->$part;
+            }
+        }
+    }
+
+    /**
      * hasParam
      * @param string $name
      * @return bool
