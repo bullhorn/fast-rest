@@ -1,5 +1,6 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\Behavior;
+use Bullhorn\FastRest\Api\Models\GeneratedInterface;
 use Bullhorn\FastRest\Api\Services\Acl\Events as AclEvents;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Delete as DeleteService;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Save as SaveService;
@@ -18,13 +19,13 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
 
     /** @var  Model */
     private $entity;
-    /** @var bool  */
-    private $isAfterSave = false;
 
     /** @var bool  */
     private $unitTestingChildren = false;
     /** @var bool  */
     private $unitTestParentCalled = false;
+    /** @var  Snapshot */
+    private $snapshot;
 
     /**
      * isUnitTestingChildren
@@ -258,11 +259,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return array
      */
     public function getChangedFields() {
-        if($this->isAfterSave() && method_exists($this->getEntity(), 'getUpdatedFields')) {
-            return $this->getEntity()->getUpdatedFields();
-        } else { //Legacy
-            return $this->getEntity()->getChangedFields();
-        }
+        return $instance->getSnapshot()->getChangedFields();
     }
 
     /**
@@ -270,11 +267,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return array
      */
     public function getSnapshotData() {
-        if($this->isAfterSave() && method_exists($this->getEntity(), 'getOldSnapshotData')) {
-            return $this->getEntity()->getOldSnapshotData();
-        } else { //Legacy
-            return $this->getEntity()->getSnapshotData();
-        }
+        return $instance->getSnapshot()->getSnapshotData();
     }
 
     /**
@@ -288,57 +281,58 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
 
     /**
      * Receives notifications from the Models Manager
-     * @param string             $eventType
-     * @param MvcInterface $entity
-     * @return bool
+     * @param string                          $eventType
+     * @param MvcInterface|GeneratedInterface $entity
+     * @return void
      * @throws ValidationException
      */
     final public function notify($eventType, MvcInterface $entity) {
         $instance = new static();
         $instance->setEntity($entity);
+        $instance->setSnapshot(new Snapshot($instance->getEntity()));
         switch($eventType) {
             case 'beforeSave':
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeSave();
                 break;
             case 'beforeDelete':
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeDelete();
                 break;
             case 'afterSave':
-                $instance->setIsAfterSave(true);
+                $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->clearReusableObjects();
                 $instance->afterSave();
                 break;
             case 'afterUpdate':
-                $instance->setIsAfterSave(true);
+                $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->afterUpdate();
                 break;
             case 'afterCreate':
-                $instance->setIsAfterSave(true);
+                $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->afterCreate();
                 break;
             case 'afterDelete':
-                $instance->setIsAfterSave(true);
+                $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->clearReusableObjects();
                 $instance->afterDelete();
                 break;
             case 'validation':
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->validation();
                 break;
             case 'beforeValidationOnCreate':
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeValidation();
                 $instance->beforeValidationOnCreate();
                 break;
             case 'beforeValidationOnUpdate':
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeValidation();
                 $instance->beforeValidationOnUpdate();
                 break;
             case AclEvents::EVENT_READ:
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $canRead = $instance->canRead();
                 if($canRead===false) {
                     if(empty($entity->getMessages())) {
@@ -349,7 +343,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
                 }
                 break;
             case AclEvents::EVENT_WRITE:
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $canWrite = $instance->canWrite();
                 if($canWrite===false) {
                     if(empty($entity->getMessages())) {
@@ -360,23 +354,23 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
                 }
                 break;
             case SaveService::EVENT_DATA_FINAL_CLEANUP:
-                $instance->setIsAfterSave(true);
+                $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->finalCleanup();
                 break;
             case SaveService::EVENT_DATA_PROPAGATION_CREATE:
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->dataPropagationCreate();
                 break;
             case SaveService::EVENT_DATA_PROPAGATION_UPDATE:
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->dataPropagationUpdate();
                 break;
             case DeleteService::EVENT_DATA_PROPAGATION_DELETE:
-                $instance->setIsAfterSave(false);
+                $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->dataPropagationDelete();
                 break;
         }
-        $instance->setIsAfterSave(true);
+        $instance->getSnapshot()->setIsAfterSave(true);
         $instance->notifyOther($eventType);
         if($entity->validationHasFailed()==true) {
             $exception = new ValidationException();
@@ -388,20 +382,20 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
     }
 
     /**
-     * isAfterSave
-     * @return bool
+     * getSnapshot
+     * @return Snapshot
      */
-    private function isAfterSave() {
-        return $this->isAfterSave;
+    private function getSnapshot() {
+        return $this->snapshot;
     }
 
     /**
-     * setIsAfterSave
-     * @param bool $isAfterSave
+     * setSnapshot
+     * @param Snapshot $snapshot
      * @return BehaviorBase
      */
-    private function setIsAfterSave($isAfterSave) {
-        $this->isAfterSave = $isAfterSave;
+    private function setSnapshot(Snapshot $snapshot) {
+        $this->snapshot = $snapshot;
         return $this;
     }
 
