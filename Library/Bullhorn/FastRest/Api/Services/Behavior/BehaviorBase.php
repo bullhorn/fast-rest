@@ -259,7 +259,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return array
      */
     public function getChangedFields() {
-        return $instance->getSnapshot()->getChangedFields();
+        return $this->getSnapshot()->getChangedFields();
     }
 
     /**
@@ -267,7 +267,7 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
      * @return array
      */
     public function getSnapshotData() {
-        return $instance->getSnapshot()->getSnapshotData();
+        return $this->getSnapshot()->getSnapshotData();
     }
 
     /**
