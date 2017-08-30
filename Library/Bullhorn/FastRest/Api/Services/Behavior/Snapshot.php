@@ -64,10 +64,14 @@ class Snapshot implements InjectionAwareInterface {
      */
     public function getSnapshotData() {
         if($this->isAfterSave() && method_exists($this->getEntity(), 'getOldSnapshotData')) {
-            return $this->getEntity()->getOldSnapshotData();
+            $data = $this->getEntity()->getOldSnapshotData();
         } else { //Legacy
-            return $this->getEntity()->getSnapshotData();
+            $data = $this->getEntity()->getSnapshotData();
         }
+        if(is_null($data)) {
+            $data = [];
+        }
+        return $data;
     }
 
     /**
