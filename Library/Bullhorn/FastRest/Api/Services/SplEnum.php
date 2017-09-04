@@ -13,6 +13,15 @@ abstract class SplEnum implements \JsonSerializable {
         $this->value = $value;
     }
 
+    /**
+     * getValues
+     * @return array
+     */
+    public static function getValues() {
+        $c = new \ReflectionClass(static::class);
+        return $c->getConstants();
+    }
+
     final public function __toString() {
         return $this->value;
     }
