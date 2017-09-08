@@ -2,6 +2,7 @@
 namespace Bullhorn\FastRest\Api\Services\ControllerHelper;
 
 use Bullhorn\FastRest\Api\Services\Database\Transaction;
+use Bullhorn\FastRest\Api\Services\Exception\CatchableException;
 use Phalcon\Http\Request;
 use Bullhorn\FastRest\Api\Models\ApiInterface;
 use Phalcon\Http\Request\Exception;
@@ -197,7 +198,11 @@ class Save extends Base {
     private function writeFields($fields, ApiInterface $entity) {
         foreach($fields as $name => $value) {
             if($this->getAcl()->canWriteField($entity, $name)) {
-                $entity->writeAttribute($name, $value);
+                try {
+                    $entity->writeAttribute($name, $value);
+                } catch(\InvalidArgumentException $e) {
+                    throw new CatchableException($e->getMessage());
+                }
             }
         }
     }
