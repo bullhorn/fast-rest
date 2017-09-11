@@ -1047,8 +1047,12 @@ class ModelBuilder {
                 $enumClass->addUse('Bullhorn\FastRest\Api\Services\SplEnum');
                 $enumClass->setExtends('SplEnum');
                 foreach($options as $option) {
-                    $this->getAbstractClass()->addConstant($this->filterConstant($field->getShortName() . '_' . lcfirst($option)), $option);
-                    $enumClass->addConstant($this->filterConstant(lcfirst($option)), $option);
+                    $optionName = lcfirst($option);
+                    if($optionName == '') {
+                        $optionName = 'EMPTY';
+                    }
+                    $this->getAbstractClass()->addConstant($this->filterConstant($field->getShortName() . '_' . $optionName), $option);
+                    $enumClass->addConstant($this->filterConstant($optionName), $option);
                 }
                 $enumClass->write();
             }
