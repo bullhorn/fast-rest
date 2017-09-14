@@ -6,7 +6,8 @@ class PluralHelper {
         '@(^d|D)ay$@' => '\\1ays',
         '@ch$@' => 'ches',
         '@y$@' => 'ies',
-        '@$@' => 's'
+        '@^$@'=> '',
+        '@$@' => 's',
     ];
 
     /**
@@ -17,6 +18,7 @@ class PluralHelper {
      * @return string
      */
     public function pluralize($string) {
+        $string = trim($string);
         foreach(self::RULES as $rule => $replace) {
             if(preg_match($rule, $string)) {
                 return preg_replace($rule, $replace, $string);
