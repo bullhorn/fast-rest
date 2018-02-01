@@ -132,7 +132,7 @@ class Index {
             throw new \Exception('Constant Already Exists: ' . $name);
         }
         $constants[$name] = $value;
-        ksort($constants);
+        asort($constants);
         $this->setConstants($constants);
     }
 
