@@ -3,6 +3,7 @@ namespace Bullhorn\FastRest\Api\Models;
 
 use Bullhorn\FastRest\Api\Services\Database\CriteriaHelper;
 use Bullhorn\FastRest\Api\Services\Database\Transaction;
+use Phalcon\Db\Column;
 use Phalcon\Mvc\Model;
 use Bullhorn\FastRest\Api\Services\Filter;
 use Phalcon\Mvc\Model\TransactionInterface;
@@ -76,14 +77,45 @@ abstract class Base extends Model {
      * @throws \Exception
      */
     public function getChangedFields() {
-        try {
-            return parent::getChangedFields();
-        } catch(Model\Exception $e) {
-            if($e->getMessage() != 'The record doesn\'t have a valid data snapshot') {
-                throw $e;
+        $snapshotData = $this->getSnapshotData();
+        if(!is_array($snapshotData)) {
+            $fields = array_values($this->getModelsMetaData()->getColumnMap($this));
+        } else {
+            $snapshotData = $this->getSnapshotData();
+            $databaseTypes = $this->getDatabaseTypes();
+            foreach($snapshotData as $key=>$value) {
+                if(array_key_exists($key, $databaseTypes)) {
+                    $databaseType = $databaseTypes[$key];
+                    switch($databaseType) {
+                        case Column::TYPE_BOOLEAN:
+                            $value = (bool)$value;
+                            break;
+                        case Column::TYPE_INTEGER:
+                            $value = (int)$value;
+                            break;
+                        case Column::TYPE_FLOAT:
+                        case Column::TYPE_DOUBLE:
+                            $value = (float)$value;
+                            break;
+                    }
+                    $snapshotData[$key] = $value;
+                }
             }
-            return $this->getModelsMetaData()->getColumnMap($this);
+            $fields = [];
+            foreach($this->getModelsMetaData()->getColumnMap($this) as $shortName) {
+                if(!array_key_exists($shortName, $snapshotData)) {
+                    $fields[] = $shortName;
+                    continue;
+                }
+                $snapData = $snapshotData[$shortName];
+                $fieldValue = $this->readAttribute($shortName);
+                if($snapData !== $fieldValue) {
+                    $fields[] = $shortName;
+                    continue;
+                }
+            }
         }
+        return array_diff($fields, ['updatedAt', 'createdAt']);
     }
 
     /**
@@ -135,6 +167,11 @@ abstract class Base extends Model {
         $this->setAutomaticallyUpdatedFields($fields);
     }
 
+    /**
+     * getDatabaseTypes
+     * @return array
+     */
+    abstract public function getDatabaseTypes();
 
     /**
      * Gets the unreadable fields

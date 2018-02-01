@@ -938,6 +938,20 @@ class ModelBuilder {
         $method->setReturnType('string[] keys are the real names, values are the names in the application');
         $method->setContent($content);
         $this->getAbstractClass()->addMethod($method);
+
+        $this->getAbstractClass()->addUse('Phalcon\Db\Column');
+        $content = '		return [';
+        foreach($this->getFields() as $field) {
+            $content .= '			\'' . $field->getShortName() . '\' => Column::' . $field->getPhalconColumnType() . ',' . "\n";
+        }
+        $content .= '       ];';
+        $method = new Object\Method();
+        $method->setAccess('public');
+        $method->setDescription('Used for determining the database type');
+        $method->setName('getDatabaseTypes');
+        $method->setReturnType('string[] keys are the column names, values are the DB\Column');
+        $method->setContent($content);
+        $this->getAbstractClass()->addMethod($method);
     }
 
     /**
