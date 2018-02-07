@@ -11,11 +11,11 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\Query;
 use Phalcon\Mvc\Model\Query\Builder;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
-abstract class Base extends PHPUnit_Framework_TestCase implements InjectionAwareInterface {
+abstract class Base extends TestCase implements InjectionAwareInterface {
     use DependencyInjection;
     const PHPUNIT_RUNNING = 'PHPUNIT_RUNNING';
 
