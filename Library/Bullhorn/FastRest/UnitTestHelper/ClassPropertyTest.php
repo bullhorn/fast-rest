@@ -3,7 +3,7 @@ namespace Bullhorn\FastRest\UnitTestHelper;
 
 use Bullhorn\FastRest\Api\Services\DataValidation\Assert;
 use Closure;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 class ClassPropertyTest {
@@ -16,7 +16,7 @@ class ClassPropertyTest {
 
     /**
      * The test class to run asserts on
-     * @var PHPUnit_Framework_TestCase
+     * @var TestCase
      */
     private $tester;
 
@@ -37,10 +37,10 @@ class ClassPropertyTest {
     /**
      * Constructor ensures object is passed in
      * @param Closure $objectFactory
-     * @param PHPUnit_Framework_TestCase $tester
+     * @param TestCase $tester
      * @param string|null $actualClassName used for testing abstract classes
      */
-    public function __construct(Closure $objectFactory, PHPUnit_Framework_TestCase $tester, $actualClassName = null) {
+    public function __construct(Closure $objectFactory, TestCase $tester, $actualClassName = null) {
         $this->objectFactory = $objectFactory;
         $this->tester = $tester;
         $object = $this->buildObject();
