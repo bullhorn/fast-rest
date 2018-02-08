@@ -4,7 +4,7 @@ namespace Bullhorn\FastRest\Generator;
 class PluralHelper {
     const RULES = [
         '@(^d|D)ay$@' => '\\1ays',
-        '@ch$@' => 'ches',
+        '@(ch|x)$@' => '\\1es',
         '@y$@' => 'ies',
         '@^$@'=> '',
         '@$@' => 's',
