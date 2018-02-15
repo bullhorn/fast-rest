@@ -8,4 +8,17 @@ class DateTime extends Date {
     public function __toString() {
         return $this->toDateTime();
     }
+
+    /**
+     * format
+     * @param string|null $format
+     * @return bool|string
+     */
+    public function format($format = null) {
+        if(is_null($format)) {
+            $format = $this->getFormatter()->getDateTimeFormat();
+        }
+        return date($format, $this->getEpoch());
+    }
+
 }

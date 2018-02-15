@@ -125,7 +125,7 @@ class Date implements InjectionAwareInterface {
      * getFormatter
      * @return Formatter
      */
-    private function getFormatter() {
+    protected function getFormatter() {
         return Formatter::getDefault();
     }
 
