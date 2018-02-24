@@ -5,7 +5,7 @@ use Bullhorn\FastRest\Api\Services\DataValidation\StrToTime;
 use Bullhorn\FastRest\DependencyInjection;
 use Phalcon\DI\InjectionAwareInterface;
 
-class Date implements InjectionAwareInterface {
+class Date implements InjectionAwareInterface, \JsonSerializable {
     use DependencyInjection;
 
     /** @type  double|false */
@@ -34,6 +34,10 @@ class Date implements InjectionAwareInterface {
             }
         }
         $this->setEqual24(in_array($dateTime, array('24:00:00', '24:00')));
+    }
+
+    public function jsonSerialize() {
+        return $this->__toString();
     }
 
     /**

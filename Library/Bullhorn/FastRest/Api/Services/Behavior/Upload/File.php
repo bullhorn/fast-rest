@@ -21,6 +21,8 @@ class File {
     private $used = false;
     /** @var string[] */
     private $allowedExtensions = [];
+    /** @var bool  */
+    private $allowMultiple = false;
 
     /**
      * Getter
@@ -212,5 +214,20 @@ class File {
         $this->handler = $handler;
     }
 
+    /**
+     * AllowMultiple
+     * @return bool
+     */
+    public function isAllowMultiple(): bool {
+        return $this->allowMultiple;
+    }
+
+    /**
+     * AllowMultiple
+     * @param bool $allowMultiple
+     */
+    public function setAllowMultiple(bool $allowMultiple): void {
+        $this->allowMultiple = $allowMultiple;
+    }
 
 }

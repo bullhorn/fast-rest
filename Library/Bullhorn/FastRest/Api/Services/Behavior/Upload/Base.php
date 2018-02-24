@@ -81,11 +81,17 @@ abstract class Base extends Behavior implements BehaviorInterface, InjectionAwar
      * @return void
      * @throws Exception
      */
-    private function processUploads($isCreating) {
+    protected function processUploads($isCreating) {
         $files = $this->getFiles();
+        $keysFound = [];
         foreach($this->getRequest()->getUploadedFiles() as $uploadedFile) {
-            if(array_key_exists($uploadedFile->getKey(), $files)) {
-                $file = $files[$uploadedFile->getKey()];
+            $key = preg_replace('@\..*$@', '', $uploadedFile->getKey());
+            if(array_key_exists($key, $files)) {
+                $file = $files[$key];
+                if(!$file->isAllowMultiple() && array_key_exists($key, $keysFound)) {
+                    continue; //Already used
+                }
+                $keysFound[$key] = true;
                 if($isCreating ? $file->isAllowedOnCreate() : $file->isAllowedOnUpdate()) {
                     $file->handle($uploadedFile);
                 }
