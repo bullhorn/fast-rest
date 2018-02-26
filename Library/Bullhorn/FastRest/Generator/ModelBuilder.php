@@ -680,7 +680,13 @@ class ModelBuilder {
                 $method->setDescription('Gets the count of related ' . $relationship->getAlias());
                 $method->setName('count' . ucfirst($relationship->getAlias()));
                 $method->setReturnType('int');
-                $method->setContent('return $this->get' . ucfirst($relationship->getAlias()) . '()->count();');
+                $parameter = new Object\Parameter();
+                $parameter->setDescription('');
+                $parameter->setName('parameters');
+                $parameter->setDefaultValue('null');
+                $parameter->setType('array');
+                $method->addParameter($parameter);
+                $method->setContent('return $this->get' . ucfirst($relationship->getAlias()) . '($parameters)->count();');
                 $this->getAbstractClass()->addMethod($method);
             } else {
 
