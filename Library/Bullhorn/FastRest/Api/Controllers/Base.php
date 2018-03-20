@@ -1,6 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Api\Controllers;
 
+use Bullhorn\FastRest\Api\Services\ControllerHelper\SearchTerm;
 use Bullhorn\FastRest\Api\Services\Exception\CatchableException;
 use Bullhorn\FastRest\Api\Models\ControllerModelInterface as ModelInterface;
 use Bullhorn\FastRest\Api\Models\CreateObject;
@@ -360,6 +361,49 @@ abstract class Base extends Controller {
             $this->handleAclError($e);
         }
     }
+
+    /**
+     * getSearchFields
+     * @return string[] db fields to search on
+     * @throws \Exception
+     */
+    protected function getSearchFields(): array {
+        throw new \Exception('If you wish to use searchAction, you must implement the searchFields method');
+    }
+
+    public function searchAction() {
+        try {
+            if(sizeOf($this->dispatcher->getParams()) == 0) {
+                $this->indexAction();
+                return;
+            }
+            $entity = $this->generateEntity();
+
+            $searchTerm = new SearchTerm($this->getSearchFields(), $this->dispatcher->getParam(0));
+            $query = new Index($this->request, $entity, $this->getQueryWhiteList(), $searchTerm);
+            $this->response->setHeader('link', $query->generateLinks());
+            /** @var ResultSet|ModelInterface[] $entities */
+            $entities = $query->getResultSet();
+            $entities = $this->filterEntities($entities);
+            $objects = array();
+            foreach($entities as $entity) {
+                $objects[] = $this->generateEntityAction($entity);
+            }
+            $outputObject = $this->getOutputObject();
+            $blankEntity = $this->generateEntity();
+            $outputObject->{$blankEntity->getEntityName() . 's'} = $objects;
+            $this->setOutputObject($outputObject);
+        } catch(Exception $e) {
+            $this->handleError($e);
+        } catch(ValidationException $e) {
+            $this->handleValidationError($e);
+        } catch(AclException $e) {
+            $this->handleAclError($e);
+        } catch(CatchableException $e) {
+            $this->handleCatchableError($e);
+        }
+    }
+
 
     /**
      * Looks up an individual entity

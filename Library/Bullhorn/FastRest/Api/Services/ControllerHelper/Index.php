@@ -35,10 +35,10 @@ class Index extends Base {
      * @param ControllerModelInterface $entityFactory
      * @param string[] $whiteList The list of fields that are always allowed
      */
-    public function __construct(Request $request, ControllerModelInterface $entityFactory, array $whiteList = []) {
+    public function __construct(Request $request, ControllerModelInterface $entityFactory, array $whiteList = [], ?SearchTerm $searchTerm = null) {
         $this->addToWhiteList($whiteList);
         $this->setRequest($request);
-        $this->setIndexCriteria(new IndexCriteria($this->getRequest()));
+        $this->setIndexCriteria(new IndexCriteria($this->getRequest(), [], $searchTerm));
         $this->setEntityFactory($entityFactory);
         $this->setCriteria($this->getEntityFactory()->query());
         $this->setCriteriaHelper(new CriteriaHelper($this->getCriteria()));
@@ -177,6 +177,25 @@ class Index extends Base {
      */
     private function buildSearchCriteria() {
         $this->buildSearchFieldsRecursive($this->getIndexCriteria()->getSearch(), $this->getEntityFactory());
+        if(!is_null($this->getIndexCriteria()->getSearchTerm())) {
+            $this->buildSearchTerm();
+        }
+    }
+
+    private function buildSearchTerm() {
+        $searchTerm = $this->getIndexCriteria()->getSearchTerm();
+        if($searchTerm->getTerm() != '') {
+            $sql = '';
+            $params = [];
+            foreach (array_values($searchTerm->getSearchFields()) as $key=>$searchField) {
+                if($key > 0) {
+                    $sql .= ' OR ';
+                }
+                $sql .= '['.$searchField.'] LIKE ?'.$key;
+                $params[] = '%'.$searchTerm->getTerm().'%';
+            }
+            $this->getCriteriaHelper()->andWhere($sql, $params);
+        }
     }
 
     /**

@@ -38,6 +38,15 @@ class ApiRoutes {
             )
         );
         $router->addGet(
+            '/' . $this->getApiRootUrl() . '/:controller/search/:params',
+            array(
+                'namespace' => $this->getApiControllerRootNamespace(),
+                'controller' => 1,
+                'action' => 'search',
+                'params' => 2
+            )
+        );
+        $router->addGet(
             '/' . $this->getApiRootUrl() . '/:controller',
             array(
                 'namespace' => $this->getApiControllerRootNamespace(),

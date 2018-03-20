@@ -20,19 +20,22 @@ class IndexCriteria implements InjectionAwareInterface {
     private $limit;
     /** @var  string[] */
     private $whiteList = ['fields', 'start', 'count', 'sort', 'token', 'vanityName', 'bhRestToken', 'authenticationKey'];
+    /** @var ?SearchTerm */
+    private $searchTerm = null;
 
     /**
      * Constructor
      * @param Request $request
      * @param string[] $whiteList
      */
-    public function __construct(Request $request, array $whiteList = []) {
+    public function __construct(Request $request, array $whiteList = [], ?SearchTerm $searchTerm = null) {
         $this->addToWhiteList($whiteList);
         $this->setRequest($request);
         $this->buildSorts();
         $this->buildSearch();
         $this->buildOffset();
         $this->buildLimit();
+        $this->setSearchTerm($searchTerm);
     }
 
     /**
@@ -213,6 +216,24 @@ class IndexCriteria implements InjectionAwareInterface {
      */
     private function setSorts(array $sorts) {
         $this->sorts = $sorts;
+    }
+
+    /**
+     * SearchTerm
+     * @return ?SearchTerm
+     */
+    public function getSearchTerm(): ?SearchTerm {
+        return $this->searchTerm;
+    }
+
+    /**
+     * SearchTerm
+     * @param ?SearchTerm $searchTerm
+     * @return IndexCriteria
+     */
+    private function setSearchTerm(?SearchTerm $searchTerm): IndexCriteria {
+        $this->searchTerm = $searchTerm;
+        return $this;
     }
 
 

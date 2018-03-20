@@ -1,7 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\DbCompare;
 
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Bullhorn\FastRest\Api\Services\Database\DbAdapter;
 use Bullhorn\FastRest\Base;
 
 class Database extends Base {
@@ -92,11 +92,12 @@ class Database extends Base {
      * @return void
      */
     private function buildDatabase($ignoreTables) {
-        $tables = $this->getDbAdapter()->query('SHOW FULL TABLES WHERE Table_Type!="VIEW"')->fetchAll();
+        $schema = $this->getDbAdapter()->getDescriptor()['dbname'];
+        $tables = $this->getDbAdapter()->query('SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE="BASE TABLE" AND TABLE_SCHEMA=?', [$schema])->fetchAll();
         array_walk(
             $tables,
             function (&$item) {
-                $item = $item[0];
+                $item = $item['TABLE_NAME'];
             }
         );
         $tables = array_diff($tables, $ignoreTables);
