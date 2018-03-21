@@ -74,6 +74,7 @@ abstract class Base extends Model {
     }
 
     public function addChildrenUpdater(ChildrenUpdater $childrenUpdater): void {
+        $this->addBehavior($childrenUpdater);
         $childrenUpdaters = $this->getChildrenUpdaters();
         $childrenUpdaters[$childrenUpdater->getFieldName()] = $childrenUpdater;
         $this->setChildrenUpdaters($childrenUpdaters);
