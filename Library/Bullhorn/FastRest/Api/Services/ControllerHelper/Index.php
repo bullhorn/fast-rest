@@ -185,16 +185,19 @@ class Index extends Base {
     private function buildSearchTerm() {
         $searchTerm = $this->getIndexCriteria()->getSearchTerm();
         if($searchTerm->getTerm() != '') {
-            $sql = '';
-            $params = [];
-            foreach (array_values($searchTerm->getSearchFields()) as $key=>$searchField) {
-                if($key > 0) {
-                    $sql .= ' OR ';
+            $parts = explode(' ', $searchTerm->getTerm());
+            foreach($parts as $part) {
+                $sql = '';
+                $params = [];
+                foreach (array_values($searchTerm->getSearchFields()) as $key => $searchField) {
+                    if ($key > 0) {
+                        $sql .= ' OR ';
+                    }
+                    $sql .= '[' . $searchField . '] LIKE ?' . $key;
+                    $params[] = '%' . $part . '%';
                 }
-                $sql .= '['.$searchField.'] LIKE ?'.$key;
-                $params[] = '%'.$searchTerm->getTerm().'%';
+                $this->getCriteriaHelper()->andWhere($sql, $params);
             }
-            $this->getCriteriaHelper()->andWhere($sql, $params);
         }
     }
 
