@@ -1,6 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Api\Controllers;
 
+use Bullhorn\FastRest\Api\Models\HttpStatusCode;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\SearchTerm;
 use Bullhorn\FastRest\Api\Services\Exception\CatchableException;
 use Bullhorn\FastRest\Api\Models\ControllerModelInterface as ModelInterface;
@@ -517,7 +518,7 @@ abstract class Base extends Controller {
         }
         $isChanged = $this->saveEntity($params->getParams(), $entity, false);
         if(!$isChanged) {
-            $this->setStatusCode(304); //Nothing is changed
+            $this->setStatusCode(HttpStatusCode::NOT_CHANGED); //Nothing is changed
         }
         return $isChanged;
     }

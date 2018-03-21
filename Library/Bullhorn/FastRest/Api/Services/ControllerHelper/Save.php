@@ -150,7 +150,9 @@ class Save extends Base {
         $fields = array();
         foreach($params as $key => $value) {
             if(!(is_object($value) && get_class($value) == 'stdClass')) {
-                if(in_array($key, $entity->getModelsMetaData()->getColumnMap($entity)) || in_array($key, $customParentRelationshipFields)) {
+                if(array_key_exists($key, $entity->getChildrenUpdaters())) {
+                    $fields[$key] = $value;
+                } elseif(in_array($key, $entity->getModelsMetaData()->getColumnMap($entity)) || in_array($key, $customParentRelationshipFields)) {
                     if(array_key_exists($key, $automaticFields) && $entity->readAttribute($key) != $value) {
                         throw new Exception('The field of: ' . $key . ' cannot be manually updated', 409);
                     }
@@ -193,18 +195,27 @@ class Save extends Base {
      * @param string[] $fields
      * @param ApiInterface $entity
      *
-     * @return void
+     * @return bool
      */
-    private function writeFields($fields, ApiInterface $entity) {
+    private function writeFields($fields, ApiInterface $entity, bool $writeChildren): bool {
+        $isChanged = false;
         foreach($fields as $name => $value) {
             if($this->getAcl()->canWriteField($entity, $name)) {
                 try {
-                    $entity->writeAttribute($name, $value);
+                    if(array_key_exists($name, $entity->getChildrenUpdaters())) {
+                        if($writeChildren) {
+                            $entity->getChildrenUpdaters()[$name]->setData($entity, $value);
+                            $isChanged = true;
+                        }
+                    } else {
+                        $entity->writeAttribute($name, $value);
+                    }
                 } catch(\InvalidArgumentException $e) {
                     throw new CatchableException($e->getMessage());
                 }
             }
         }
+        return $isChanged;
     }
 
     /**
@@ -246,7 +257,7 @@ class Save extends Base {
         $fields = $this->filterFields($params, $entity, $isCreating);
 
 
-        $this->writeFields($fields, $entity);
+        $this->writeFields($fields, $entity, false);
         $this->writeCustomParents($fields, $entity);
         //Then Update the parents
         /** @var ApiInterface[] $parentEntities */
@@ -289,7 +300,9 @@ class Save extends Base {
         foreach($parentEntities as $relationship => $parent) {
             $entity->setRelated($relationship, $parent);
         }
-        $this->writeFields($fields, $entity);
+        if($this->writeFields($fields, $entity, true)) {
+            $isChanged = true;
+        }
 
         if($isCreating) {
             $entity->fireEventCancel(UploadBase::EVENT_UPLOAD_FILE_CREATE);

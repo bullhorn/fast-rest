@@ -8,6 +8,7 @@ use Phalcon\Mvc\Model;
 use Bullhorn\FastRest\Api\Services\Filter;
 use Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSet;
+use Bullhorn\FastRest\Api\Services\Behavior\UpdateChildren\Base as ChildrenUpdater;
 
 /**
  * Interface EntityInterface
@@ -23,6 +24,8 @@ abstract class Base extends Model {
     private $automaticallyUpdatedFields = [];
     /** @var CustomRelationship[] */
     private $customParentRelationships = [];
+    /** @var ChildrenUpdater[] */
+    private static $childrenUpdaters = [];
 
     /**
      * Constructor
@@ -69,6 +72,35 @@ abstract class Base extends Model {
         $customRelationships[$customRelationship->getAlias()] = $customRelationship;
         $this->setCustomParentRelationships($customRelationships);
     }
+
+    public function addChildrenUpdater(ChildrenUpdater $childrenUpdater): void {
+        $childrenUpdaters = $this->getChildrenUpdaters();
+        $childrenUpdaters[$childrenUpdater->getFieldName()] = $childrenUpdater;
+        $this->setChildrenUpdaters($childrenUpdaters);
+    }
+
+    /**
+     * ChildrenUpdaters
+     * @return ChildrenUpdater[]
+     */
+    public function getChildrenUpdaters(): array {
+        $key = get_class($this);
+        if(!array_key_exists($key, self::$childrenUpdaters)) {
+            return [];
+        }
+        return self::$childrenUpdaters[$key];
+    }
+
+    /**
+     * ChildrenUpdaters
+     * @param ChildrenUpdater[] $childrenUpdaters
+     * @return Base
+     */
+    private function setChildrenUpdaters(array $childrenUpdaters): Base {
+        self::$childrenUpdaters[get_class($this)] = $childrenUpdaters;
+        return $this;
+    }
+
 
     /**
      * getChangedFields

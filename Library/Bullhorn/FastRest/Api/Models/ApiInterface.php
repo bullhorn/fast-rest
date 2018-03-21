@@ -6,6 +6,7 @@ use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\Relation;
 use Bullhorn\FastRest\Api\Services\Database\CriteriaHelper;
+use Bullhorn\FastRest\Api\Services\Behavior\UpdateChildren\Base as ChildrenUpdater;
 
 interface ApiInterface extends GeneratedInterface {
     const FIELD_TYPE_BOOL = 'bool';
@@ -20,6 +21,12 @@ interface ApiInterface extends GeneratedInterface {
      * @return CustomRelationship[]
      */
     public function getCustomParentRelationships();
+
+    /**
+     * ChildrenUpdaters
+     * @return ChildrenUpdater[]
+     */
+    public function getChildrenUpdaters(): array;
 
     /**
      * Returns the primary id.
