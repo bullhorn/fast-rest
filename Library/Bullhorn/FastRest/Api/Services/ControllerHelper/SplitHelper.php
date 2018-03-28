@@ -48,6 +48,7 @@ class SplitHelper {
      */
     public function convert(array $input) {
         //Convert to objects
+        if (isSet($input['XDEBUG_SESSION_START'])) unset($input['XDEBUG_SESSION_START']);
         $returnVar = new \stdClass();
         foreach($input as $name => $value) {
             $parts = explode($this->getDelimiter(), $name);
