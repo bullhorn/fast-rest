@@ -271,6 +271,15 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
     }
 
     /**
+     * beforeUpdate
+     * @return void
+     */
+    protected function beforeUpdate() {
+        $this->setUnitTestParentCalled(true);
+        return;
+    }
+
+    /**
      * beforeSave
      * @return void
      */
@@ -291,42 +300,46 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
         $instance->setEntity($entity);
         $instance->setSnapshot(new Snapshot($instance->getEntity()));
         switch($eventType) {
-            case 'beforeSave':
+            case DbEventEnum::BEFORE_SAVE:
                 $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeSave();
                 break;
-            case 'beforeDelete':
+            case DbEventEnum::BEFORE_DELETE:
                 $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeDelete();
                 break;
-            case 'afterSave':
+            case DbEventEnum::BEFORE_UPDATE:
+                $instance->getSnapshot()->setIsAfterSave(false);
+                $instance->beforeUpdate();
+                break;
+            case DbEventEnum::AFTER_SAVE:
                 $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->clearReusableObjects();
                 $instance->afterSave();
                 break;
-            case 'afterUpdate':
+            case DbEventEnum::AFTER_UPDATE:
                 $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->afterUpdate();
                 break;
-            case 'afterCreate':
+            case DbEventEnum::AFTER_CREATE:
                 $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->afterCreate();
                 break;
-            case 'afterDelete':
+            case DbEventEnum::AFTER_DELETE:
                 $instance->getSnapshot()->setIsAfterSave(true);
                 $instance->clearReusableObjects();
                 $instance->afterDelete();
                 break;
-            case 'validation':
+            case DbEventEnum::VALIDATION:
                 $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->validation();
                 break;
-            case 'beforeValidationOnCreate':
+            case DbEventEnum::BEFORE_VALIDATION_ON_CREATE:
                 $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeValidation();
                 $instance->beforeValidationOnCreate();
                 break;
-            case 'beforeValidationOnUpdate':
+            case DbEventEnum::BEFORE_VALIDATION_ON_UPDATE:
                 $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeValidation();
                 $instance->beforeValidationOnUpdate();
