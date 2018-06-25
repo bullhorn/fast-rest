@@ -515,15 +515,23 @@ abstract class Base extends Model {
         return $returnVar;
     }
 
+    private $columnMapFixed;
+
     /**
      * @param array $map
      * @return array
      */
     protected function columnMapMissingColumnsFix(array $map) {
-        $data = $this->getDi()->get('modelsMetadata');
-        $attributes = $data->getAttributes($this);
-        foreach(array_diff($attributes, array_keys($map)) as $missingKeys) {
-            $map[$missingKeys] = $missingKeys;
+        if(is_null($this->columnMapFixed)) {
+            /** @var Column[] $columns */
+            $columns = $this->getReadConnection()->describeColumns($this->getSource());
+            foreach($columns as $dbColumn) {
+                $name = $dbColumn->getName();
+                if(!array_key_exists($name, $map)) {
+                    $map[$name] = $name;
+                }
+            }
+            $this->columnMapFixed = $map;
         }
         return $map;
     }
