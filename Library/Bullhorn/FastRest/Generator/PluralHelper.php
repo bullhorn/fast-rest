@@ -2,13 +2,6 @@
 namespace Bullhorn\FastRest\Generator;
 
 class PluralHelper {
-    const RULES = [
-        '@(^d|D)ay$@' => '\\1ays',
-        '@(ch|x)$@' => '\\1es',
-        '@y$@' => 'ies',
-        '@^$@'=> '',
-        '@$@' => 's',
-    ];
 
     /**
      * pluralizes a string
@@ -17,12 +10,21 @@ class PluralHelper {
      *
      * @return string
      */
-    public function pluralize($string) {
+    public static function pluralize($string) {
         $string = trim($string);
-        foreach(self::RULES as $rule => $replace) {
-            if(preg_match($rule, $string)) {
-                return preg_replace($rule, $replace, $string);
-            }
+        $testString = strtolower($string);
+        if($testString == '') {
+            return '';
+        } elseif(substr($testString, -3) == 'day') {
+            return $string.'s';
+        } elseif(substr($testString, -2) == 'ch') {
+            return $string.'es';
+        } elseif(substr($testString, -1) == 'x') {
+            return $string.'es';
+        } elseif(substr($testString, -1) == 'y') {
+            return substr($string, 0, -1).'ies';
+        } else {
+            return $string.'s';
         }
     }
 }
