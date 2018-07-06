@@ -10,8 +10,20 @@ class Filter extends PhalconFilter
      */
     public function __construct()
     {
-        this->add("boolean", new Filter__constructClosureOne());
-        this->add("nullify", new Filter__constructClosureOne());
+        this->add("boolean", function(value) {
+            return filter_var(
+                value,
+                FILTER_VALIDATE_BOOLEAN,
+                ["flags":FILTER_NULL_ON_FAILURE]
+            );
+        });
+        this->add("nullify", function(value) {
+            if(value === "" || value === "null") {
+                return null;
+            } else {
+                return value;
+            }
+        });
     }
 
 }

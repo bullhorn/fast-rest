@@ -14,7 +14,7 @@ class DbAdapter extends ParentDbAdapter
      *
      * @return boolean
      */
-    public function execute(string! sqlStatement, var bindParams = null, var bindTypes = null) -> boolean
+    public function execute(sqlStatement, var bindParams = null, var bindTypes = null) -> boolean
     {
         var e;
 
@@ -39,18 +39,18 @@ class DbAdapter extends ParentDbAdapter
      *
      * @return boolean
      */
-    public function query(string! sqlStatement, var bindParams = null, var bindTypes = null) -> <ResultInterface> | boolean
+    public function query(var sqlStatement, var placeholders = null, var dataTypes = null) -> <ResultInterface> | boolean
     {
         var results, e;
 
         try {
-            let results =  this->callParentQuery(sqlStatement, bindParams, bindTypes);
+            let results =  this->callParentQuery(sqlStatement, placeholders, dataTypes);
             results->setFetchMode(Db::FETCH_ASSOC);
             return results;
         } catch \PDOException, e {
             if e->getCode() === self::MYSQL_WENT_AWAY_CODE || e->getMessage() === "SQLSTATE[HY000]: General error: 2006 MySQL server has gone away" {
                 this->connect(this->_descriptor);
-                return this->callParentQuery(sqlStatement, bindParams, bindTypes);
+                return this->callParentQuery(sqlStatement, placeholders, dataTypes);
             } else {
                 throw e;
             }
@@ -67,9 +67,9 @@ class DbAdapter extends ParentDbAdapter
      *
      * @return boolean
      */
-    protected function callParentExecute(string! sqlStatement, var bindParams = null, var bindTypes = null) -> boolean
+    protected function callParentExecute(string! sqlStatement, var placeholders = null, var dataTypes = null) -> boolean
     {
-        return parent::execute(sqlStatement, bindParams, bindTypes);
+        return parent::execute(sqlStatement, placeholders, dataTypes);
     }
 
     /**

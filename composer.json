@@ -24,7 +24,8 @@
   },
   "require-dev": {
     "phalcon/incubator": ">=2.0",
-    "codeclimate/php-test-reporter": "dev-master"
+    "codeclimate/php-test-reporter": "dev-master",
+      "prune-mazui/zephir-ide-helper": "^1.2"
   },
   "autoload": {
     "psr-0": {

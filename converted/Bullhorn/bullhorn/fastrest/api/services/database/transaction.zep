@@ -62,14 +62,10 @@ class Transaction implements InjectionAwareInterface
      */
     protected function setTransaction(<TransactionInterface> transaction)
     {
-        var transactions, tmpThis1;
+        var transactions;
 
         let transactions =  this->getTransactions();
-
-        this->getDbService();
-        let tmpThis1 = this;
-
-        let transactions[tmpThis1] = transaction;
+        let transactions[this->getDbService()] = transaction;
         this->setTransactions(transactions);
     }
 
@@ -139,7 +135,7 @@ class Transaction implements InjectionAwareInterface
      */
     public function getTransaction() -> <TransactionInterface>
     {
-        var transactions, tmpThis1;
+        var transactions;
 
         if !(this->isInTransaction()) {
             throw new \Exception("This transaction has already been rolled back, or committed, or has not began yet");
@@ -155,7 +151,7 @@ class Transaction implements InjectionAwareInterface
      */
     public function rollback()
     {
-        var e, transactions, tmpThis1;
+        var e, transactions;
 
         try {
             this->getTransaction()->rollback();
@@ -181,7 +177,7 @@ class Transaction implements InjectionAwareInterface
      */
     public function commit()
     {
-        var e, transactions, tmpThis1;
+        var e, transactions;
 
         try {
             this->getTransaction()->commit();

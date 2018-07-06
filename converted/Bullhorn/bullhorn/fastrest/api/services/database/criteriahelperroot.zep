@@ -3,7 +3,7 @@ namespace Bullhorn\FastRest\Api\Services\Database;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSet;
 use Phalcon\Mvc\Model\Row;
-class CriteriaHelper
+class CriteriaHelperRoot
 {
     /** @var  Criteria */
     protected criteria;
@@ -159,56 +159,6 @@ class CriteriaHelper
             let params["group"] =  this->getGroupBys();
         }
         return {modelName}::find(params);
-    }
-
-    /**
-     * Converts an array into
-     *
-     * @param array $list if this is an array of objects that have the getId method, it uses those ids instead
-     * @param array &$params
-     * @param int $currentParamCount
-     *
-     * @return string sql
-     */
-    public function listToIn(array list, params, int currentParamCount) -> string
-    {
-        var sql, first, key, value;
-
-        let currentParamCount += sizeOf(params);
-        let sql = "";
-        let first =  true;
-        for key, value in list {
-            if is_object(value) && method_exists(value, "getId") {
-                let value =  value->getId();
-            }
-            if first {
-                let first =  false;
-            } else {
-                let sql .= ",";
-            }
-            let sql .= "?" . currentParamCount;
-            let params[currentParamCount] = value;
-            let currentParamCount++;
-        }
-        return sql;
-    }
-
-    /**
-     * Adds a new parameter
-     *
-     * @param string $value
-     * @param array &$params
-     * @param int $currentParamCount
-     *
-     * @return string
-     */
-    public function addParam(string value, params, int currentParamCount) -> string
-    {
-        var count;
-
-        let count =  currentParamCount + sizeOf(params);
-        let params[] = value;
-        return "?" . count;
     }
 
 }
