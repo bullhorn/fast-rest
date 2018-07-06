@@ -131,6 +131,8 @@ interface ApiInterface extends GeneratedInterface {
      */
     public function getExtraProperties();
 
+    public function getLazyProperties(): array;
+
     /**
      * Returns all behaviors associated with the class
      *

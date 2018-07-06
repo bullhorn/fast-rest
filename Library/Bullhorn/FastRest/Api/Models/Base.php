@@ -486,6 +486,10 @@ abstract class Base extends Model {
         return array();
     }
 
+    public function getLazyProperties(): array {
+        return [];
+    }
+
     /**
      * Returns all behaviors associated with the class
      *

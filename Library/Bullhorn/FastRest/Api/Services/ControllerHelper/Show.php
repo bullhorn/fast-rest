@@ -84,7 +84,8 @@ class Show extends Base {
         }
         foreach($field->getFields() as $subField) {
             if($subField == '*') { //All parts
-                foreach($columns as $column) {
+                $lazyProperties = $entity->getLazyProperties();
+                foreach(array_diff($columns, $lazyProperties) as $column) {
                     $this->showField($output, $entity, $column);
                 }
             } elseif(in_array($subField, $columns)) {
@@ -107,7 +108,7 @@ class Show extends Base {
      * @return void
      */
     private function showField(\stdClass $output, ApiInterface $entity, $column) {
-        if($this->getAcl()->canReadField($entity, $column)) {
+        /*if($this->getAcl()->canReadField($entity, $column)) {
             if(in_array($column, $entity->getUnReadableFields())) {
                 $value = null;
             } else {
@@ -117,8 +118,10 @@ class Show extends Base {
                     $value = $value->__toString();
                 }
             }
-            $output->{$column} = $value;
-        }
+            $output->{$column} = $entity->readAttribute($column);
+        }*/
+
+        $output->{$column} = $entity->readAttribute($column);
     }
 
     /**
