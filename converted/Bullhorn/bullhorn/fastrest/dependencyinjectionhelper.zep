@@ -1,8 +1,8 @@
-//To use this, you must also implement \Phalcon\DI\InjectionAwareInterface
 namespace Bullhorn\FastRest;
 
 use Phalcon\DI\FactoryDefault;
 use Phalcon\DiInterface;
+//To use this, you must also implement \Phalcon\DI\InjectionAwareInterface
 final class DependencyInjectionHelper
 {
     /** @var  DiInterface */
@@ -21,7 +21,7 @@ final class DependencyInjectionHelper
         }
         return self::di;
     }
-    
+
     /**
      * Sets the dependency injector
      * We cannot strict type the variable

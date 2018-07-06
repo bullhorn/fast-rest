@@ -4,3 +4,4 @@ rm -rf /etc/php.d/zz-fast-rest.ini
 zephir build
 echo 'extension=bullhornfastrest.so' > /etc/php.d/zz-fast-rest.ini
 service httpd restart
+php build/buildIdeDocs.php
