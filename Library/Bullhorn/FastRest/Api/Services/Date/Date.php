@@ -3,11 +3,11 @@ namespace Bullhorn\FastRest\Api\Services\Date;
 
 use Bullhorn\FastRest\Api\Services\DataValidation\StrToTime;
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use Phalcon\DI\InjectionAwareInterface;
+use Phalcon\DiInterface;
 
 class Date implements InjectionAwareInterface, \JsonSerializable {
-    use DependencyInjection;
-
     /** @type  double|false */
     private $dateInt;
     /** @type bool */
@@ -34,6 +34,14 @@ class Date implements InjectionAwareInterface, \JsonSerializable {
             }
         }
         $this->setEqual24(in_array($dateTime, array('24:00:00', '24:00')));
+    }
+
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
     }
 
     public function jsonSerialize() {

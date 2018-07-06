@@ -125,7 +125,7 @@ class Save extends Base {
         }
         $columnMap = $entity->getModelsMetaData()->getColumnMap($entity);
         $automaticFields = array_fill_keys($entity->getAutomaticallyUpdatedFields(), null);
-        foreach($automaticAttributes as $fullName => $null) {
+        foreach($automaticAttributes as $fullName => $_) {
             $automaticFields[$columnMap[$fullName]] = null;
         }
         return $automaticFields;

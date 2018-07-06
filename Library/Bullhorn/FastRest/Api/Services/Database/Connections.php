@@ -1,16 +1,25 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\Database;
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use Phalcon\Db\AdapterInterface;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\DiInterface;
 
 class Connections implements InjectionAwareInterface {
-    use DependencyInjection;
 	const DI_NAME = 'DbConnections';
 	/** @type  AdapterInterface[] */
 	private $dbAdapters = [];
 
-	/**
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
+    }
+
+    /**
 	 * Getter
 	 * @return AdapterInterface[]
 	 */

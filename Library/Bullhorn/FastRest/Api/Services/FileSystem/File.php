@@ -1,11 +1,11 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\FileSystem;
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\DiInterface;
 
 class File implements InjectionAwareInterface {
-    use DependencyInjection;
-
     /** @var  string */
     private $path;
 
@@ -17,6 +17,13 @@ class File implements InjectionAwareInterface {
         $this->setPath($path);
     }
 
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
+    }
 
     /**
      * Getter

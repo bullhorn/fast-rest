@@ -5,7 +5,9 @@ use Bullhorn\FastRest\Api\Services\Acl\Events as AclEvents;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Delete as DeleteService;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Save as SaveService;
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use Phalcon\DI\InjectionAwareInterface;
+use Phalcon\DiInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\ModelInterface as MvcInterface;
 use Phalcon\Mvc\Model\Behavior;
@@ -15,7 +17,6 @@ use Bullhorn\FastRest\Api\Services\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Model\ValidatorInterface;
 
 abstract class BehaviorBase extends Behavior implements BehaviorInterface, InjectionAwareInterface {
-    use DependencyInjection;
 
     /** @var  Model */
     private $entity;
@@ -26,6 +27,14 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
     private $unitTestParentCalled = false;
     /** @var  Snapshot */
     private $snapshot;
+
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
+    }
 
     /**
      * isUnitTestingChildren

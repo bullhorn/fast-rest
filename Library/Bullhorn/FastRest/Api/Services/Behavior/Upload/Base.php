@@ -2,6 +2,8 @@
 namespace Bullhorn\FastRest\Api\Services\Behavior\Upload;
 
 use Bullhorn\FastRest\Api\Services\Behavior\ValidationException;
+use Bullhorn\FastRest\DependencyInjectionHelper;
+use Phalcon\DiInterface;
 use Phalcon\Mvc\Model\Behavior;
 use Phalcon\Mvc\Model\BehaviorInterface;
 use Phalcon\DI\InjectionAwareInterface;
@@ -13,13 +15,20 @@ use Phalcon\Mvc\Model\Message;
 use Phalcon\Mvc\ModelInterface as MvcInterface;
 
 abstract class Base extends Behavior implements BehaviorInterface, InjectionAwareInterface {
-    use DependencyInjection;
     const EVENT_UPLOAD_FILE_CREATE = 'uploadFileCreate';
     const EVENT_UPLOAD_FILE_UPDATE = 'uploadFileUpdate';
     /** @var  File[] */
     private $files;
     /** @var  ApiInterface */
     private $entity;
+
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
+    }
 
     /**
      * Getter

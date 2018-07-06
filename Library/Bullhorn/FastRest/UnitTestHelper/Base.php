@@ -3,10 +3,12 @@ namespace Bullhorn\FastRest\UnitTestHelper;
 
 use Bullhorn\FastRest\Api\Services\Date\Formatter;
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceInterface;
+use Phalcon\DiInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\Query;
@@ -16,7 +18,6 @@ use PHPUnit_Framework_MockObject_MockObject;
 use ReflectionClass;
 
 abstract class Base extends TestCase implements InjectionAwareInterface {
-    use DependencyInjection;
     const PHPUNIT_RUNNING = 'PHPUNIT_RUNNING';
 
     /** @type  string */
@@ -27,6 +28,14 @@ abstract class Base extends TestCase implements InjectionAwareInterface {
     public $phalconHelperNamespace = '';
     /** @var  ServiceInterface[] */
     private $startingServices;
+
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
+    }
 
     /**
      * Getter

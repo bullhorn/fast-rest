@@ -2,7 +2,9 @@
 namespace Bullhorn\FastRest\Api\Services\Behavior\UpdateChildren;
 use Bullhorn\FastRest\Api\Services\Behavior\DbEventEnum;
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\DiInterface;
 use Phalcon\Http\Request\Exception;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior;
@@ -10,7 +12,6 @@ use Phalcon\Mvc\Model\BehaviorInterface;
 use Phalcon\Mvc\ModelInterface;
 
 abstract class Base extends Behavior implements InjectionAwareInterface, BehaviorInterface {
-    use DependencyInjection;
     private $savedData = [];
 
     /** @var  Model */
@@ -19,6 +20,14 @@ abstract class Base extends Behavior implements InjectionAwareInterface, Behavio
     abstract public function getFieldName();
 
     abstract protected function process(array $data);
+
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
+    }
 
     /**
      * getAvailableFields

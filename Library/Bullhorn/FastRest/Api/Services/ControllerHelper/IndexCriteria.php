@@ -3,11 +3,12 @@ namespace Bullhorn\FastRest\Api\Services\ControllerHelper;
 
 use Bullhorn\FastRest\Api\Services\Config\ApiConfig;
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\DiInterface;
 use Phalcon\Http\Request;
 
 class IndexCriteria implements InjectionAwareInterface {
-    use DependencyInjection;
     /** @var  Request */
     private $request;
     /** @var  Sort[] */
@@ -36,6 +37,14 @@ class IndexCriteria implements InjectionAwareInterface {
         $this->buildOffset();
         $this->buildLimit();
         $this->setSearchTerm($searchTerm);
+    }
+
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
     }
 
     /**

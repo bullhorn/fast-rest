@@ -19,13 +19,11 @@
     "php": ">=5.5.0",
     "ext-phalcon": ">=2.0.4 <3.9",
     "zircote/swagger-php": "*",
-    "nicklewis/phalcon-db-mock": "dev-master"
+    "nicklewis/phalcon-db-mock": "dev-master",
+    "fezfez/php-to-zephir": "^0.2.1"
   },
   "require-dev": {
     "phalcon/incubator": ">=2.0",
-    "phpunit/phpunit": "dev-master#9104a4e2f6a3ebdc4eb036624949a1a2849373dd",
-    "phpunit/php-code-coverage": "dev-master#b8436b000263f6d72fbad1d36890e247ce84857e",
-    "phpunit/phpunit-mock-objects": "dev-master#7b18bbdad9880e09740959e90eec4b91c35a4aa9",
     "codeclimate/php-test-reporter": "dev-master"
   },
   "autoload": {

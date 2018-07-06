@@ -3,12 +3,13 @@ namespace Bullhorn\FastRest\Api\Services\Date;
 
 use Bullhorn\FastRest\Api\Services\DataValidation\Assert;
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use InvalidArgumentException;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\DiInterface;
 
 class Formatter implements InjectionAwareInterface {
-    use DependencyInjection;
     const DATE_FORMAT_UK = 'd/m/Y';
     const DATE_FORMAT_US = 'm/d/Y';
     const DATE_FORMAT_EURO = 'd-m-Y';
@@ -27,6 +28,14 @@ class Formatter implements InjectionAwareInterface {
      */
     public function __construct() {
         $this->reset();
+    }
+
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
     }
 
     /**

@@ -2,7 +2,9 @@
 namespace Bullhorn\FastRest\Api\Services\Database;
 
 use Bullhorn\FastRest\DependencyInjection;
+use Bullhorn\FastRest\DependencyInjectionHelper;
 use Phalcon\DI\InjectionAwareInterface;
+use Phalcon\DiInterface;
 use Phalcon\Mvc\Model\Transaction\Failed;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use \Phalcon\Mvc\Model\TransactionInterface;
@@ -10,7 +12,6 @@ use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Db\Exception as DbException;
 
 class Transaction implements InjectionAwareInterface {
-    use DependencyInjection;
     const EVENT_ROLLBACK = 'transaction:rollback';
     const EVENT_COMMIT = 'transaction:commit';
 
@@ -26,6 +27,14 @@ class Transaction implements InjectionAwareInterface {
      */
     public function __construct($dbService = 'db') {
         $this->setDbService($dbService);
+    }
+
+    public function getDi() {
+        return DependencyInjectionHelper::getDi();
+    }
+
+    public function setDi(DiInterface $di) {
+        DependencyInjectionHelper::setDi($di);
     }
 
     /**
