@@ -103,7 +103,9 @@ class Save extends Base {
         } catch(TransactionException $e) {
             $transactionManager->rollback();
         } catch(\Exception $e) {
-            $transactionManager->rollback();
+            if($transactionManager->isInTransaction()) {
+                $transactionManager->rollback();
+            }
             throw $e;
         }
         return $isChanged;
