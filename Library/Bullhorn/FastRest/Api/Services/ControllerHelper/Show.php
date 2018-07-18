@@ -108,7 +108,7 @@ class Show extends Base {
      * @return void
      */
     private function showField(\stdClass $output, ApiInterface $entity, $column) {
-        /*if($this->getAcl()->canReadField($entity, $column)) {
+        if($this->getAcl()->canReadField($entity, $column)) {
             if(in_array($column, $entity->getUnReadableFields())) {
                 $value = null;
             } else {
@@ -119,7 +119,7 @@ class Show extends Base {
                 }
             }
             $output->{$column} = $entity->readAttribute($column);
-        }*/
+        }
 
         $output->{$column} = $entity->readAttribute($column);
     }
