@@ -118,7 +118,7 @@ class Show extends Base {
                     $value = $value->__toString();
                 }
             }
-            $output->{$column} = $entity->readAttribute($column);
+            $output->{$column} = $value;
         }
     }
 
