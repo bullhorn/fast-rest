@@ -120,8 +120,6 @@ class Show extends Base {
             }
             $output->{$column} = $entity->readAttribute($column);
         }
-
-        $output->{$column} = $entity->readAttribute($column);
     }
 
     /**
