@@ -286,10 +286,11 @@ class ClassPropertyTest {
 
     /**
      * Tests all the properties for the current class using default test values
-     * @return VOID
+     * @param array $ignoredProperties
+     * @return void
      */
-    public function testAllPropertiesGettersAndSetters() {
-        $props = $this->findAllProperties();
+    public function testAllPropertiesGettersAndSetters(array $ignoredProperties = []) {
+        $props = array_diff($this->findAllProperties(), $ignoredProperties);
         foreach($props as $property) {
             $this->testProperty($property);
         }
