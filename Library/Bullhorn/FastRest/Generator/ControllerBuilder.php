@@ -243,7 +243,7 @@ class ControllerBuilder {
             $property->setName((!is_null($alias) ? $alias . '.' : '') . $string);
             $property->setType('string');
             $property->setFormat('');
-            $property->setDescription('');
+            $property->setDescription('Read Only Extra Property');
             $property->setRequired(false);
             $model->addProperty($property);
         }
