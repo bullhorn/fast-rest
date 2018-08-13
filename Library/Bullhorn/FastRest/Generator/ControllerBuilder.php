@@ -166,7 +166,7 @@ class ControllerBuilder {
      * Getter
      * @return Object\Index
      */
-    private function getObject() {
+    public function getObject() {
         return $this->object;
     }
 
