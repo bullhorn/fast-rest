@@ -238,6 +238,15 @@ class ControllerBuilder {
             $property->setRequired(array_key_exists($field->getName(), $requiredFields));
             $model->addProperty($property);
         }
+        foreach($this->getModel()->getExtraProperties() as $string) {
+            $property = new Swagger\Property();
+            $property->setName((!is_null($alias) ? $alias . '.' : '') . $string);
+            $property->setType('string');
+            $property->setFormat('');
+            $property->setDescription('');
+            $property->setRequired(false);
+            $model->addProperty($property);
+        }
     }
 
     /**
@@ -392,6 +401,9 @@ class ControllerBuilder {
             foreach($automaticAttributes as $fullName => $null) {
                 $automaticFields[(!is_null($alias) ? $alias . '.' : '') . $columnMap[$fullName]] = null;
             }
+        }
+        foreach($this->getModel()->getExtraProperties() as $string) {
+            $automaticFields[$string] = '';
         }
         if(!empty($automaticFields)) {
             $description .= "\n" . 'The following fields are read only: ' . implode(', ', array_keys($automaticFields)) . '.';

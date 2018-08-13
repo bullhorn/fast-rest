@@ -13,6 +13,12 @@ interface GeneratedInterface extends InjectionAwareInterface, ModelInterface {
     public function getUnReadableFields();
 
     /**
+     * Allows us to arbitrarily add read only properties to api entities.
+     * @return String[]
+     */
+    public function getExtraProperties();
+
+    /**
      * Gets a list of all fields that are automatically updated, and cannot be updated through the api
      * @return string[]
      */
