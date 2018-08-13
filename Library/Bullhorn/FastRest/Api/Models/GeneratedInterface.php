@@ -6,6 +6,11 @@ use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Mvc\ModelInterface;
 
 interface GeneratedInterface extends InjectionAwareInterface, ModelInterface {
+    /**
+     * Gets the unreadable fields
+     * @return \string[]
+     */
+    public function getUnReadableFields();
 
     /**
      * Gets a list of all fields that are automatically updated, and cannot be updated through the api

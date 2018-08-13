@@ -225,7 +225,11 @@ class ControllerBuilder {
                 }
             }
         }
+        $unReadableField = $this->getModel()->getUnReadableFields();
         foreach($builder->getFields() as $field) {
+            if(in_array($field->getShortName(), $unReadableField)) {
+                continue;
+            }
             $property = new Swagger\Property();
             $property->setName((!is_null($alias) ? $alias . '.' : '') . $field->getShortName());
             $property->setType($field->getSwaggerType());
