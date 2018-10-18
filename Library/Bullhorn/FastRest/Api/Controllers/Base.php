@@ -186,6 +186,9 @@ abstract class Base extends Controller {
             $outputObject = $this->getOutputObject();
             $blankEntity = $this->generateEntity();
             $outputObject->{$blankEntity->getEntityName() . 's'} = $objects;
+            if($this->hasFlag((new FlagEnum(FlagEnum::PAGE_COUNTS)))) {
+                $outputObject->PageCounts = $query->generatePageCounts();
+            }
             $this->setOutputObject($outputObject);
         } catch(Exception $e) {
             $this->handleError($e);
@@ -196,6 +199,17 @@ abstract class Base extends Controller {
         } catch(CatchableException $e) {
             $this->handleCatchableError($e);
         }
+    }
+
+    private function hasFlag(FlagEnum $name): bool {
+        if(!$this->request->hasQuery('flag')) {
+            return false;
+        }
+        $flags = $this->request->getQuery('flag');
+        if(!is_array($flags)) {
+            return false;
+        }
+        return array_key_exists((string)$name, $flags);
     }
 
     /**
@@ -393,6 +407,9 @@ abstract class Base extends Controller {
             $outputObject = $this->getOutputObject();
             $blankEntity = $this->generateEntity();
             $outputObject->{$blankEntity->getEntityName() . 's'} = $objects;
+            if($this->hasFlag((new FlagEnum(FlagEnum::PAGE_COUNTS)))) {
+                $outputObject->PageCounts = $query->generatePageCounts();
+            }
             $this->setOutputObject($outputObject);
         } catch(Exception $e) {
             $this->handleError($e);
