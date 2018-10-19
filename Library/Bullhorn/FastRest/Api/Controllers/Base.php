@@ -533,11 +533,9 @@ abstract class Base extends Controller {
         if(is_array($params->getParams())) {
             throw new Exception('Bulk Updating is not supported: An array of objects was passed in', 400);
         }
-        $isChanged = $this->saveEntity($params->getParams(), $entity, false);
-        if(!$isChanged) {
-            $this->setStatusCode(HttpStatusCode::NOT_CHANGED); //Nothing is changed
-        }
-        return $isChanged;
+        $this->saveEntity($params->getParams(), $entity, false);
+        // we stopped returning a 304 because the internet is a terrible place where no one follows the rules.
+        return true;
     }
 
     /**
