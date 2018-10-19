@@ -456,6 +456,14 @@ class Index extends Base {
         . '<' . $this->generateUrl($this->getPreviousPageQueryCriteria()) . '>; rel="prev"';
     }
 
+    public function generatePageCounts(): \stdClass {
+        return (object)[
+            'maxCount' => (int)$this->getCount(),
+            'start' => (int)$this->getIndexCriteria()->getOffset(),
+            'count' => (int)$this->getIndexCriteria()->getLimit()
+        ];
+    }
+
     /**
      * Gets the query params for the first page
      * @return string[]
