@@ -18,8 +18,6 @@ class ModelBuilder {
     private $relationships;
     /** @var  Object\Index */
     private $abstractClass;
-    /** @var  Object\Index */
-    private $testClass;
     /** @var Index[] */
     private $indexes;
     /** @var  string */
@@ -38,7 +36,6 @@ class ModelBuilder {
         $this->setConfiguration($configuration);
         $this->setTableName($tableName);
         $this->setAbstractClass(new Object\Index($this->getConfiguration()));
-        $this->setTestClass(new Object\Index($this->getConfiguration()));
 
         $this->buildFields();
         $this->buildRelationships();
@@ -180,22 +177,6 @@ class ModelBuilder {
         $this->setIndexes($indexes);
     }
 
-    /**
-     * Getter
-     * @return Object\Index
-     */
-    private function getTestClass() {
-        return $this->testClass;
-    }
-
-    /**
-     * Setter
-     * @param Object\Index $testClass
-     */
-    private function setTestClass($testClass) {
-        $this->testClass = $testClass;
-    }
-
 
     /**
      * Getter
@@ -331,11 +312,9 @@ class ModelBuilder {
             switch($field->getType()) {
                 case 'Date':
                     $this->getAbstractClass()->addUse($this->getConfiguration()->getDateClassName());
-                    $this->getTestClass()->addUse($this->getConfiguration()->getDateClassName());
                     break;
                 case 'DateTime':
                     $this->getAbstractClass()->addUse($this->getConfiguration()->getDateTimeClassName());
-                    $this->getTestClass()->addUse($this->getConfiguration()->getDateTimeClassName());
                     break;
             }
             $fields[] = $field;
@@ -805,30 +784,6 @@ class ModelBuilder {
             $method->setContent($content);
             $this->getAbstractClass()->addMethod($method);
 
-
-            $content = '$reflectionClass = new \ReflectionClass($this->getModel());
-		$reflectionProperty = $reflectionClass->getProperty(\'' . $field->getShortName() . '\');
-		$reflectionProperty->setAccessible(TRUE);
-';
-            foreach($rawTypes as $rawType) {
-                if(in_array($field->getType(), array('Date', 'DateTime'))) {
-                    $content .= '		$expectedValue = new ' . $field->getType() . '(' . $rawType . ');
-';
-                } else {
-                    $content .= '		$expectedValue = ' . $rawType . ';
-';
-                }
-                $content .= '		$reflectionProperty->setValue($this->getModel(), ' . $rawType . ');
-		$actualValue = $this->getModel()->get' . ucfirst($field->getShortName()) . '();
-		$this->assertEquals($expectedValue, $actualValue);
-';
-            }
-            $method = new Object\Method();
-            $method->setAccess('public');
-            $method->setName('testGet' . ucfirst($field->getShortName()));
-            $method->setContent($content);
-            $this->getTestClass()->addMethod($method);
-
             $method = new Object\Method();
             $method->setDescription('Setter');
             $parameter = new Object\Parameter();
@@ -896,33 +851,6 @@ class ModelBuilder {
 		return $this;';
             $method->setContent($content);
             $this->getAbstractClass()->addMethod($method);
-
-
-            $content = '$reflectionClass = new \ReflectionClass($this->getModel());
-		$reflectionProperty = $reflectionClass->getProperty(\'' . $field->getShortName() . '\');
-		$reflectionProperty->setAccessible(TRUE);
-';
-            foreach($rawTypes as $rawType) {
-                if(in_array($field->getType(), array('Date', 'DateTime'))) {
-                    $content .= '		$expectedValue = new ' . $field->getType() . '(' . $rawType . ');
-		$expectedValue = $expectedValue->__toString();
-';
-                } else {
-                    $content .= '		$expectedValue = ' . $rawType . ';
-';
-                }
-                $content .= '		$returnValue = $this->getModel()->set' . ucfirst($field->getShortName()) . '(' . $rawType . ');
-		$this->assertSame($returnValue, $this->getModel());
-		$actualValue = $reflectionProperty->getValue($this->getModel());
-		$this->assertEquals($expectedValue, $actualValue);
-';
-            }
-            $method = new Object\Method();
-            $method->setAccess('public');
-            $method->setName('testSet' . ucfirst($field->getShortName()));
-            $method->setContent($content);
-            $this->getTestClass()->addMethod($method);
-
         }
     }
 
@@ -1120,41 +1048,6 @@ class ModelBuilder {
     }
 
     /**
-     * Builds the initial setup of the test class
-     * @return void
-     * @throws \Exception
-     */
-    private function buildTestSetup() {
-        $this->getTestClass()->addUse('Bullhorn\FastRest\UnitTestHelper\MockDbAdapter');
-        $variable = new Object\Variable();
-        $variable->setName('model');
-        $variable->setType($this->getAbstractClass()->getName());
-        $this->getTestClass()->addVariable($variable);
-
-        $method = new Object\Method();
-        $method->setName('getModel');
-        $method->setReturnType($this->getAbstractClass()->getName());
-        $method->setContent('return $this->model;');
-        $this->getTestClass()->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setName('getDbMock');
-        $method->setReturnType('MockDbAdapter');
-        $method->setContent('return $this->getDi()->get($this->getConnectionService());');
-        $this->getTestClass()->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setName('setUp');
-        $content = '$this->setModelSubNamespace(\'' . $this->getConfiguration()->getModelSubNamespace() . '\');
-		$this->setConnectionService(\'' . $this->getConfiguration()->getConnectionService() . '\');
-		$this->setPhalconHelperNamespace(\'' . $this->getConfiguration()->getRootNamespace() . '\PhalconHelper\');
-		parent::setUp();
-		$this->model = $this->getMockForAbstractClass(\'' . $this->getAbstractClass()->getNamespace() . '\\' . $this->getAbstractClass()->getName() . '\', [$this->getDi()]);';
-        $method->setContent($content);
-        $this->getTestClass()->addMethod($method);
-    }
-
-    /**
      * Initialize Method
      * @return void
      * @throws \Exception
@@ -1188,12 +1081,6 @@ class ModelBuilder {
         $method->setReturnType('string');
         $method->setContent('return \'' . $this->getTableName() . '\';');
         $this->getAbstractClass()->addMethod($method);
-
-        $method = new Object\Method();
-        $method->setAccess('public');
-        $method->setName('testGetSource');
-        $method->setContent('$this->assertSame($this->getModel()->getSource(), \'' . $this->getTableName() . '\');');
-        $this->getTestClass()->addMethod($method);
     }
 
     /**
@@ -1368,11 +1255,6 @@ class ModelBuilder {
         $this->getAbstractClass()->setAbstract(true);
         $this->buildIdField();
 
-        $this->initTestClass();
-        $this->getTestClass()->setNamespace($this->getAbstractClass()->getNamespace());
-        $this->getTestClass()->setName($this->getAbstractClass()->getName() . 'Test');
-        $this->buildTestSetup();
-
         $this->buildEnumConstants();
 
         $this->buildInitialize();
@@ -1390,16 +1272,6 @@ class ModelBuilder {
         $this->buildRelationshipGetters();
         $this->buildColumnMap();
         $this->buildRelationshipsList();
-    }
-
-    /**
-     * initTestClass
-     * @return void
-     * @throws \Exception
-     */
-    private function initTestClass() {
-        $this->getTestClass()->setExtends('BaseTest');
-        $this->getTestClass()->addUse('Bullhorn\FastRest\UnitTestHelper\Base as BaseTest');
     }
 
     /**
@@ -1561,7 +1433,6 @@ class ModelBuilder {
         if(!file_exists($child->getFileName())) {
             $child->write();
         }
-        $this->getTestClass()->write();
         $this->buildTestTable()->write();
         $this->getValidationClass()->write();
         if(!file_exists($this->getValidationChildClass()->getFileName())) {
