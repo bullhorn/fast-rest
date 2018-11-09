@@ -179,17 +179,10 @@ abstract class Base extends Controller {
             /** @var ResultSet|ModelInterface[] $entities */
             $entities = $query->getResultSet();
             $entities = $this->filterEntities($entities);
-            $objects = array();
-            foreach($entities as $entity) {
-                $objects[] = $this->generateEntityAction($entity);
-            }
-            $outputObject = $this->getOutputObject();
-            $blankEntity = $this->generateEntity();
-            $outputObject->{$blankEntity->getEntityName() . 's'} = $objects;
+            $this->indexActionInternal($entities);
             if($this->hasFlag((new FlagEnum(FlagEnum::PAGE_COUNTS)))) {
-                $outputObject->PageCounts = $query->generatePageCounts();
+                $this->getOutputObject()->PageCounts = $query->generatePageCounts();
             }
-            $this->setOutputObject($outputObject);
         } catch(Exception $e) {
             $this->handleError($e);
         } catch(ValidationException $e) {
@@ -718,5 +711,22 @@ abstract class Base extends Controller {
      * @throws Exception
      */
     abstract protected function validateLogin();
+
+    /**
+     * indexActionInternal
+     * @param $entities
+     * @return void
+     */
+    protected function indexActionInternal($entities): void {
+        $objects = [];
+        foreach($entities as $entity) {
+            $objects[] = $this->generateEntityAction($entity);
+        }
+        $outputObject = $this->getOutputObject();
+        $blankEntity = $this->generateEntity();
+        $outputObject->{$blankEntity->getEntityName() . 's'} = $objects;
+
+        $this->setOutputObject($outputObject);
+    }
 
 }
