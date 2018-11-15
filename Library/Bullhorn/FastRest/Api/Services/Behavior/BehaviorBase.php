@@ -289,6 +289,15 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
     }
 
     /**
+     * beforeCreate
+     * @return void
+     */
+    protected function beforeCreate() {
+        $this->setUnitTestParentCalled(true);
+        return;
+    }
+
+    /**
      * Receives notifications from the Models Manager
      * @param string                          $eventType
      * @param MvcInterface|GeneratedInterface $entity
@@ -300,6 +309,10 @@ abstract class BehaviorBase extends Behavior implements BehaviorInterface, Injec
         $instance->setEntity($entity);
         $instance->setSnapshot(new Snapshot($instance->getEntity()));
         switch($eventType) {
+            case DbEventEnum::BEFORE_CREATE:
+                $instance->getSnapshot()->setIsAfterSave(false);
+                $instance->beforeCreate();
+                break;
             case DbEventEnum::BEFORE_SAVE:
                 $instance->getSnapshot()->setIsAfterSave(false);
                 $instance->beforeSave();
