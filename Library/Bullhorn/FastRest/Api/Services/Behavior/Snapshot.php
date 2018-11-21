@@ -52,7 +52,11 @@ class Snapshot implements InjectionAwareInterface {
      */
     public function getChangedFields() {
         if($this->isAfterSave() && method_exists($this->getEntity(), 'getUpdatedFields')) {
-            return $this->getEntity()->getUpdatedFields();
+            if($this->getEntity()->hasSnapshotData()) {
+                return $this->getEntity()->getUpdatedFields();
+            } else {
+                return $this->getSnapshotData();
+            }
         } else { //Legacy
             return $this->getEntity()->getChangedFields();
         }
