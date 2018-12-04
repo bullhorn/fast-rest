@@ -827,14 +827,14 @@ class ModelBuilder {
 ';
                     break;
                 case 'Date':
-                    $content .= '		if(!is_string($' . $field->getShortName() . ') || !preg_match(\'@^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$@\', $' . $field->getShortName() . ')) {
+                    $content .= '		if(!is_null($everifyHireDate) && (!is_string($' . $field->getShortName() . ') || !preg_match(\'@^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$@\', $' . $field->getShortName() . '))) {
 			$date = new ' . $field->getType() . '($' . $field->getShortName() . ');
 			$' . $field->getShortName() . ' = $date->__toString();
 		}
 ';
                     break;
                 case 'DateTime':
-                    $content .= '		if(!is_string($' . $field->getShortName() . ') || !preg_match(\'@^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$@\', $' . $field->getShortName() . ')) {
+                    $content .= '		if(!is_null($everifyHireDate) && (!is_string($' . $field->getShortName() . ') || !preg_match(\'@^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$@\', $' . $field->getShortName() . '))) {
 			$date = new ' . $field->getType() . '($' . $field->getShortName() . ');
 			$' . $field->getShortName() . ' = $date->__toString();
 		}
