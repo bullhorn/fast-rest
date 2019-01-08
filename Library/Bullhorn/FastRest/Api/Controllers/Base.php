@@ -699,9 +699,14 @@ abstract class Base extends Controller {
      * @return void
      */
     protected function handleAclError(AclException $e) {
+        if(!empty($e->getMessage())) {
+            $this->addError(new Exception($e->getMessage(), 401));
+        }
         $entity = $e->getEntity();
-        foreach($entity->getMessages() as $message) {
-            $this->addError(new Exception($message->getMessage(), 401));
+        if(!is_null($entity)) {
+            foreach ($entity->getMessages() as $message) {
+                $this->addError(new Exception($message->getMessage(), 401));
+            }
         }
     }
 
