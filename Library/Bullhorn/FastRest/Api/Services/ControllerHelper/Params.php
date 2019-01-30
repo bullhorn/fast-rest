@@ -4,6 +4,7 @@ namespace Bullhorn\FastRest\Api\Services\ControllerHelper;
 use Phalcon\Http\Request;
 use Bullhorn\FastRest\Api\Services\Filter;
 use Phalcon\Http\Request\Exception;
+use Riverline\MultiPartParser\StreamedPart;
 
 /**
  * Class Save
@@ -162,7 +163,7 @@ class Params extends Base {
             if($this->getRequest()->isPost()) {
                 $params = $this->getRequest()->getPost();
             } else {
-                $params = $this->getRequest()->getPut();
+                $params = $this->getPut();
             }
             $delimiter = '_';
         }
@@ -179,6 +180,37 @@ class Params extends Base {
         } else {
             $helper = new SplitHelper($delimiter);
             $this->setParams($helper->convert((array)$params));
+        }
+    }
+
+    private function getPut(): array {
+        $data = 'Content-Type: '.$this->getRequest()->getContentType()."\r\n\r\n".$this->getRequest()->getRawBody();
+        $stream = fopen('php://temp', 'rw');
+        fwrite($stream, $data);
+        rewind($stream);
+        $_FILES = [];
+        $_PUT = [];
+        $document = new StreamedPart($stream);
+        if ($document->isMultiPart()) {
+            $parts = $document->getParts();
+            foreach($parts as $part) {
+                if($part->isFile()) {
+                    $filePath = tempnam(sys_get_temp_dir(), 'UPLOAD');
+                    file_put_contents($filePath, $part->getBody());
+                    $_FILES[$part->getName()] = [
+                        'name' => $part->getFileName(),
+                        'type' => '',
+                        'tmp_name' => $filePath,
+                        'error' => 0,
+                        'size' => mb_strlen($part->getBody()),
+                    ];
+                } else {
+                    $_PUT[$part->getName()] = $part->getBody();
+                }
+            }
+            return $_PUT;
+        } else {
+            return $this->getRequest()->getPut();
         }
     }
 
