@@ -16,17 +16,15 @@
     }
   ],
   "require": {
-    "php": ">=5.5.0",
+    "php": ">=7.1.5",
     "ext-phalcon": ">=2.0.4 <3.9",
     "zircote/swagger-php": "*",
     "nicklewis/phalcon-db-mock": "dev-master",
-  "riverline/multipart-parser": "^2.0"
+    "riverline/multipart-parser": "^2.0"
   },
   "require-dev": {
     "phalcon/incubator": ">=2.0",
-    "phpunit/phpunit": "dev-master#9104a4e2f6a3ebdc4eb036624949a1a2849373dd",
-    "phpunit/php-code-coverage": "dev-master#b8436b000263f6d72fbad1d36890e247ce84857e",
-    "phpunit/phpunit-mock-objects": "dev-master#7b18bbdad9880e09740959e90eec4b91c35a4aa9",
+  "phpunit/phpunit": "^7",
     "codeclimate/php-test-reporter": "dev-master"
   },
   "autoload": {
