@@ -20,7 +20,7 @@
     "ext-phalcon": ">=2.0.4 <3.9",
     "zircote/swagger-php": "*",
     "nicklewis/phalcon-db-mock": "dev-master",
-  "riverline/multipart-parser": "dev-master#91dd118cdd59986bcc104cce419b13fa48c87ee5"
+  "riverline/multipart-parser": "^2.0"
   },
   "require-dev": {
     "phalcon/incubator": ">=2.0",
