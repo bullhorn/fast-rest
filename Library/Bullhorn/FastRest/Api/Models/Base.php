@@ -26,6 +26,8 @@ abstract class Base extends Model {
     private $customParentRelationships = [];
     /** @var ChildrenUpdater[] */
     private static $childrenUpdaters = [];
+    /** @var Base[]|ApiInterface[] */
+    private $apiParentEntities = [];
 
     /**
      * Constructor
@@ -539,4 +541,23 @@ abstract class Base extends Model {
         }
         return $map;
     }
+
+    /**
+     * ApiParentEntities
+     * @return Base[]|ApiInterface[]
+     */
+    public function getApiParentEntities(): array {
+        return $this->apiParentEntities;
+    }
+
+    /**
+     * ApiParentEntities
+     * @param Base[]|ApiInterface[] $apiParentEntities
+     * @return Base
+     */
+    public function setApiParentEntities(array $apiParentEntities) {
+        $this->apiParentEntities = $apiParentEntities;
+        return $this;
+    }
+
 }

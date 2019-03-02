@@ -167,4 +167,18 @@ interface ApiInterface extends GeneratedInterface {
      * @return string[]
      */
     public function getFieldTypes();
+
+    /**
+     * ApiParentEntities
+     * @return Base[]|ApiInterface[]
+     */
+    public function getApiParentEntities(): array;
+
+    /**
+     * ApiParentEntities
+     * @param Base[]|ApiInterface[] $apiParentEntities
+     * @return Base
+     */
+    public function setApiParentEntities(array $apiParentEntities);
+
 }

@@ -45,6 +45,9 @@ class Show extends Base {
             if($parentEntity === false) {//AKA, a nullable vendor
                 $output->{$field->getAlias()} = null;
             } else {
+                $parentEntities = $entity->getApiParentEntities() ?? [];
+                $parentEntities[$entity->getSource()] = $entity;
+                $parentEntity->setApiParentEntities($parentEntities);
                 $output->{$field->getAlias()} = new \stdClass();
                 $this->showRecursive($output->{$field->getAlias()}, $field, $parentEntity);
             }
@@ -52,6 +55,10 @@ class Show extends Base {
             $output->{$field->getAlias()} = array();
             $resultSet = $entity->getRelated($field->getAlias());
             foreach($resultSet as $key => $currentEntity) {
+                $parentEntities = $entity->getApiParentEntities() ?? [];
+                $parentEntities[$entity->getSource()] = $entity;
+                $currentEntity->setApiParentEntities($parentEntities);
+
                 $subOutput = new \stdClass();
                 $output->{$field->getAlias()}[] = $subOutput;
                 $this->showRecursive($subOutput, $field, $currentEntity);
