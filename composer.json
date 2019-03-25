@@ -1,8 +1,4 @@
 {
-
-    "repositories": [
-        {"type":"vcs","url":"git@github.com:bullhorn/fast-rest-services.git"}
-    ],
   "name": "bullhorn/fast-rest",
   "type": "library",
   "description": "FastREST generates REST-ready models and controllers dynamically from a MySQL database schema, including foreign keys, table and column comments, and indexes.",
