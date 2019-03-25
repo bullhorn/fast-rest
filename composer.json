@@ -1,4 +1,8 @@
 {
+
+    "repositories": [
+        {"type":"vcs","url":"git@github.com:bullhorn/fast-rest-services.git"}
+    ],
   "name": "bullhorn/fast-rest",
   "type": "library",
   "description": "FastREST generates REST-ready models and controllers dynamically from a MySQL database schema, including foreign keys, table and column comments, and indexes.",
@@ -20,6 +24,7 @@
     "ext-phalcon": ">=2.0.4 <3.9",
     "zircote/swagger-php": "*",
     "nicklewis/phalcon-db-mock": "dev-master",
+    "bullhorn/fast-rest-services": "dev-master",
     "riverline/multipart-parser": "^2.0"
   },
   "require-dev": {
