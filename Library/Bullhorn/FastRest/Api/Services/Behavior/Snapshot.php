@@ -47,19 +47,42 @@ class Snapshot implements InjectionAwareInterface {
     }
 
     /**
-     * getUpdatedFields
+     * getChangedFields
      * @return array
      */
     public function getChangedFields() {
         if($this->isAfterSave() && method_exists($this->getEntity(), 'getUpdatedFields')) {
             if($this->getEntity()->hasSnapshotData()) {
-                return $this->getEntity()->getUpdatedFields();
+                $actualChangedFields = $this->getEntity()->getUpdatedFields();
             } else {
-                return $this->getSnapshotData();
+                $actualChangedFields = $this->getSnapshotData();
             }
         } else { //Legacy
-            return $this->getEntity()->getChangedFields();
+            $actualChangedFields = $this->getEntity()->getChangedFields();
         }
+        $model = $this->getEntity();
+        foreach($actualChangedFields as $index => $changedField) {
+            $newValue = $model->readAttribute($changedField);
+            if(is_array($newValue)) {
+                $newValue = json_encode($newValue);
+            }
+            $oldValue = $this->getSnapshotData()[$changedField] ?? null ?? null;
+            if(is_object($oldValue)) {
+                $oldValue = (string)$oldValue;
+            }
+            if(is_object($newValue)) {
+                $newValue = (string)$newValue;
+            }
+            if(is_bool($oldValue) || is_bool($newValue)){
+                $oldValue = (bool) $oldValue;
+                $newValue = (bool) $newValue;
+            }
+            if($oldValue === $newValue) {
+                unset($actualChangedFields[$index]);
+            }
+
+        }
+        return array_values($actualChangedFields);
     }
 
     /**
