@@ -1,9 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Api\Controllers;
 
-use Bullhorn\FastRest\Api\Models\HttpStatusCode;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\SearchTerm;
-use Bullhorn\FastRest\Api\Services\Exception\CatchableException;
 use Bullhorn\FastRest\Api\Models\ControllerModelInterface as ModelInterface;
 use Bullhorn\FastRest\Api\Models\CreateObject;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Index;
@@ -13,6 +11,7 @@ use Bullhorn\FastRest\Api\Services\ControllerHelper\Delete;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\Show;
 use Bullhorn\FastRest\Api\Services\Acl\AclException;
 use Bullhorn\FastRest\Api\Services\ControllerHelper\ShowCriteria;
+use Bullhorn\FastRestServices\Exception\CatchableException;
 use Phalcon\Http\Request\Exception;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSet;
@@ -183,14 +182,8 @@ abstract class Base extends Controller {
             if($this->hasFlag((new FlagEnum(FlagEnum::PAGE_COUNTS)))) {
                 $this->getOutputObject()->PageCounts = $query->generatePageCounts();
             }
-        } catch(Exception $e) {
-            $this->handleError($e);
-        } catch(ValidationException $e) {
-            $this->handleValidationError($e);
-        } catch(AclException $e) {
-            $this->handleAclError($e);
-        } catch(CatchableException $e) {
-            $this->handleCatchableError($e);
+        } catch(\Exception $e) {
+            $this->handleAllHandleableErrors($e);
         }
     }
 
@@ -244,14 +237,8 @@ abstract class Base extends Controller {
             if(!is_null($createObject->getEntity())) {
                 try {
                     $this->showActionInternal($createObject->getEntity());
-                } catch(Exception $e) {
-                    $this->handleError($e);
-                } catch(ValidationException $e) {
-                    $this->handleValidationError($e);
-                } catch(AclException $e) {
-                    $this->handleAclError($e);
-                } catch(CatchableException $e) {
-                    $this->handleCatchableError($e);
+                } catch(\Exception $e) {
+                    $this->handleAllHandleableErrors($e);
                 }
             }
         } else {
@@ -266,14 +253,8 @@ abstract class Base extends Controller {
                         $object->{$createObject->getEntity()->getEntityName()} = $this->generateEntityAction($createObject->getEntity());
                     }
                     $object = $this->addErrorsAndStatus($createObject->getErrors(), $createObject->getStatusCode(), $object);
-                } catch(Exception $e) {
-                    $this->handleError($e);
-                } catch(ValidationException $e) {
-                    $this->handleValidationError($e);
-                } catch(AclException $e) {
-                    $this->handleAclError($e);
-                } catch(CatchableException $e) {
-                    $this->handleCatchableError($e);
+                } catch(\Exception $e) {
+                    $this->handleAllHandleableErrors($e);
                 }
                 $objects[] = $object;
             }
@@ -311,15 +292,8 @@ abstract class Base extends Controller {
             try {
                 $entity = $this->createActionInternal($postParam);
                 $createObject->setEntity($entity);
-
-            } catch(Exception $e) {
-                $this->handleError($e);
-            } catch(ValidationException $e) {
-                $this->handleValidationError($e);
-            } catch(AclException $e) {
-                $this->handleAclError($e);
-            } catch(CatchableException $e) {
-                $this->handleCatchableError($e);
+            } catch(\Exception $e) {
+                $this->handleAllHandleableErrors($e);
             }
             $createObject->setStatusCode($this->getStatusCode());
             $createObject->setErrors($this->getErrors());
@@ -361,12 +335,8 @@ abstract class Base extends Controller {
             }
             $entity = $this->validateEntityId($this->dispatcher->getParam(0));
             $this->showActionInternal($entity);
-        } catch(Exception $e) {
-            $this->handleError($e);
-        } catch(ValidationException $e) {
-            $this->handleValidationError($e);
-        } catch(AclException $e) {
-            $this->handleAclError($e);
+        } catch(\Exception $e) {
+            $this->handleAllHandleableErrors($e);
         }
     }
 
@@ -404,14 +374,8 @@ abstract class Base extends Controller {
                 $outputObject->PageCounts = $query->generatePageCounts();
             }
             $this->setOutputObject($outputObject);
-        } catch(Exception $e) {
-            $this->handleError($e);
-        } catch(ValidationException $e) {
-            $this->handleValidationError($e);
-        } catch(AclException $e) {
-            $this->handleAclError($e);
-        } catch(CatchableException $e) {
-            $this->handleCatchableError($e);
+        } catch(\Exception $e) {
+            $this->handleAllHandleableErrors($e);
         }
     }
 
@@ -461,14 +425,8 @@ abstract class Base extends Controller {
             if($isChanged) {
                 $this->showActionInternal($entity->findFirst($entity->getId()));
             }
-        } catch(Exception $e) {
-            $this->handleError($e);
-        } catch(ValidationException $e) {
-            $this->handleValidationError($e);
-        } catch(AclException $e) {
-            $this->handleAclError($e);
-        } catch(CatchableException $e) {
-            $this->handleCatchableError($e);
+        } catch(\Exception $e) {
+            $this->handleAllHandleableErrors($e);
         }
     }
 
@@ -544,12 +502,8 @@ abstract class Base extends Controller {
             }
             $entity = $this->validateEntityId($this->dispatcher->getParam(0));
             $this->deleteActionInternal($entity);
-        } catch(Exception $e) {
-            $this->handleError($e);
-        } catch(ValidationException $e) {
-            $this->handleValidationError($e);
-        } catch(AclException $e) {
-            $this->handleAclError($e);
+        } catch(\Exception $e) {
+            $this->handleAllHandleableErrors($e);
         }
     }
 
@@ -658,11 +612,31 @@ abstract class Base extends Controller {
     }
 
     /**
+     * handleAllHandleableErrors
+     * @param \Exception $e
+     * @return void
+     */
+    protected function handleAllHandleableErrors(\Exception $e) {
+        if($e instanceof Exception) {
+            $this->handleError($e);
+        } elseif($e instanceof ValidationException) {
+            $this->handleValidationError($e);
+        } elseif($e instanceof AclException) {
+            $this->handleAclError($e);
+        } elseif($e instanceof CatchableException) {
+            $this->handleCatchableError($e);
+        } else {
+            throw $e;
+        }
+    }
+
+    /**
      * Adds the error message
      *
      * @param Exception $e
      *
      * @return void
+     * @internal Use handleAllHandleableErrors
      */
     protected function handleError(Exception $e) {
         $this->addError($e);
@@ -672,6 +646,7 @@ abstract class Base extends Controller {
      * handleCatchableError
      * @param CatchableException $e
      * @return void
+     * @internal Use handleAllHandleableErrors
      */
     protected function handleCatchableError(CatchableException $e) {
         $this->addError(new Exception($e->getMessage(), 400));
@@ -684,6 +659,7 @@ abstract class Base extends Controller {
      * @param int $errorCode
      *
      * @return void
+     * @internal Use handleAllHandleableErrors
      */
     protected function handleValidationError(ValidationException $e, $errorCode = 409) {
         $entity = $e->getEntity();
@@ -698,6 +674,7 @@ abstract class Base extends Controller {
      * @param AclException $e
      *
      * @return void
+     * @internal Use handleAllHandleableErrors
      */
     protected function handleAclError(AclException $e) {
         if(!empty($e->getMessage())) {
