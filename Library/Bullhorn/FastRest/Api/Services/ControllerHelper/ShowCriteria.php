@@ -27,7 +27,18 @@ class ShowCriteria {
      */
     private function buildFields($defaultFieldsValue) {
         $rawFields = $this->getRequest()->get('fields', null, $defaultFieldsValue);
-        $fields = explode(',', $rawFields);
+        $fields = preg_split('/,(?![^\(\]]*\))/', $rawFields);
+        $entityAndFields = preg_grep('/.+?\((.*?)\)/', $fields);
+        $fields = array_diff($fields, $entityAndFields);
+        foreach($entityAndFields as $entityAndField) {
+            $entity = preg_split('/\((.*?)\)/', $entityAndField)[0];
+            $entityFields = [];
+            preg_match('/\((.*?)\)/', $entityAndField, $entityFields);
+            foreach(explode(',', $entityFields[0]) as $subField) {
+                $subField = str_replace(['(',')'], '', $subField);
+                array_push($fields, $entity.'.'.$subField);
+            }
+        }
         $helper = new SplitHelper('.');
         $keyedFields = array_fill_keys($fields, null);
         $this->setField(new Field($helper->convert($keyedFields)));
