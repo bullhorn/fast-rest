@@ -8,6 +8,7 @@ class ShowCriteria {
     private $request;
     /** @var  Field */
     private $field;
+    const SUB_FIELD_REGEX = '/(,(?<=,)(?=[^a-z])(.+?\((.*?)\)))((?(R),|\)*)|(?R))|(.(?<=^[A-Z])(.+?\((.*?)\)))((?(R),|\)*))/';
 
     /**
      * Constructor
@@ -27,18 +28,10 @@ class ShowCriteria {
      */
     private function buildFields($defaultFieldsValue) {
         $rawFields = $this->getRequest()->get('fields', null, $defaultFieldsValue);
-        $fields = preg_split('/,(?![^\(\]]*\))/', $rawFields);
-        $entityAndFields = preg_grep('/.+?\((.*?)\)/', $fields);
-        $fields = array_diff($fields, $entityAndFields);
-        foreach($entityAndFields as $entityAndField) {
-            $entity = preg_split('/\((.*?)\)/', $entityAndField)[0];
-            $entityFields = [];
-            preg_match('/\((.*?)\)/', $entityAndField, $entityFields);
-            foreach(explode(',', $entityFields[0]) as $subField) {
-                $subField = str_replace(['(',')'], '', $subField);
-                array_push($fields, $entity.'.'.$subField);
-            }
-        }
+        $entitiesWithFields = [];
+        preg_match_all(ShowCriteria::SUB_FIELD_REGEX, $rawFields, $entitiesWithFields);
+        $fields = explode(',', preg_replace(ShowCriteria::SUB_FIELD_REGEX, '', $rawFields));
+        $this->filterSubEntityFields($entitiesWithFields[0], $fields);
         $helper = new SplitHelper('.');
         $keyedFields = array_fill_keys($fields, null);
         $this->setField(new Field($helper->convert($keyedFields)));
@@ -77,5 +70,41 @@ class ShowCriteria {
         $this->request = $request;
     }
 
+    /**
+     * filterSubEntityFields
+     * @param array  $entitiesWithFields
+     * @param array  $fields
+     * @param string $entityPath
+     * @return void
+     */
+    private function filterSubEntityFields(array $entitiesWithFields, array &$fields, string $entityPath = '') {
+        foreach($entitiesWithFields as $entityAndFields) {
+            $entity = preg_split('/\((.*?)\)((?(R),|\)*)|(?R))/', $entityAndFields)[0];
+            $entity = trim($entity,',');
+            if($entityPath !== '') {
+                $entityPath .= '.'.$entity;
+            } else {
+                $entityPath = $entity;
+            }
+            $entityFields = [];
+            preg_match_all('/\((.*?)\)((?(R),|\)*)|(?R))/', $entityAndFields, $entityFields);
+            $rawEntityFields = substr($entityFields[0][0], 1, -1);
+            $subEntityWithFields = [];
+            if(strpos($rawEntityFields,'(') !== false) {
+                preg_match_all(ShowCriteria::SUB_FIELD_REGEX, $rawEntityFields, $subEntityWithFields);
+                $currentEntityFields = explode(',', preg_replace(ShowCriteria::SUB_FIELD_REGEX, '', $rawEntityFields));
+            } else {
+                $currentEntityFields = explode(',', $rawEntityFields);
+            }
+            foreach($currentEntityFields as $subField) {
+                $fields[] = $entityPath . '.' . $subField;
+            }
+            foreach($subEntityWithFields as $subEntity) {
+                if(count($subEntity) > 0 && $subEntity[0] !== '' && strpos($subEntity[0],'(') !== false) {
+                    $this->filterSubEntityFields($subEntity, $fields, $entityPath);
+                }
+            }
+        }
+    }
 
 }
