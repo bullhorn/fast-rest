@@ -14,6 +14,7 @@ use Bullhorn\FastRest\Api\Services\ControllerHelper\ShowCriteria;
 use Bullhorn\FastRestServices\Exception\CatchableException;
 use Phalcon\Http\Request\Exception;
 use Phalcon\Mvc\Controller;
+use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSet;
 use Bullhorn\FastRest\Api\Services\Behavior\ValidationException;
 use Bullhorn\FastRest\Api\Services\Output\OutputInterface;
@@ -35,10 +36,12 @@ abstract class Base extends Controller {
     const STATUS_CODE_NOT_FOUND = 404;
 
     /**
-     * Initializes
+     * beforeExecuteRoute
+     * @param Dispatcher $dispatcher
      * @return void
+     * @throws \Exception
      */
-    public function beforeExecuteRoute() {
+    public function beforeExecuteRoute(Dispatcher $dispatcher) {
         $this->validateServicesDefined();
         $this->getDi()->set('Request', $this->request);
         $this->setStatusCode(200);
@@ -48,7 +51,7 @@ abstract class Base extends Controller {
             $this->validateLogin();
         } catch(Exception $e) {
             $this->handleError($e);
-            $this->afterExecuteRoute();
+            $this->afterExecuteRoute($dispatcher);
             exit;
         }
     }
@@ -573,8 +576,8 @@ abstract class Base extends Controller {
      *
      * @throws \Exception
      */
-    public function afterExecuteRoute() {
-        /** @var \Bullhorn\FastRest\Api\Services\Output\OutputInterface $output */
+    public function afterExecuteRoute(Dispatcher $dispatcher) {
+        /** @var OutputInterface $output */
         $output = $this->getDI()->get(OutputInterface::DI_NAME);
         if(!($output instanceof OutputInterface)) {
             throw new \Exception('The Output must implement: ' . OutputInterface::class);
