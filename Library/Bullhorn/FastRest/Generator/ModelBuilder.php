@@ -336,7 +336,7 @@ class ModelBuilder {
         $validation = new Object\Index($this->getConfiguration());
         $validation->setNamespace(
             $this->getConfiguration()->getRootNamespace()
-            . '\Services\Behavior\\' . $this->getConfiguration()->getModelSubNamespace()
+            . '\Services\Behavior' . $this->getConfiguration()->getFullModelSubNamespace()
             . '\Generated'
         );
         $validation->setName($this->getAbstractClass()->getName());
@@ -514,7 +514,7 @@ class ModelBuilder {
         $childValidation = new Object\Index($this->getConfiguration());
         $childValidation->setNamespace(
             $this->getConfiguration()->getRootNamespace()
-            . '\Services\Behavior\\' . $this->getConfiguration()->getModelSubNamespace()
+            . '\Services\Behavior' . $this->getConfiguration()->getFullModelSubNamespace()
         );
         $childValidation->setName($this->getAbstractClass()->getName());
         $childValidation->setExtends('Generated\\' . $this->getAbstractClass()->getName());
@@ -1236,19 +1236,19 @@ class ModelBuilder {
         $this->getAbstractClass()->setName(ucfirst($this->getTableName()));
         $this->getAbstractClass()->addUse(
             $this->getConfiguration()->getRootNamespace()
-            . '\Models\\' . $this->getConfiguration()->getModelSubNamespace()
+            . '\Models' . $this->getConfiguration()->getFullModelSubNamespace()
             . '\Base'
         );
         $this->getAbstractClass()->addUse('Bullhorn\FastRest\Api\Models\GeneratedInterface');
         $this->getAbstractClass()->setImplements(['GeneratedInterface']);
         $this->getAbstractClass()->setNamespace(
             $this->getConfiguration()->getRootNamespace()
-            . '\Models\\' . $this->getConfiguration()->getModelSubNamespace()
+            . '\Models' . $this->getConfiguration()->getFullModelSubNamespace()
             . '\Generated'
         );
         $this->getAbstractClass()->addUse(
             $this->getConfiguration()->getRootNamespace()
-            . '\Models\\' . $this->getConfiguration()->getModelSubNamespace()
+            . '\Models' . $this->getConfiguration()->getFullModelSubNamespace()
             . '\\' . ucfirst($this->getTableName()) . ' as ChildModel'
         );
         $this->getAbstractClass()->setExtends('Base');
@@ -1366,11 +1366,11 @@ class ModelBuilder {
 
         $class->setNamespace(
             $this->getConfiguration()->getRootNamespace()
-            . '\Models\\' . $this->getConfiguration()->getModelSubNamespace()
+            . '\Models' . $this->getConfiguration()->getFullModelSubNamespace()
         );
         $class->addUse(
             $this->getConfiguration()->getRootNamespace()
-            . '\Models\\' . $this->getConfiguration()->getModelSubNamespace()
+            . '\Models' . $this->getConfiguration()->getFullModelSubNamespace()
             . '\Generated\\' . ucfirst($this->getTableName()) . ' as GeneratedParent'
         );
         $method = new Object\Method();
@@ -1392,7 +1392,7 @@ class ModelBuilder {
         $class = new Object\Index($this->getConfiguration());
         $class->setNamespace(
             $this->getConfiguration()->getRootNamespace()
-            . '\PhalconHelper\Database\Tables\\' . $this->getConfiguration()->getModelSubNamespace()
+            . '\PhalconHelper\Database\Tables' . $this->getConfiguration()->getFullModelSubNamespace()
         );
         $class->setName(ucfirst($this->getTableName()) . 'Test');
         $class->addUse('Bullhorn\FastRest\UnitTestHelper\MockTable');

@@ -125,6 +125,14 @@ class Configuration extends Base {
         return $this->modelSubNamespace;
     }
 
+    public function getFullModelSubNamespace() {
+        $namespace = $this->getModelSubNamespace();
+        if(strlen($namespace) > 0) {
+            $namespace = '\\'.$namespace;
+        }
+        return $namespace;
+    }
+
     /**
      * Setter
      * @param string $modelSubNamespace

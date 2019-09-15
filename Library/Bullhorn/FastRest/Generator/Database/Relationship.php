@@ -41,7 +41,7 @@ class Relationship {
         $this->setRemoteColumn($remoteColumn);
         $this->setRemoteModel(
             $configuration->getRootNamespace()
-            . '\Models\\' . $configuration->getModelSubNamespace()
+            . '\Models' . $configuration->getFullModelSubNamespace()
             . '\\' . ucfirst($this->getRemoteTable())
         );
         $this->setRelationshipType($type);
