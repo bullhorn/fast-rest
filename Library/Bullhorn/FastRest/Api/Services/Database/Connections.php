@@ -1,6 +1,7 @@
 <?php
 namespace Bullhorn\FastRest\Api\Services\Database;
 use Bullhorn\FastRest\DependencyInjection;
+use PDOException;
 use Phalcon\Db\AdapterInterface;
 use Phalcon\Di\InjectionAwareInterface;
 
@@ -37,7 +38,18 @@ class Connections implements InjectionAwareInterface {
 		$key = json_encode($configInfo);
 		$dbAdapters = $this->getDbAdapters();
 		if(!array_key_exists($key, $dbAdapters)) {
-			$dbAdapter = new $className($configInfo);
+            $dbAdapter = null;
+		    for($i=0; $i < 3 && is_null($dbAdapter); $i++) {
+                try {
+                    $dbAdapter = new $className($configInfo);
+                } catch(PDOException $e) {
+                    if(false === strstr($e->getMessage(), 'reading initial communication packet')) {
+                        throw $e;
+                    }
+                    usleep(1000);
+                }
+            }
+
 			$dbAdapters[$key] = $dbAdapter;
 			$this->setDbAdapters($dbAdapters);
 		}
