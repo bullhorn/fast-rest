@@ -14,7 +14,7 @@ before_install:
     - phpenv config-add customPHP.ini
     - git clone git://github.com/phalcon/cphalcon.git
     - cd cphalcon
-    - git checkout tags/phalcon-v2.0.13
+    - git checkout v3.2.1
     - cd build
     - ./install
     - cd ../..
