@@ -46,7 +46,7 @@ class Connections implements InjectionAwareInterface {
                     if(false === strstr($e->getMessage(), 'reading initial communication packet')) {
                         throw $e;
                     }
-                    usleep(1000);
+                    usleep(($i+1) * 5000);
                 }
             }
 
