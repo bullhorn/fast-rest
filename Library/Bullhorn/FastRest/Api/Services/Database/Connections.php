@@ -39,11 +39,11 @@ class Connections implements InjectionAwareInterface {
 		$dbAdapters = $this->getDbAdapters();
 		if(!array_key_exists($key, $dbAdapters)) {
             $dbAdapter = null;
-		    for($i=0; $i < 3 && is_null($dbAdapter); $i++) {
+		    for($i=0; is_null($dbAdapter); $i++) {
                 try {
                     $dbAdapter = new $className($configInfo);
                 } catch(PDOException $e) {
-                    if(false === strstr($e->getMessage(), 'reading initial communication packet')) {
+                    if($i==3 || false === strstr($e->getMessage(), 'reading initial communication packet')) {
                         throw $e;
                     }
                     usleep(($i+1) * 5000);
