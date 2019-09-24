@@ -940,7 +940,7 @@ class ModelBuilder {
      * @param string $name
      * @return string
      */
-    private function filterConstant($name) {
+    public static function filterConstant($name) {
         $name = str_replace(' ', '_', $name);
         $name = preg_replace_callback(
             '@[A-Z][a-z]@',
