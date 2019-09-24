@@ -975,6 +975,9 @@ class ModelBuilder {
         if(is_numeric($name)) {
             $name = 'VALUE_'.$name;
         }
+        if($name === '') {
+            $name = 'EMPTY';
+        }
         return $name;
     }
 
