@@ -199,7 +199,7 @@ class Index extends Base {
                     if ($key > 0) {
                         $sql .= ' OR ';
                     }
-                    $searchFieldParts = explode('.', $searchField);
+                    $searchFieldParts = array_slice(explode('.', $searchField), -2);
                     foreach($searchFieldParts as $searchFieldPartsKey => $searchFieldPart) {
                         if($searchFieldPartsKey != 0) {
                             $sql .= '.';
