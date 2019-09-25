@@ -199,8 +199,10 @@ class Index extends Base {
                     if ($key > 0) {
                         $sql .= ' OR ';
                     }
-                    $searchFieldParts = array_slice(explode('.', $searchField), -2);
-                    foreach($searchFieldParts as $searchFieldPartsKey => $searchFieldPart) {
+                    //Only use the last two parts as you only want the join table and the field name
+                    //This way Assignment.Employee.User.firstName will end up outputing as [User].[firstName]
+                    $joinNameAndField = array_slice(explode('.', $searchField), -2);
+                    foreach($joinNameAndField as $searchFieldPartsKey => $searchFieldPart) {
                         if($searchFieldPartsKey != 0) {
                             $sql .= '.';
                         }
