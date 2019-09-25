@@ -185,6 +185,12 @@ class Index extends Base {
     private function buildSearchTerm() {
         $searchTerm = $this->getIndexCriteria()->getSearchTerm();
         if($searchTerm->getTerm() != '') {
+            foreach($searchTerm->getSearchFields() as $searchField) {
+                if(strpos($searchField, '.') !== false) {
+                    $joinString = substr($searchField, 0, strrpos($searchField, '.'));
+                    $this->getEntityFactory()->addJoin($this->getCriteriaHelper(), $joinString);
+                }
+            }
             $parts = explode(' ', $searchTerm->getTerm());
             foreach($parts as $part) {
                 $sql = '';
@@ -193,7 +199,16 @@ class Index extends Base {
                     if ($key > 0) {
                         $sql .= ' OR ';
                     }
-                    $sql .= '[' . $searchField . '] LIKE ?' . $key;
+                    //Only use the last two parts as you only want the join table and the field name
+                    //This way Assignment.Employee.User.firstName will end up outputing as [User].[firstName]
+                    $joinNameAndField = array_slice(explode('.', $searchField), -2);
+                    foreach($joinNameAndField as $searchFieldPartsKey => $searchFieldPart) {
+                        if($searchFieldPartsKey != 0) {
+                            $sql .= '.';
+                        }
+                        $sql .= '['.$searchFieldPart.']';
+                    }
+                    $sql .= ' LIKE ?' . $key;
                     $params[] = '%' . $part . '%';
                 }
                 $this->getCriteriaHelper()->andWhere($sql, $params);
