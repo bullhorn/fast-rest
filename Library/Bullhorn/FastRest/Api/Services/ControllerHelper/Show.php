@@ -95,6 +95,8 @@ class Show extends Base {
                 foreach(array_diff($columns, $lazyProperties) as $column) {
                     $this->showField($output, $entity, $column);
                 }
+            } elseif(preg_match('@^count(?P<childName>[A-Z][A-Za-z]+)@', $subField, $matches) && in_array($matches['childName'], $entity->getChildrenRelationships())) {
+                $output->{$subField} = $entity->getRelated($matches['childName'])->count();
             } elseif(in_array($subField, $columns)) {
                 $this->showField($output, $entity, $subField);
             } elseif(in_array($subField, $entity->getChildrenRelationships()) || in_array($subField, $entity->getParentRelationships())) {
