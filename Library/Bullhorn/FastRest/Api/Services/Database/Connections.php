@@ -11,6 +11,17 @@ class Connections implements InjectionAwareInterface {
 	/** @type  AdapterInterface[] */
 	private $dbAdapters = [];
 
+
+    public function hasAdapter($host, $dbInstance): bool {
+        foreach($this->getDbAdapters() as $key => $dbAdapter) {
+            $data = json_decode($key);
+            if ($host === $data->host && $dbInstance === $data->dbname) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 	/**
 	 * Getter
 	 * @return AdapterInterface[]

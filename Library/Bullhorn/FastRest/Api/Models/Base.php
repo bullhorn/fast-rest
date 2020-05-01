@@ -529,17 +529,16 @@ abstract class Base extends Model {
      */
     protected function columnMapMissingColumnsFix(array $map) {
         if(is_null($this->columnMapFixed)) {
-            /** @var Column[] $columns */
-            $columns = $this->getReadConnection()->describeColumns($this->getSource());
-            foreach($columns as $dbColumn) {
-                $name = $dbColumn->getName();
+            /** @var string[] $columns */
+            $columns = $this->getModelsMetaData()->getAttributes($this);
+            foreach($columns as $name) {
                 if(!array_key_exists($name, $map)) {
                     $map[$name] = $name;
                 }
             }
             $this->columnMapFixed = $map;
         }
-        return $map;
+        return $this->columnMapFixed;
     }
 
     /**
