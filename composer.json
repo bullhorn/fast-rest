@@ -21,7 +21,7 @@
     "php": ">=7.3",
     "ext-phalcon": ">=3.4.5",
     "zircote/swagger-php": "*",
-    "bullhorn/fast-rest-services": "dev-php73-upgrade",
+    "bullhorn/fast-rest-services": "dev-master",
     "riverline/multipart-parser": "^2.0"
   },
   "require-dev": {
