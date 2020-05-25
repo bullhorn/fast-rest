@@ -88,7 +88,7 @@ abstract class Base extends TestCase implements InjectionAwareInterface {
      * Setup
      * @return void
      */
-    protected function setUp() {
+    protected function setUp(): void {
         if(!defined(self::PHPUNIT_RUNNING)) {
             define(self::PHPUNIT_RUNNING, true);
         }
