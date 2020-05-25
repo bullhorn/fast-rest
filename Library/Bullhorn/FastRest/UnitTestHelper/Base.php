@@ -80,7 +80,7 @@ abstract class Base extends TestCase implements InjectionAwareInterface {
      * Tear down.
      * @return void
      */
-    public function tearDown() {
+    public function tearDown(): void {
         $this->resetDi();
     }
 
