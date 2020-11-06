@@ -22,7 +22,7 @@
     "ext-phalcon": ">=2.0.4 <3.9",
     "zircote/swagger-php": "*",
     "nicklewis/phalcon-db-mock": "dev-master",
-    "bullhorn/fast-rest-services": "dev-master",
+    "bullhorn/fast-rest-services": "dev-BBO-4463",
     "riverline/multipart-parser": "^2.0"
   },
   "require-dev": {
