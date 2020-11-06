@@ -21,7 +21,7 @@
     "php": ">=7.3",
     "ext-phalcon": ">=3.4.5",
     "zircote/swagger-php": "*",
-    "bullhorn/fast-rest-services": "*",
+    "bullhorn/fast-rest-services": "2.0.0",
     "riverline/multipart-parser": "^2.0",
     "nicklewis/phalcon-db-mock": "dev-master"
   },
