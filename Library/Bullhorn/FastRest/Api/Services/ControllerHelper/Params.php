@@ -153,7 +153,7 @@ class Params extends Base {
             throw new Exception('No Data Passed', 400);
         }
         $bulkCreation = false;
-        if(!is_null($this->getRequest()->getJsonRawBody())) {
+        if(!is_null($this->getRequest()->getJsonRawBody()) && $this->getRequest()->getJsonRawBody() !== false) {
             $params = $this->getRequest()->getJsonRawBody();
             $delimiter = '.';
             if(is_array($params)) {
@@ -167,7 +167,7 @@ class Params extends Base {
             }
             $delimiter = '_';
         }
-        if($this->request->getRawBody()!='' && sizeOf($params) == 0 && json_last_error() != JSON_ERROR_NONE) {
+        if($this->request->getRawBody()!='' && (!is_array($params) || sizeOf($params) == 0) && json_last_error() != JSON_ERROR_NONE) {
             $this->dispatchJsonError();
         }
         if($bulkCreation) { //Bulk Creation

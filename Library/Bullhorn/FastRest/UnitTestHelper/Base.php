@@ -80,7 +80,7 @@ abstract class Base extends TestCase implements InjectionAwareInterface {
      * Tear down.
      * @return void
      */
-    public function tearDown() {
+    public function tearDown(): void {
         $this->resetDi();
     }
 
@@ -88,7 +88,7 @@ abstract class Base extends TestCase implements InjectionAwareInterface {
      * Setup
      * @return void
      */
-    protected function setUp() {
+    protected function setUp(): void {
         if(!defined(self::PHPUNIT_RUNNING)) {
             define(self::PHPUNIT_RUNNING, true);
         }

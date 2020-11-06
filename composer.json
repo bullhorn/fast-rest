@@ -18,12 +18,12 @@
     }
   ],
   "require": {
-    "php": ">=7.1.5",
-    "ext-phalcon": ">=2.0.4 <3.9",
+    "php": ">=7.3",
+    "ext-phalcon": ">=3.4.5",
     "zircote/swagger-php": "*",
-    "nicklewis/phalcon-db-mock": "dev-master",
-    "bullhorn/fast-rest-services": "dev-master",
-    "riverline/multipart-parser": "^2.0"
+    "bullhorn/fast-rest-services": "*",
+    "riverline/multipart-parser": "^2.0",
+    "nicklewis/phalcon-db-mock": "dev-master"
   },
   "require-dev": {
     "phalcon/incubator": ">=2.0",
