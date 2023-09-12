@@ -106,16 +106,22 @@ abstract class Base extends Behavior implements BehaviorInterface, InjectionAwar
      * @param ApiInterface|MvcInterface $entity
      * @return bool
      */
-    public function notify($eventType, MvcInterface $entity) {
-        $this->setEntity($entity);
+    final public function notify($eventType, MvcInterface $entity) {
+        $instance = new static();
+        $instance->setEntity($entity);
         switch($eventType) {
             case self::EVENT_UPLOAD_FILE_CREATE:
-                $this->processUploads(true);
+                $instance->processUploads(true);
                 break;
             case self::EVENT_UPLOAD_FILE_UPDATE:
-                $this->processUploads(false);
+                $instance->processUploads(false);
                 break;
         }
+        $instance->notifyInstance($eventType);
+    }
+
+    protected function notifyInstance($eventType): void {
+        //Override in child if necessary
     }
 
     /**
